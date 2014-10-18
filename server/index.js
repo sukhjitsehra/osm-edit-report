@@ -1,15 +1,11 @@
 var express = require('express');
 var cors = require('cors');
 var fs = require('fs');
-var path = require('path');
-var fs = require('fs');
 var readline = require('readline');
 
 var app = express();
 app.use(cors());
-
 console.log("http://localhost:3021/data");
-
 var objs = function() {
 	return {
 		values: [],
@@ -24,22 +20,14 @@ app.get('/data/:date', function(req, res) {
 	var date = req.params.date;
 	var array_json = [];
 	var users = [];
-
-
-
 	console.log(date);
-
 	var rd = readline.createInterface({
-		input: fs.createReadStream('2014-10-15.csv'),
+		input: fs.createReadStream('data/' + date + '.csv'),
 		output: process.stdout,
 		terminal: false
 	});
-
-
 	var bandera = true;
 	var array_objs = [];
-
-
 	rd.on('line', function(line) {
 		if (bandera) {
 			var users = line.split(',');
@@ -65,17 +53,10 @@ app.get('/data/:date', function(req, res) {
 		}
 
 	}).on('close', function() {
-console.log(array_objs);
+
 		res.json(array_objs);
-  //process.exit(0);
-});
-
-
-
-
-
-
-
+		//process.exit(0);
+	});
 });
 
 app.listen(process.env.PORT || 3021);
