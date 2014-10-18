@@ -14,7 +14,13 @@ var objs = function() {
 	};
 };
 
-
+var color_users={
+	'Rub21':'#0171C5',
+	'ediyes':'#FF0',
+	'Luis36995':'#0F0',
+	'RichRico':'#875',
+	'dannykath':'#e34'
+};
 
 app.get('/data/:date', function(req, res) {
 	var date = req.params.date;
@@ -34,6 +40,7 @@ app.get('/data/:date', function(req, res) {
 			for (var i = 1; i < users.length; i++) {
 				var user = new objs();
 				user.key = users[i];
+				user.color=color_users[users[i]];
 				array_objs.push(user)
 
 			};
