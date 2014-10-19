@@ -75,7 +75,7 @@ for (var i = 0; i < users.length; i++) {
 	array_total.push(count[users[i]].way.highways.v1 + count[users[i]].way.highways.vx);
 };
 
-var file = day + '.csv'; //name of day
+var file = "server/data/"+day + '.csv'; //name of day
 fs.exists(file, function(exists) {
 	if (!exists) {
 		var wstream = fs.createWriteStream(file);

@@ -10,16 +10,16 @@ var objs = function() {
 	return {
 		values: [],
 		key: null,
-		color: "#ff7f0e"
+		color: null
 	};
 };
 
-var color_users={
-	'Rub21':'#0171C5',
-	'ediyes':'#FF0',
-	'Luis36995':'#0F0',
-	'RichRico':'#875',
-	'dannykath':'#e34'
+var color_users = {
+	'Rub21': '#0171C5',
+	'ediyes': '#FF0',
+	'Luis36995': '#0F0',
+	'RichRico': '#e34',
+	'dannykath': '#662289'
 };
 
 app.get('/:date', function(req, res) {
@@ -40,7 +40,7 @@ app.get('/:date', function(req, res) {
 			for (var i = 1; i < users.length; i++) {
 				var user = new objs();
 				user.key = users[i];
-				user.color=color_users[users[i]];
+				user.color = color_users[users[i]];
 				array_objs.push(user)
 
 			};
@@ -48,7 +48,7 @@ app.get('/:date', function(req, res) {
 		} else {
 			var data = line.split(',');
 			for (var i = 1; i < data.length; i++) {
-				array_objs[i-1].values.push({
+				array_objs[i - 1].values.push({
 					x: parseInt(data[0]),
 					y: parseInt(data[i])
 				});
