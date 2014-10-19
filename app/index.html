@@ -136,13 +136,11 @@
                     var container = d3.select('#chart');
                     var svg = container.select('svg');
 
-                    if (fitScreen) {
-                        // resize based on container's width AND HEIGHT
+                    if (fitScreen) {   
                         var windowSize = nv.utils.windowSize();
                         svg.attr("width", windowSize.width);
                         svg.attr("height", windowSize.height);
                     } else {
-                        // resize based on container's width
                         var aspect = chart.width() / chart.height();
                         var targetWidth = parseInt(container.style('width'));
                         svg.attr("width", targetWidth);

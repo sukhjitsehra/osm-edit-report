@@ -27,11 +27,15 @@ app.get('/:date', function(req, res) {
 	var array_json = [];
 	var users = [];
 	console.log(date);
+
+
 	var rd = readline.createInterface({
 		input: fs.createReadStream('data/' + date + '.csv'),
 		output: process.stdout,
 		terminal: false
 	});
+
+
 	var bandera = true;
 	var array_objs = [];
 	rd.on('line', function(line) {
@@ -58,7 +62,14 @@ app.get('/:date', function(req, res) {
 	}).on('close', function() {
 		res.json(array_objs);
 		//process.exit(0);
+	}).on("error", function(err) {
+		self.emit("error", err);
+		console.log('error');
+
 	});
+
+
+
 });
 
 app.listen(process.env.PORT || 3021);
