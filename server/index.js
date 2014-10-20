@@ -30,7 +30,7 @@ app.get('/:date', function(req, res) {
 
 	var readStream = fs.createReadStream('data/' + date + '.csv');
 	readStream.on('error', function(err) {
-		console.log('Error lectura de archivo');
+		console.log("Caught", err);
 		res.json({});
 	});
 
