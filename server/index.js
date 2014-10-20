@@ -28,13 +28,17 @@ app.get('/:date', function(req, res) {
 	var users = [];
 	console.log(date);
 
+	var readStream = fs.createReadStream('data/' + date + '.csv');
+	readStream.on('error', function(err) {
+		console.log('Error lectura de archivo');
+		res.json({});
+	});
 
 	var rd = readline.createInterface({
-		input: fs.createReadStream('data/' + date + '.csv'),
+		input: readStream,
 		output: process.stdout,
 		terminal: false
 	});
-
 
 	var bandera = true;
 	var array_objs = [];
@@ -45,9 +49,8 @@ app.get('/:date', function(req, res) {
 				var user = new objs();
 				user.key = users[i];
 				user.color = color_users[users[i]];
-				array_objs.push(user)
-
-			};
+				array_objs.push(user);
+			}
 			bandera = false;
 		} else {
 			var data = line.split(',');
@@ -61,15 +64,7 @@ app.get('/:date', function(req, res) {
 
 	}).on('close', function() {
 		res.json(array_objs);
-		//process.exit(0);
-	}).on("error", function(err) {
-		self.emit("error", err);
-		console.log('error');
-
+		process.exit(0);
 	});
-
-
-
 });
-
 app.listen(process.env.PORT || 3021);
