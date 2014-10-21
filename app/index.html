@@ -70,7 +70,7 @@
     var host='http://54.172.94.3:3021/'
     $.ajax({
             dataType: "json",
-            url: +document.URL.split('#')[1],
+            url: host+document.URL.split('#')[1],
             success: function(json) {
 
                 draw(json);
