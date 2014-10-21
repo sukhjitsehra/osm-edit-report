@@ -87,7 +87,29 @@
                 chart.useInteractiveGuideline(true);
                 //chart.xAxis.axisLabel('Hora').tickFormat(d3.format(',r'));
                      chart.xAxis.axisLabel('Hour').tickFormat(function(d) { 
-                    return d +' H';
+
+                        //Caso Peru Team
+                        var h=d-4;
+                        if(h>=0)
+                        {
+                            return h +' H';
+                        }else{
+                            switch(h) {
+                                case -4:
+                                    return 20 +' H';
+                                case -3:
+                                     return 21 +' H';
+                                case -2:
+                                     return 22 +' H';
+                                case -1:
+                                     return 23 +' H';
+                                    break;
+                                case 0:
+                                     return 22 +' H';
+                            }
+                        }
+                    
+
                      });
 
                 chart.yAxis

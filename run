@@ -5,7 +5,7 @@ while true; do
 	#curl -O http://planet.openstreetmap.org/replication/minute/001/092/$COUNTER.osc.gz
 	curl -O http://planet.openstreetmap.org/replication/hour/000/018/$COUNTER.osc.gz
 	gzip -d $COUNTER.osc.gz
-	node index.js --osmfile=$COUNTER.osc --users=Rub21,ediyes,Luis36995,RichRico,dannykath
+	node index.js --osmfile=$COUNTER.osc --users=ediyes,Luis36995,RichRico,dannykath,Rub21
 	rm $COUNTER.osc
 	let COUNTER=COUNTER+1 
 	sleep 1h
