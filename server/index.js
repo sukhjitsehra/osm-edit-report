@@ -28,43 +28,50 @@ app.get('/:date', function(req, res) {
 	var users = [];
 	console.log(date);
 
-	var readStream = fs.createReadStream('data/' + date + '.csv');
-	readStream.on('error', function(err) {
-		console.log("Caught", err);
-		res.json({});
-	});
-
-	var rd = readline.createInterface({
-		input: readStream,
-		output: process.stdout,
-		terminal: false
-	});
-
-	var bandera = true;
-	var array_objs = [];
-	rd.on('line', function(line) {
-		if (bandera) {
-			var users = line.split(',');
-			for (var i = 1; i < users.length; i++) {
-				var user = new objs();
-				user.key = users[i];
-				user.color = color_users[users[i]];
-				array_objs.push(user);
-			}
-			bandera = false;
+	var file = 'data/' + date + '.csv';
+	fs.exists(file, function(exists) {
+		if (exists) {
+			var readStream = fs.createReadStream(file);
+			var rd = readline.createInterface({
+				input: readStream,
+				output: process.stdout,
+				terminal: false
+			});
+			var bandera = true;
+			var array_objs = [];
+			rd.on('line', function(line) {
+				if (bandera) {
+					var users = line.split(',');
+					for (var i = 1; i < users.length; i++) {
+						var user = new objs();
+						user.key = users[i];
+						user.color = color_users[users[i]];
+						array_objs.push(user);
+					}
+					bandera = false;
+				} else {
+					var data = line.split(',');
+					for (var i = 1; i < data.length; i++) {
+						array_objs[i - 1].values.push({
+							x: parseInt(data[0]),
+							y: parseInt(data[i])
+						});
+					};
+				}
+			}).on('close', function() {
+				res.json(array_objs);
+				//process.exit(0);
+			}).on('error', function(e) {
+				console.log('error');
+			});
 		} else {
-			var data = line.split(',');
-			for (var i = 1; i < data.length; i++) {
-				array_objs[i - 1].values.push({
-					x: parseInt(data[0]),
-					y: parseInt(data[i])
-				});
-			};
+			res.json({});
 		}
-
-	}).on('close', function() {
-		res.json(array_objs);
-		process.exit(0);
 	});
+
+
+
 });
+
+
 app.listen(process.env.PORT || 3021);
