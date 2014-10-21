@@ -41,8 +41,12 @@ var check_hour = true;
 handler.on('way', function(way) {
 	if (check_hour) {
 		console.log(way.timestamp);
-		hour = moment.unix(way.timestamp).format('HH');
-		day = moment.unix(way.timestamp).format('YYYY-MM-DD');
+		var date = new Date(parseFloat(way.timestamp) * 1000);
+		console.log(date);
+		hour = date.getHours();
+		console.log('hour:' + hour);
+		//day = moment.unix(way.timestamp).format('YYYY-MM-DD');
+		day = date.getUTCFullYear() + '-' + (parseInt(date.getUTCMonth()) + 1)+ '-' + date.getUTCDate();
 		console.log(day);
 		check_hour = false;
 	}
@@ -75,7 +79,7 @@ for (var i = 0; i < users.length; i++) {
 	array_total.push(count[users[i]].way.highways.v1 + count[users[i]].way.highways.vx);
 };
 
-var file = "server/data/"+day + '.csv'; //name of day
+var file = "server/data/" + day + '.csv'; //name of day
 fs.exists(file, function(exists) {
 	if (!exists) {
 		var wstream = fs.createWriteStream(file);
