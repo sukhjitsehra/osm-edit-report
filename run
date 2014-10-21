@@ -1,7 +1,7 @@
 #!/bin/bash 
-COUNTER=213
+COUNTER=350
 #while true; do
- while [  $COUNTER -lt 418 ]; do
+ while [  $COUNTER -lt 467 ]; do
 	#curl -O http://planet.openstreetmap.org/replication/minute/001/092/$COUNTER.osc.gz
 	curl -O http://planet.openstreetmap.org/replication/hour/000/018/$COUNTER.osc.gz
 	gzip -d $COUNTER.osc.gz
