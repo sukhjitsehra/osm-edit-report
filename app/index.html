@@ -65,10 +65,11 @@
     <script src="src/models/lineChart.js"></script>
     <script  src="lib/jquery-2.1.1.min.js"></script>
     <script>
-
+    //var host='http://localhost:3021/';
+    var host='http://54.172.190.221:3021/'
     $.ajax({
             dataType: "json",
-            url: "http://localhost:3021/"+document.URL.split('#')[1],
+            url: +document.URL.split('#')[1],
             success: function(json) {
 
                 draw(json);
@@ -84,15 +85,12 @@
 
                 chart.useInteractiveGuideline(true);
                 //chart.xAxis.axisLabel('Hora').tickFormat(d3.format(',r'));
-
                      chart.xAxis.axisLabel('Hour').tickFormat(function(d) { 
                     return d +' H';
                      });
 
-
                 chart.yAxis
                         .axisLabel('ChangeSets');
-                        //.tickFormat(d3.format(',.2f'));
 
                 d3.select('#chart svg')
                         .attr('perserveAspectRatio', 'xMinYMid')
@@ -147,8 +145,6 @@
                         svg.attr("height", Math.round(targetWidth / aspect));
                     }
                 };
-
-
                 return chart;
             });
         }
