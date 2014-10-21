@@ -65,13 +65,8 @@ app.get('/:date', function(req, res) {
 				console.log('error');
 			});
 		} else {
-			res.json({});
+			res.json({error:"no data"});
 		}
 	});
-
-
-
 });
-
-
 app.listen(process.env.PORT || 3021);
