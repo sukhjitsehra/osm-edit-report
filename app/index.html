@@ -66,8 +66,8 @@
     <script src="src/models/lineChart.js"></script>
    
     <script>
-    //var host='http://localhost:3021/';
-    var host='http://54.172.183.193:3021/'
+    var host='http://localhost:3021/';
+    //var host='http://54.172.183.193:3021/'
     $.ajax({
             dataType: "json",
             url: host+document.URL.split('#')[1],
@@ -89,7 +89,7 @@
                      chart.xAxis.axisLabel('Hour').tickFormat(function(d) { 
 
                         //Caso Peru Team
-                        var h=d-4;
+                        var h=d;
                         if(h>=0)
                         {
                             return h +' H';

@@ -1,9 +1,9 @@
 var osmium = require('osmium');
 var numeral = require('numeral');
 var argv = require('optimist').argv;
-var sqlite3 = require('sqlite3').verbose();
-var db = new sqlite3.Database('dbreport.sqlite');
-
+var _ = require('underscore');
+var fs = require('fs');
+var moment = require('moment');
 
 var obj_way = function() {
 	return {
@@ -32,6 +32,7 @@ for (var k = 0; k < users.length; k++) {
 	};
 	count[users[k]] = way;
 };
+
 var file = new osmium.File(osmfile);
 var reader = new osmium.Reader(file);
 var handler = new osmium.Handler();
@@ -45,11 +46,11 @@ handler.on('way', function(way) {
 		hour = date.getHours();
 		console.log('hour:' + hour);
 		//day = moment.unix(way.timestamp).format('YYYY-MM-DD');
-		day = date.getUTCFullYear() + '-' + (parseInt(date.getUTCMonth()) + 1) + '-' + date.getUTCDate() + '-' + date.getHours();
+		day = date.getUTCFullYear() + '-' + (parseInt(date.getUTCMonth()) + 1) + '-' + date.getUTCDate();
 		console.log(day);
 		check_hour = false;
 	}
-	if (typeof way.tags().highway !== 'undefined' && users.indexOf(way.user) !== -1) { //evalua las calles	
+	if ((typeof way.tags().highway !== 'undefined' || typeof way.tags().building !== 'undefined') && users.indexOf(way.user) !== -1) { //evalua las calles	
 		if (way.version === 1) {
 			++count[way.user].way.highways.v1;
 		} else {
@@ -60,11 +61,20 @@ handler.on('way', function(way) {
 
 
 reader.apply(handler);
-db.serialize(function() {
-	var stmt = db.prepare("INSERT INTO osm_data VALUES (?,?,?,?)");
-	for (var i = 0; i < users.length; i++) {
-		stmt.run(users[i], day, count[users[i]].way.highways.v1, count[users[i]].way.highways.vx);
-	};
-	stmt.finalize();
+
+var array_total = [];
+for (var i = 0; i < users.length; i++) {
+	array_total.push(count[users[i]].way.highways.v1 + count[users[i]].way.highways.vx);
+};
+
+var file = "server/data/" + day + '.csv'; //name of day
+fs.exists(file, function(exists) {
+	if (!exists) {
+		var wstream = fs.createWriteStream(file);
+		wstream.write('hour,' + users.toString() + '\n');
+		wstream.write(hour + ',' + array_total.toString() + '\n');
+		wstream.end();
+	} else {
+		fs.appendFile(file, hour + ',' + array_total.toString() + '\n');
+	}
 });
-db.close();
