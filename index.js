@@ -5,10 +5,9 @@ var fs = require('fs');
 var zlib = require('zlib');
 var sqlite3 = require('sqlite3').verbose();
 var db = new sqlite3.Database('dbreport.sqlite');
-
-var osm_users=['Rub21','ediyes','Luis36995','RichRico','dannykath'];
-
-var osm_file = '300.osc';
+var sleep = require('sleep');
+var osm_users = ['Rub21', 'ediyes', 'Luis36995', 'RichRico', 'dannykath'];
+var osm_file = '';
 
 var obj_way = function() {
 	return {
@@ -25,18 +24,13 @@ var obj_way = function() {
 	};
 };
 
-
 function format_num(n) {
 	return numeral(n).format('0,0');
 }
 
-
-
 function download_file(localFile, callback) {
 	console.log('inicia descarga');
-
 	var localStream = fs.createWriteStream(localFile);
-
 	var out = request({
 		uri: 'http://planet.openstreetmap.org/replication/hour/000/018/' + localFile + '.gz'
 	});
@@ -53,10 +47,7 @@ function download_file(localFile, callback) {
 
 };
 
-
-
 function proces_file_save() {
-
 	var osmfile = osm_file;
 	var users = osm_users;
 	var count = {};
@@ -92,7 +83,6 @@ function proces_file_save() {
 		}
 	});
 
-
 	reader.apply(handler);
 	db.serialize(function() {
 		var stmt = db.prepare("INSERT INTO osm_data VALUES (?,?,?,?)");
@@ -102,9 +92,38 @@ function proces_file_save() {
 		stmt.finalize();
 	});
 	db.close();
-
-
 }
 
+//intitializar parameters
+var url = 'http://planet.openstreetmap.org/replication/hour/000';
+var name_file = '';
+var num_file = 0;
+var num_directory = 18;
+var name_directory = ''
+name_directory = '0' + num_directory;
 
-download_file(osm_file, proces_file_save);
+setInterval(function() {
+	var url_file = get_url_file();
+	osm_file = name_file + '.osc'
+	download_file(osm_file, proces_file_save);
+	console.log(url_file);
+}, 3 * 60 * 1000); 
+
+
+function get_url_file() {
+	if (num_file < 10) {
+		name_file = '00' + num_file;
+		num_file++;
+	} else if (num_file >= 10 && num_file < 100) {
+		name_file = '0' + num_file;
+		num_file++;
+	} else if (num_file >= 100 && num_file < 1000) {
+		name_file = '' + num_file;
+		num_file++;
+	} else {
+		num_file = 0;
+		num_directory++;
+		name_directory = '0' + num_directory;
+	}
+	return url + '/' + name_directory + '/' + name_file + '.osc.gz';
+}
