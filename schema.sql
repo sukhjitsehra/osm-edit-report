@@ -1,6 +1,14 @@
-CREATE TABLE osm_data (
-  osm_user INTEGER,
-  osm_date INTEGER,
+CREATE TABLE osm_user (
+  id_user INTEGER PRIMARY KEY AUTOINCREMENT,
+  osm_user TEXT
+);
+
+CREATE TABLE osm_highway (	
+  osm_file TEXT,
+  id_user INTEGER,
+  osm_date TEXT,
   high_v1 INTEGER,
   high_vx  INTEGER
 );
+
+

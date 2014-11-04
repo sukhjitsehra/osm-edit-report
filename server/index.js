@@ -3,6 +3,10 @@ var cors = require('cors');
 var fs = require('fs');
 var readline = require('readline');
 
+var sqlite3 = require('sqlite3').verbose();
+var db = new sqlite3.Database('../dbreport.sqlite');
+
+
 var app = express();
 app.use(cors());
 console.log("http://localhost:3021/");
@@ -28,45 +32,12 @@ app.get('/:date', function(req, res) {
 	var users = [];
 	console.log(date);
 
-	var file = 'data/' + date + '.csv';
-	fs.exists(file, function(exists) {
-		if (exists) {
-			var readStream = fs.createReadStream(file);
-			var rd = readline.createInterface({
-				input: readStream,
-				output: process.stdout,
-				terminal: false
-			});
-			var bandera = true;
-			var array_objs = [];
-			rd.on('line', function(line) {
-				if (bandera) {
-					var users = line.split(',');
-					for (var i = 1; i < users.length; i++) {
-						var user = new objs();
-						user.key = users[i];
-						user.color = color_users[users[i]];
-						array_objs.push(user);
-					}
-					bandera = false;
-				} else {
-					var data = line.split(',');
-					for (var i = 1; i < data.length; i++) {
-						array_objs[i - 1].values.push({
-							x: parseInt(data[0]),
-							y: parseInt(data[i])
-						});
-					};
-				}
-			}).on('close', function() {
-				res.json(array_objs);
-				//process.exit(0);
-			}).on('error', function(e) {
-				console.log('error');
-			});
-		} else {
-			res.json({error:"no data"});
-		}
+	db.each("SELECT id_user, osm_user from osm_user", function(err, row) {
+		console.log("SELECT substr(osm_date, 0, 11) as date, substr(osm_date, 12) as hour, (high_vx + high_v1) as high_total from osm_highway WHERE id_user ='" + row.id_user + "'");
+
+		db.each("SELECT substr(osm_date, 0, 11) as date, substr(osm_date, 12) as hour, (high_vx + high_v1) as high_total from osm_highway WHERE id_user ='" + row.id_user + "'", function(err2, row2) {
+			console.log(row.osm_user + " : " + row2.hour + " : " + row2.high_total);
+		});
 	});
 });
 app.listen(process.env.PORT || 3021);
