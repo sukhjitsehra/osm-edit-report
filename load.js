@@ -5,7 +5,6 @@ var fs = require('fs');
 var zlib = require('zlib');
 var sqlite3 = require('sqlite3').verbose();
 var db = new sqlite3.Database('dbreport.sqlite');
-var sleep = require('sleep');
 var osm_users = ['Rub21', 'ediyes', 'Luis36995', 'RichRico', 'dannykath'];
 var osm_file = '';
 
