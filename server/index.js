@@ -24,7 +24,8 @@ app.get('/:date', function(req, res) {
 		user.id = row.id_user;
 		array_objs.push(user);
 	}, function() {
-		db.each("SELECT  substr(osm_date,0,11) as date,substr(osm_date,12) as hour,(high_vx+high_v1) as high_total, osm_user,R.id_user  FROM osm_highway AS C LEFT JOIN  osm_user AS R ON R.id_user=C.id_user WHERE  date='" + date + "'", function(err, row) {
+		var query = "SELECT  (high_vx+high_v1) as high_total, U.osm_user, U.id_user, substr( D.osm_date,0,11) as date ,substr(D.osm_date,12) as hour  FROM osm_highway   AS H   LEFT JOIN  osm_user AS U  ON   U.id_user=H.id_user  LEFT JOIN osm_date as D   ON H.id_date=D.id_date WHERE  date='" + date + "'";
+		db.each(query, function(err, row) {
 			array_objs[row.id_user - 1].values.push({
 				x: parseInt(row.hour),
 				y: parseInt(row.high_total)

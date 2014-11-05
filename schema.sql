@@ -4,13 +4,16 @@ CREATE TABLE osm_user (
   color TEXT
 );
 
+CREATE TABLE osm_date(	
+  id_date INTEGER PRIMARY KEY AUTOINCREMENT,
+  osm_file TEXT,
+  osm_date TEXT
+);
 
 CREATE TABLE osm_highway (	
-  osm_file TEXT,
   id_user INTEGER,
-  osm_date TEXT,
+  id_date  INTEGER,
   high_v1 INTEGER,
   high_vx  INTEGER
 );
-
 
