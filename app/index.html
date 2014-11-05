@@ -19,6 +19,12 @@
 
     }
 
+      #chart1{
+        height: 500px;
+        margin-top: 50px;
+
+    }
+
 </style>
 <body>
  <script  src="lib/jquery-2.1.1.min.js"></script>
@@ -54,6 +60,12 @@
     <div id="chart" class='with-transitions'>
         <svg></svg>
     </div>
+
+      <div id="chart1" class='with-3d-shadow with-transitions'>
+    <svg></svg>
+  </div>
+
+
     <link href="src/nv.d3.css" rel="stylesheet" type="text/css">
     <script src="lib/d3.v3.js"></script>
     <script src="lib/nv.d3.js"></script>
@@ -65,7 +77,9 @@
     <script src="src/models/line.js"></script>
     <script src="src/models/lineChart.js"></script>
    
-    <script>
+    <script>   
+
+
     //var host='http://localhost:3021/';
     var host='http://54.172.162.212:3022/'
     $.ajax({
@@ -74,6 +88,7 @@
             success: function(json) {
 
                 draw(json);
+                draw_bart(json);
             }
         });
         function draw(json) {
@@ -81,7 +96,7 @@
                 var chart = nv.models.lineChart();
                 var fitScreen = false;
                 var width = 500;
-                var height = 200;
+                var height = 100;
                 var zoom = 4;
 
                 chart.useInteractiveGuideline(true);
@@ -173,4 +188,46 @@
                 return chart;
             });
         }
+
+
+        function draw_bart(test_data) {
+
+  var chart;
+  nv.addGraph(function() {
+    chart = nv.models.multiBarChart()
+      //.barColor(d3.scale.category20().range())
+      .margin({
+        bottom: 100
+      })
+      .transitionDuration(300)
+      .delay(0)
+      .rotateLabels(0)
+      .groupSpacing(0.1);
+
+    chart.multibar
+      .hideable(true);
+
+    chart.reduceXTicks(false).staggerLabels(true);
+
+    chart.xAxis
+      .axisLabel("Hours")
+      .showMaxMin(true)
+      .tickFormat(d3.format(','));
+
+    chart.yAxis
+      .tickFormat(d3.format(',.H'));
+
+    d3.select('#chart1 svg')
+      .datum(test_data)
+      .call(chart);
+
+    nv.utils.windowResize(chart.update);
+
+    chart.dispatch.on('stateChange', function(e) {
+      nv.log('New State:', JSON.stringify(e));
+    });
+
+    return chart;
+  });
+}
     </script>

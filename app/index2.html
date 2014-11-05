@@ -59,11 +59,11 @@ $.ajax({
   dataType: "json",
   url: host + document.URL.split('#')[1],
   success: function(json) {
-    draw(json);
+    draw_bart(json);
   }
 });
 
-function draw(test_data) {
+function draw_bart(test_data) {
 
   var chart;
   nv.addGraph(function() {
