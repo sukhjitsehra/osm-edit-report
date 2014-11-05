@@ -1,7 +1,9 @@
 CREATE TABLE osm_user (
   id_user INTEGER PRIMARY KEY AUTOINCREMENT,
-  osm_user TEXT
+  osm_user TEXT,
+  color TEXT
 );
+
 
 CREATE TABLE osm_highway (	
   osm_file TEXT,

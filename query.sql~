@@ -1,8 +1,8 @@
-INSERT   INTO  osm_user(osm_user,color)  VALUES ("Rub21,","0171C5");
-INSERT   INTO  osm_user(osm_user,color)  VALUES ("ediyes","FFFF00");
-INSERT   INTO  osm_user(osm_user,color)  VALUES ("Luis36995","00FF00");
-INSERT   INTO  osm_user(osm_user,color)  VALUES ("RichRico","EE3344");
-INSERT   INTO  osm_user(osm_user,color)  VALUES ("dannykath","662289");
+INSERT   INTO  osm_user(osm_user)  VALUES ("Rub21,","0171C5");
+INSERT   INTO  osm_user(osm_user)  VALUES ("ediyes","FFFF00");
+INSERT   INTO  osm_user(osm_user)  VALUES ("Luis36995","00FF00");
+INSERT   INTO  osm_user(osm_user)  VALUES ("RichRico","EE3344");
+INSERT   INTO  osm_user(osm_user)  VALUES ("dannykath","662289");
 select * from osm_user;
 
 

@@ -29,7 +29,7 @@ function format_num(n) {
 }
 
 function download_file(url, localFile, callback) {
-	//console.log('Start download : ' + url);
+	console.log('Start download : ' + url);
 	var localStream = fs.createWriteStream(localFile);
 	var out = request({
 		uri: url
@@ -78,6 +78,7 @@ function proces_file_save() {
 	});
 
 	reader.apply(handler);
+
 	db.serialize(function() {
 		var stmt = db.prepare("INSERT INTO osm_highway VALUES (?,?,?,?,?)");
 		for (var i = 0; i < osm_users.length; i++) {
@@ -85,10 +86,21 @@ function proces_file_save() {
 		};
 		stmt.finalize();
 	});
-	var tempFile = fs.openSync(osm_file, 'r');
-	fs.closeSync(tempFile);
-	fs.unlinkSync(osm_file);
-	console.log('Remove file :' + osm_file);
+
+	//repite
+	if (!fs.exists(osm_file)) {
+		var tempFile = fs.openSync(osm_file, 'r');
+		fs.closeSync(tempFile);
+		fs.unlinkSync(osm_file);
+	} else {
+		console.log('*********************************Completo*******************************');
+	}
+
+	url_file = get_url_file();
+	osm_file = name_file + '.osc'
+	download_file(url_file, osm_file, proces_file_save);
+
+
 }
 
 function get_url_file() {
@@ -126,8 +138,8 @@ var num_directory = 18;
 var name_directory = ''
 name_directory = '0' + num_directory;
 
-setInterval(function() {
-	var url_file = get_url_file();
-	osm_file = name_file + '.osc'
-	download_file(url_file, osm_file, proces_file_save);
-}, 60* 60 * 1000);
+
+
+var url_file = get_url_file();
+osm_file = name_file + '.osc'
+download_file(url_file, osm_file, proces_file_save);

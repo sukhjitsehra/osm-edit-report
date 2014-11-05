@@ -42,8 +42,10 @@ app.get('/:date', function(req, res) {
 			rd.on('line', function(line) {
 				if (bandera) {
 					var users = line.split(',');
+
 					for (var i = 1; i < users.length; i++) {
 						var user = new objs();
+
 						user.key = users[i];
 						user.color = color_users[users[i]];
 						array_objs.push(user);
@@ -65,7 +67,9 @@ app.get('/:date', function(req, res) {
 				console.log('error');
 			});
 		} else {
-			res.json({error:"no data"});
+			res.json({
+				error: "no data"
+			});
 		}
 	});
 });
