@@ -147,7 +147,7 @@ function complete_date(str) {
 //intitializar parameters
 var url = 'http://planet.openstreetmap.org/replication/hour/000';
 var name_file = '';
-var num_file = 825;
+var num_file = 828;
 var num_directory = 18;
 var name_directory = ''
 name_directory = '0' + num_directory;
@@ -157,4 +157,4 @@ setInterval(function() {
 	osm_file = name_file + '.osc'
 	download_file(url_file, osm_file, proces_file_save);
 
-}, 2 * 60 * 1000);
+}, 60* 60 * 1000);
