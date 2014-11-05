@@ -35,4 +35,5 @@ app.get('/:date', function(req, res) {
 		});
 	});
 });
+
 app.listen(process.env.PORT || 3021);

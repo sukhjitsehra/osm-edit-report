@@ -18,4 +18,4 @@ SELECT substr(osm_date,0,11) as date,substr(osm_date,12) as hour,(high_vx+high_v
 SELECT   (high_vx+high_v1) as high_total,  U. osm_user,   U. id_user, D.osm_date    FROM osm_highway   AS H   LEFT JOIN  osm_user AS U  ON   U.id_user=H.id_user  LEFT JOIN osm_date as D   ON H.id_date=D.id_date
 
 //Con Parametro
-SELECT   (high_vx+high_v1) as high_total,  U. osm_user,   U. id_user, substr( D.osm_date,0,11) as date    FROM osm_highway   AS H   LEFT JOIN  osm_user AS U  ON   U.id_user=H.id_user  LEFT JOIN osm_date as D   ON H.id_date=D.id_date WHERE  date='2014-10-03'
+SELECT   (high_vx+high_v1) as high_total,  U. osm_user,   U. id_user, substr( D.osm_date,0,11) as date ,substr(D.osm_date,12) as hour   FROM osm_highway   AS H   LEFT JOIN  osm_user AS U  ON   U.id_user=H.id_user  LEFT JOIN osm_date as D   ON H.id_date=D.id_date WHERE  date='2014-10-03'
