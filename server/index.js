@@ -20,7 +20,7 @@ app.get('/:date', function(req, res) {
 	db.each("SELECT id_user, osm_user , color from osm_user", function(err, row) {
 		var user = new objs();
 		user.key = row.osm_user;
-		user.color = row.color,
+		user.color = '#'+row.color,
 		user.id = row.id_user;
 		array_objs.push(user);
 	}, function() {

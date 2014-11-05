@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<meta charset="utf-8">
+
+<link href="../src/nv.d3.css" rel="stylesheet" type="text/css">
+
+<style>
+
+body {
+  overflow-y:scroll;
+}
+
+text {
+  font: 12px sans-serif;
+}
+
+#chart1 {
+  height: 500px;
+  margin: 10px;
+  min-width: 100px;
+  min-height: 100px;
+/*
+  Minimum height and width is a good idea to prevent negative SVG dimensions...
+  For example width should be =< margin.left + margin.right + 1,
+  of course 1 pixel for the entire chart would not be very useful, BUT should not have errors
+*/
+}
+
+</style>
+<body>
+
+ <script  src="lib/jquery-2.1.1.min.js"></script>
+<link rel="stylesheet" href="lib/bootstrap.min.css">
+<link rel="stylesheet" href="lib/bootstrap-theme.min.css">
+<script src="lib/bootstrap.min.js"></script>
+
+
+  <div id="chart1" class='with-3d-shadow with-transitions'>
+    <svg></svg>
+  </div>
+
+
+    <link href="src/nv.d3.css" rel="stylesheet" type="text/css">
+    <script src="lib/d3.v3.js"></script>
+    <script src="lib/nv.d3.js"></script>
+    <script src="src/tooltip.js"></script>
+    <script src="src/utils.js"></script>
+    <script src="src/models/legend.js"></script>
+    <script src="src/models/axis.js"></script>
+    <script src="src/models/scatter.js"></script>
+    <script src="src/models/line.js"></script>
+    <script src="src/models/lineChart.js"></script>
+
+
+<script>
+
+var host = 'http://localhost:3021/';
+//var host='http://54.172.183.193:3021/'
+$.ajax({
+  dataType: "json",
+  url: host + document.URL.split('#')[1],
+  success: function(json) {
+    draw(json);
+  }
+});
+
+function draw(test_data) {
+
+  var chart;
+  nv.addGraph(function() {
+    chart = nv.models.multiBarChart()
+      //.barColor(d3.scale.category20().range())
+      .margin({
+        bottom: 100
+      })
+      .transitionDuration(300)
+      .delay(0)
+      .rotateLabels(0)
+      .groupSpacing(0.1);
+
+    chart.multibar
+      .hideable(true);
+
+    chart.reduceXTicks(false).staggerLabels(true);
+
+    chart.xAxis
+      .axisLabel("Hours")
+      .showMaxMin(true)
+      .tickFormat(d3.format(','));
+
+    chart.yAxis
+      .tickFormat(d3.format(',.H'));
+
+    d3.select('#chart1 svg')
+      .datum(test_data)
+      .call(chart);
+
+    nv.utils.windowResize(chart.update);
+
+    chart.dispatch.on('stateChange', function(e) {
+      nv.log('New State:', JSON.stringify(e));
+    });
+
+    return chart;
+  });
+}
+</script>
