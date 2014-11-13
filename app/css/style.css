@@ -1,0 +1,21 @@
+body {
+overflow-y:scroll;
+}
+text {
+font: 12px sans-serif;
+}
+svg {
+display: block;
+}
+#chart{
+margin-top: 20px;
+}
+#chart1{
+height: 500px;
+margin-top: 50px;
+}
+.date-form { margin: 10px; }
+label.control-label span { cursor: pointer; }
+#date-picker-2{
+z-index: 9999;
+}
