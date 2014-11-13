@@ -45,6 +45,7 @@ function download_file(url, localFile, callback) {
 };
 
 function proces_file_save() {
+
 	console.log('Process file :' + name_file);
 	var osmfile = osm_file;
 	var count = {};
@@ -54,6 +55,8 @@ function proces_file_save() {
 		};
 		count[osm_users[k]] = way;
 	};
+
+	
 	var file = new osmium.File(osmfile);
 	var reader = new osmium.Reader(file);
 	var handler = new osmium.Handler();
@@ -95,11 +98,6 @@ function proces_file_save() {
 	});
 
 
-	//var tempFile = fs.openSync(osm_file, 'r');
-	//fs.closeSync(tempFile);
-	//fs.unlinkSync(osm_file);
-	//console.log('Remove file :' + osm_file);
-
 	//repite
 	if (!fs.exists(osm_file)) {
 		var tempFile = fs.openSync(osm_file, 'r');
@@ -109,11 +107,6 @@ function proces_file_save() {
 	} else {
 		console.log('Error in remove file');
 	}
-
-	//url_file = get_url_file();
-	//osm_file = name_file + '.osc'
-	//download_file(url_file, osm_file, proces_file_save);
-
 }
 
 function get_url_file() {
@@ -156,4 +149,4 @@ setInterval(function() {
 	osm_file = name_file + '.osc'
 	download_file(url_file, osm_file, proces_file_save);
 
-}, 60* 60 * 1000);
+}, 60 * 60 * 1000);

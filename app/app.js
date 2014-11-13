@@ -1,5 +1,5 @@
-//var host='http://localhost:3021/';
-var host = 'http://54.172.162.212:3022/'
+var host='http://localhost:3021/';
+//var host = 'http://54.172.162.212:3022/'
 
 
 function draw(json) {

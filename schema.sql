@@ -6,7 +6,7 @@ CREATE TABLE osm_user (
 
 CREATE TABLE osm_date(	
   id_date INTEGER PRIMARY KEY AUTOINCREMENT,
-  osm_file TEXT,
+  osm_file TEXT not null unique,
   osm_date TEXT
 );
 

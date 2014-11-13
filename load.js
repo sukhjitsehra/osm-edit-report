@@ -143,7 +143,7 @@ function complete_date(str) {
 //intitializar parameters
 var url = 'http://planet.openstreetmap.org/replication/hour/000';
 var name_file = '';
-var num_file = 800;
+var num_file = 980;
 var num_directory = 18;
 var name_directory = ''
 name_directory = '0' + num_directory;
