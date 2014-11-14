@@ -27,5 +27,7 @@ SELECT SUM(high_vx+high_v1) as high_total, U. osm_user, U. id_user, substr( D.os
 
 
 
+SELECT  strftime('%s',  substr( osm_date,0,11)  || ' 00:00:00' ) as int_date FROM  osm_date;
 
-SELECT strftime('%d - %m  - %Y ', datetime(1281353727, 'unixepoch')) FROM Visits;
+
+

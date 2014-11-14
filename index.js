@@ -56,20 +56,19 @@ function proces_file_save() {
 		count[osm_users[k]] = way;
 	};
 
-	
+
 	var file = new osmium.File(osmfile);
 	var reader = new osmium.Reader(file);
 	var handler = new osmium.Handler();
 	var day, hour = '';
 	var check_hour = true;
 	handler.on('way', function(way) {
-		//if (check_hour) {
-		//console.log(way.timestamp);
+
 		var date = new Date(parseFloat(way.timestamp) * 1000);
-		//hour = date.getHours();
 		day = date.getUTCFullYear() + '-' + complete_date(parseInt(date.getUTCMonth()) + 1) + '-' + complete_date(date.getUTCDate()) + '-' + complete_date(date.getHours());
-		//check_hour = false;
-		//}
+
+		//day = parseFloat(way.timestamp) * 1000;
+
 		if (typeof way.tags().highway !== 'undefined' && osm_users.indexOf(way.user) !== -1) { //evalua las calles	
 			if (way.version === 1) {
 				++count[way.user].way.highways.v1;
