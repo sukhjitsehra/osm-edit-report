@@ -1,5 +1,21 @@
 //var host='http://localhost:3021/';
+
+
+
 var host = 'http://54.172.162.212:3022/'
+
+
+$.ajax({
+    dataType: "json",
+    url: host + document.URL.split('#')[1],
+    success: function(json) {
+
+        draw_bart(json);
+        draw(json);
+        
+    }
+});
+
 
 
 function draw(json) {
@@ -145,7 +161,8 @@ function draw_bart(test_data) {
 
 
 $(document).ready(function() {
-    console.log("ready!");
+
+    $('.date-picker').val(document.URL.split('#')[1]);
     $(".date-picker").datepicker({
         weekStart: 1,
         dateFormat: 'yy-mm-dd'
@@ -157,7 +174,7 @@ $(document).ready(function() {
         $('#chart').empty();
 
         $('#chart1').html('<svg></svg>');
-         $('#chart').html('<svg></svg>');
+        $('#chart').html('<svg></svg>');
 
         $.ajax({
             dataType: "json",
@@ -165,6 +182,8 @@ $(document).ready(function() {
             success: function(json) {
                 draw(json);
                 draw_bart(json);
+
+                location.href = document.URL.split('#')[0] + '#'+$('.date-picker').val();
             }
         });
     });
