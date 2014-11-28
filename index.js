@@ -8,7 +8,7 @@ var db = new sqlite3.Database('dbreport.sqlite');
 var osm_users = ['Rub21', 'ediyes', 'Luis36995', 'RichRico', 'dannykath'];
 var osm_file = '';
 
-var obj_way = function() {
+/*var obj_way = function() {
 	return {
 		highways: {
 			v1: 0,
@@ -21,7 +21,34 @@ var obj_way = function() {
 			vx: 0
 		}
 	};
+};*/
+
+var obj = function() {
+	return {
+		osm_user: {
+			osmuser: null,
+			color: null
+		},
+		osm_date: {
+			osmfile: null,
+			osmdate: 0
+		},
+		osm_node: {
+			v1: 0,
+			vx: 0
+		},
+		osm_way: {
+			v1: 0,
+			vx: 0
+		},
+		osm_relation: {
+			v1: 0,
+			vx: 0
+		}
+	};
 };
+
+
 
 function format_num(n) {
 	return numeral(n).format('0,0');
@@ -48,6 +75,7 @@ function proces_file_save() {
 
 	console.log('Process file :' + name_file);
 	var osmfile = osm_file;
+	
 	var count = {};
 	for (var k = 0; k < osm_users.length; k++) {
 		var way = {
@@ -108,6 +136,7 @@ function proces_file_save() {
 	}
 }
 
+
 function get_url_file() {
 	if (num_file < 10) {
 		name_file = '00' + num_file;
@@ -125,6 +154,7 @@ function get_url_file() {
 	}
 	return url + '/' + name_directory + '/' + name_file + '.osc.gz';
 }
+
 
 function complete_date(str) {
 	str = str + '';
