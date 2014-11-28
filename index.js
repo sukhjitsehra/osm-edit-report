@@ -3,25 +3,12 @@ var numeral = require('numeral');
 var request = require('request');
 var fs = require('fs');
 var zlib = require('zlib');
-var sqlite3 = require('sqlite3').verbose();
-var db = new sqlite3.Database('dbreport.sqlite');
-var osm_users = ['Rub21', 'ediyes', 'Luis36995', 'RichRico', 'dannykath'];
-var osm_file = '';
+var _ = require('underscore');
 
-/*var obj_way = function() {
-	return {
-		highways: {
-			v1: 0,
-			vx: 0,
-			oneways: 0,
-			bridges: 0
-		},
-		buildings: {
-			v1: 0,
-			vx: 0
-		}
-	};
-};*/
+var pg = require('pg');
+var conString = "postgres://postgres:1234@localhost/dbstatistic";
+
+var osm_file = '';
 
 var obj = function() {
 	return {
@@ -71,70 +58,133 @@ function download_file(url, localFile, callback) {
 	});
 };
 
-function proces_file_save() {
+function proces_file_save(callback) {
 
+	//connect data base
+	var client = new pg.Client(conString);
+	client.connect(function(err) {
+		if (err) {
+			return console.error('could not connect to postgres', err);
+		}
+	});
+
+	//proces file
 	console.log('Process file :' + name_file);
 	var osmfile = osm_file;
-	
 	var count = {};
-	for (var k = 0; k < osm_users.length; k++) {
-		var way = {
-			way: new obj_way()
-		};
-		count[osm_users[k]] = way;
-	};
 
+	var query_user = "SELECT iduser, osmuser, color, estado FROM osm_user";
+	console.log(query_user)
 
-	var file = new osmium.File(osmfile);
-	var reader = new osmium.Reader(file);
-	var handler = new osmium.Handler();
-	var day, hour = '';
-	var check_hour = true;
-	handler.on('way', function(way) {
+	var main_query = client.query(query_user, function(error, result) {
+		if (error) {
+			console.log(error);
+			res.statusCode = 404;
+			return res.send('Error 404: No quote found');
+		} else {
+			try {
+				for (var i = 0; i < result.rows.length; i++) {
+					user = new obj();
+					count[result.rows[i].iduser] = user;
+				}
 
-		var date = new Date(parseFloat(way.timestamp) * 1000);
-		day = date.getUTCFullYear() + '-' + complete_date(parseInt(date.getUTCMonth()) + 1) + '-' + complete_date(date.getUTCDate()) + '-' + complete_date(date.getHours());
+				//Procesamiento de datos
+				var file = new osmium.File(osmfile);
+				var reader = new osmium.Reader(file);
+				var handler = new osmium.Handler();
 
-		//day = parseFloat(way.timestamp) * 1000;
+				//WAY
+				handler.on('way', function(way) {
+					osmdate = way.timestamp;
+					if (count.hasOwnProperty(way.uid) && _.size(way.tags()) > 0) {
+						if (way.version === 1) {
+							++count[way.uid].osm_way.v1;
+						} else {
+							++count[way.uid].osm_way.vx;
+						}
+					}
+				});
+				//NODE
+				handler.on('node', function(node) {
 
-		if (typeof way.tags().highway !== 'undefined' && osm_users.indexOf(way.user) !== -1) { //evalua las calles	
-			if (way.version === 1) {
-				++count[way.user].way.highways.v1;
-			} else {
-				++count[way.user].way.highways.vx;
+					if (count.hasOwnProperty(node.uid) && _.size(node.tags()) > 0) {
+						if (node.version === 1) {
+							++count[node.uid].osm_node.v1;
+						} else {
+							++count[node.uid].osm_node.vx;
+						}
+					}
+				});
+
+				//RELATION
+				handler.on('relation', function(relation) {
+					if (count.hasOwnProperty(relation.uid) && _.size(relation.tags()) > 0) {
+						if (relation.version === 1) {
+							++count[relation.uid].osm_node.v1;
+						} else {
+							++count[relation.uid].osm_node.vx;
+						}
+					}
+				});
+				reader.apply(handler);
+				//insert date
+				var query_data = 'INSERT INTO osm_date(idfile, osmdate)  VALUES ($1, $2);';
+				client.query(query_data, [name_directory + '-' + name_file, osmdate],
+					function(err, result) {
+						if (err) {
+							console.log(err);
+						} else {
+							console.log('row inserted with id: ' + result);
+						}
+					});
+
+				//insertobjs(idfile, iduser , node_v1 , node_vx , way_v1 , way_vx , relation_v1 , relation_vx)
+				//insert all data
+				_.each(count, function(val, key) {
+					var obj_data = [];
+					obj_data.push(name_directory + '-' + name_file);
+					obj_data.push(key);
+					obj_data.push(val.osm_node.v1);
+					obj_data.push(val.osm_node.vx);
+					obj_data.push(val.osm_way.v1);
+					obj_data.push(val.osm_way.vx);
+					obj_data.push(val.osm_relation.v1);
+					obj_data.push(val.osm_relation.vx);
+					var query_insert = 'SELECT insertobjs($1, $2, $3, $4, $5, $6, $7, $8)';
+					client.query(query_insert, obj_data,
+						function(err, result) {
+							if (err) {
+								console.log(err);
+							} else {
+								console.log('row inserted with id: ' + result);
+							}
+						});
+				});
+				//console.log(count);
+			} catch (e) {
+				console.log("entering catch block");
 			}
 		}
 	});
 
-	reader.apply(handler);
+	main_query.on('end', function(result) {
+		//Elimia el archivo
+		if (!fs.exists(osm_file)) {
+			var tempFile = fs.openSync(osm_file, 'r');
+			fs.closeSync(tempFile);
+			fs.unlinkSync(osm_file);
+			console.log('Remove file :' + osm_file);
+		} else {
+			console.log('Error in remove file');
+		}
 
-	db.serialize(function() {
-		var id_date = 0;
-		var stmt_date = db.prepare("INSERT INTO osm_date(osm_file,osm_date) VALUES (?,?)");
-		stmt_date.run(name_directory + '-' + name_file, day);
-		stmt_date.finalize();
-		db.each("SELECT MAX(id_date) as id_date  FROM osm_date", function(err, row) {
-			id_date = row.id_date;
-		}, function() {
-			var stmt_highway = db.prepare("INSERT INTO osm_highway VALUES (?,?,?,?)");
-			for (var i = 0; i < osm_users.length; i++) {
-				stmt_highway.run(i + 1, id_date, count[osm_users[i]].way.highways.v1, count[osm_users[i]].way.highways.vx);
-			};
-			stmt_highway.finalize();
-		});
+		setTimeout(
+			function() {
+				client.end();
+			}, 5000);
 	});
-
-
-	//repite
-	if (!fs.exists(osm_file)) {
-		var tempFile = fs.openSync(osm_file, 'r');
-		fs.closeSync(tempFile);
-		fs.unlinkSync(osm_file);
-		console.log('Remove file :' + osm_file);
-	} else {
-		console.log('Error in remove file');
-	}
 }
+
 
 
 function get_url_file() {
@@ -156,26 +206,20 @@ function get_url_file() {
 }
 
 
-function complete_date(str) {
-	str = str + '';
-	if (str.length === 1) {
-		return '0' + str;
-	} else {
-		return str;
-	}
-}
 
 //intitializar parameters
 var url = 'http://planet.openstreetmap.org/replication/hour/000';
 var name_file = '';
-var num_file = 828;
-var num_directory = 18;
+var num_file = 46;
+var num_directory = 19;
 var name_directory = ''
 name_directory = '0' + num_directory;
+var osmdate = 0;
 
-setInterval(function() {
-	var url_file = get_url_file();
-	osm_file = name_file + '.osc'
-	download_file(url_file, osm_file, proces_file_save);
 
-}, 60 * 60 * 1000);
+//setInterval(function() {
+var url_file = get_url_file();
+osm_file = name_file + '.osc'
+download_file(url_file, osm_file, proces_file_save);
+
+//}, 60 * 60 * 1000);
