@@ -112,6 +112,42 @@ $$ LANGUAGE plpgsql;
 
 
 
+--selecion
+
+SELECT idfile, osmdate FROM osm_date;
+
+
+
+SELECT u.osmuser, substring(to_timestamp(d.osmdate)::text,0,14) , (w.way_v1 + w.way_vx) as way FROM osm_way as w INNER JOIN osm_user as u on   u.iduser =  w.iduser INNER JOIN osm_date as d on   d.idfile =  w.idfile
+
+
+--quiero por hora de 16 0 horas =1415750400 y 17 0 horas =1416182400
+
+SELECT u.osmuser, substring(to_timestamp(d.osmdate)::text,0,14), (w.way_v1 + w.way_vx) as way 
+FROM osm_way as w 
+INNER JOIN osm_user as u on   u.iduser =  w.iduser 
+INNER JOIN osm_date as d on   d.idfile =  w.idfile
+WHERE d.osmdate> 1416096000 AND d.osmdate<1416182400 
+
+-- Todo los avances por team
+
+SELECT u.osmuser,sum(w.way_v1 + w.way_vx) as way 
+FROM osm_way as w 
+INNER JOIN osm_user as u on   u.iduser =  w.iduser 
+INNER JOIN osm_date as d on   d.idfile =  w.idfile
+WHERE  d.osmdate> 0 AND d.osmdate<1516268800   GROUP BY  u.osmuser
+
+
+--POR DIA
+
+SELECT  u.osmuser, substring(to_timestamp(d.osmdate)::text,0,11) as date, sum(w.way_v1 + w.way_vx) as way 
+FROM osm_way as w 
+INNER JOIN osm_user as u on   u.iduser =  w.iduser 
+INNER JOIN osm_date as d on   d.idfile =  w.idfile 
+WHERE d.osmdate> 1416096000 AND d.osmdate<1416182400
+GROUP BY  date,u.osmuser 
+ORDER BY u.osmuser 
+
 
 
 

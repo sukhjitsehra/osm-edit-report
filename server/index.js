@@ -1,38 +1,71 @@
 var express = require('express');
 var cors = require('cors');
-var sqlite3 = require('sqlite3').verbose();
-var db = new sqlite3.Database('../dbreport.sqlite');
 var app = express();
+var pg = require('pg');
+var _ = require('underscore');
 app.use(cors());
-console.log("http://localhost:3021/");
-var objs = function() {
+
+var obj = function() {
 	return {
 		values: [],
 		key: null,
-		color: null,
-		id: null
+		color: null
+			//id: null
 	};
 };
+
+var conString = "postgres://postgres:1234@localhost/dbstatistic";
+console.log("http://localhost:3021/");
+//connect data base
+var client = new pg.Client(conString);
+client.connect(function(err) {
+	if (err) {
+		return console.error('could not connect to postgres', err);
+	}
+});
+
+
 app.get('/:date', function(req, res) {
 	var date = req.params.date;
 	var array_objs = [];
-	console.log(date);
-	db.each("SELECT id_user, osm_user , color from osm_user", function(err, row) {
-		var user = new objs();
-		user.key = row.osm_user;
-		user.color = '#'+row.color,
-		user.id = row.id_user;
-		array_objs.push(user);
-	}, function() {
-		var query = "SELECT  (high_vx+high_v1) as high_total, U.osm_user, U.id_user, substr( D.osm_date,0,11) as date ,substr(D.osm_date,12) as hour  FROM osm_highway   AS H   LEFT JOIN  osm_user AS U  ON   U.id_user=H.id_user  LEFT JOIN osm_date as D   ON H.id_date=D.id_date WHERE  date='" + date + "'";
-		db.each(query, function(err, row) {
-			array_objs[row.id_user - 1].values.push({
-				x: parseInt(row.hour),
-				y: parseInt(row.high_total)
-			});
-		}, function() {
+	var query_user = "SELECT iduser, osmuser, color, estado FROM osm_user";
+	var main_query = client.query(query_user, function(error, result) {
+		if (error) {
+			console.log(error);
+			res.statusCode = 404;
+			return res.send('Error 404: No quote found');
+		} else {
+			for (var i = 0; i < result.rows.length; i++) {
+				user = new obj();
+				user.key = result.rows[i].osmuser;
+				user.color = '#' + result.rows[i].color;
+				array_objs.push(user);
+			}
+		}
+	});
+
+	var query = "SELECT u.osmuser, substring(to_timestamp(d.osmdate)::text,0,14) as osmdate , (w.way_v1 + w.way_vx) as way" +
+		" FROM osm_way as w" +
+		" INNER JOIN osm_user as u on   u.iduser =  w.iduser" +
+		" INNER JOIN osm_date as d on   d.idfile =  w.idfile" +
+		" WHERE d.osmdate> 1416096000 AND d.osmdate<1416182400 ";
+
+	client.query(query, function(error, result) {
+		if (error) {
+			console.log(error);
+			res.statusCode = 404;
+			return res.send('Error 404: No quote found');
+		} else {
+			for (var i = 0; i < result.rows.length; i++) {
+				var userss = _.find(array_objs, function(obj) {
+					return obj.key === result.rows[i].osmuser
+				}).values.push({
+					x: parseInt(result.rows[i].osmdate.split(' ')[1]),
+					y: parseInt(result.rows[i].way)
+				});
+			}
 			res.json(array_objs);
-		});
+		}
 	});
 });
 

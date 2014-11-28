@@ -74,8 +74,7 @@ function proces_file_save(callback) {
 	var count = {};
 
 	var query_user = "SELECT iduser, osmuser, color, estado FROM osm_user";
-	console.log(query_user)
-
+	//console.log(query_user)
 	var main_query = client.query(query_user, function(error, result) {
 		if (error) {
 			console.log(error);
@@ -133,9 +132,9 @@ function proces_file_save(callback) {
 					function(err, result) {
 						if (err) {
 							console.log(err);
-						} else {
+						}/* else {
 							console.log('row inserted with id: ' + result);
-						}
+						}*/
 					});
 
 				//insertobjs(idfile, iduser , node_v1 , node_vx , way_v1 , way_vx , relation_v1 , relation_vx)
@@ -155,9 +154,9 @@ function proces_file_save(callback) {
 						function(err, result) {
 							if (err) {
 								console.log(err);
-							} else {
+							} /*else {
 								console.log('row inserted with id: ' + result);
-							}
+							}*/
 						});
 				});
 				//console.log(count);

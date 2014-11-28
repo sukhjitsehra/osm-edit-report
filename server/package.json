@@ -8,7 +8,9 @@
   "dependencies": {
     "cors": "^2.4.1",
     "express": "^4.0.0",
-    "sqlite3": "^3.0.2"
+    "pg": "^4.0.0",
+    "sqlite3": "^3.0.2",
+    "underscore": "^1.7.0"
   },
   "scripts": {
     "run": "./index.js"

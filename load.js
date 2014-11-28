@@ -74,8 +74,7 @@ function proces_file_save(callback) {
 	var count = {};
 
 	var query_user = "SELECT iduser, osmuser, color, estado FROM osm_user";
-	console.log(query_user)
-
+	//console.log(query_user)
 	var main_query = client.query(query_user, function(error, result) {
 		if (error) {
 			console.log(error);
