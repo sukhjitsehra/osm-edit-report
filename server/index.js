@@ -3,6 +3,7 @@ var cors = require('cors');
 var app = express();
 var pg = require('pg');
 var _ = require('underscore');
+var moment = require('moment');
 app.use(cors());
 
 var obj = function() {
@@ -26,7 +27,10 @@ client.connect(function(err) {
 
 
 app.get('/:date', function(req, res) {
-	var date = req.params.date;
+
+	var date = (req.params.date + '').split('&');
+	console.log(date);
+
 	var array_objs = [];
 	var query_user = "SELECT iduser, osmuser, color, estado FROM osm_user";
 	var main_query = client.query(query_user, function(error, result) {
@@ -48,7 +52,10 @@ app.get('/:date', function(req, res) {
 		" FROM osm_way as w" +
 		" INNER JOIN osm_user as u on   u.iduser =  w.iduser" +
 		" INNER JOIN osm_date as d on   d.idfile =  w.idfile" +
-		" WHERE d.osmdate> 1416096000 AND d.osmdate<1416182400 ";
+		" WHERE d.osmdate> " + date[1] + " AND d.osmdate<" + date[2];
+
+
+		console.log(query);
 
 	client.query(query, function(error, result) {
 		if (error) {
@@ -60,7 +67,7 @@ app.get('/:date', function(req, res) {
 				var userss = _.find(array_objs, function(obj) {
 					return obj.key === result.rows[i].osmuser
 				}).values.push({
-					x: parseInt(result.rows[i].osmdate.split(' ')[1]),
+					x: result.rows[i].osmdate,
 					y: parseInt(result.rows[i].way)
 				});
 			}

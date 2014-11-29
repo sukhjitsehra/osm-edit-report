@@ -20,12 +20,17 @@
                 <a class="navbar-brand" href="#">Progress Team-Data</a>
             </div>
             <div class="navbar-collapse collapse">
-                <ul class="nav navbar-nav">
-                    <li class="active"><a href="#hour">Per Hour</a></li>
-                    <li ><a href="#day">Per Day</a></li>
-                    <li><a href="#month">Per Month</a></li>
-                </ul>
-                <div class="date-form">
+                <div class="btn-group nav navbar-nav btn-input clearfix col-md-2" style="margin-top: 10px">
+                    <button type="button" class="btn btn-default dropdown-toggle form-control" data-toggle="dropdown">
+                    <span data-bind="label">Per Hour</span> <span class="caret"></span>
+                    </button>
+                    <ul class="dropdown-menu" role="menu">
+                        <li><a href="#">Per Hour</a></li>
+                        <li><a href="#">Per Day</a></li>
+                        <li><a href="#">Per Month</a></li>
+                    </ul>
+                </div>
+                <div class="date-form  col-md-3">
                     <div class="form-horizontal">
                         <div class="control-group">
                             <div class="controls">
@@ -37,21 +42,32 @@
                             </div>
                         </div>
                     </div>
-                    
                 </div>
-                
+                <div class="date-form  col-md-3">
+                    <div class="form-horizontal">
+                        <div class="control-group">
+                            <div class="controls">
+                                <div class="input-group">
+                                    <input id="date-picker-3" type="text" class="date-picker1 form-control" />
+                                    <label for="date-picker-3" class="input-group-addon btn"><span class="glyphicon glyphicon-calendar"></span>
+                                    </label>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
     <div id="chart1" class='with-3d-shadow with-transitions'>
         <svg></svg>
     </div>
-    <div id="chart" class='with-transitions'>
-        <svg></svg>
-    </div>
+
+
+
     <script  src="lib/jquery-2.1.1.min.js"></script>
     <script src="js/jquery-ui-1.9.2.min.js"></script>
-    <script src="bootstrap.js"></script>
+    <script src="js/bootstrap.js"></script>
     <script src="lib/d3.v3.js"></script>
     <script src="lib/nv.d3.js"></script>
     <script src="src/tooltip.js"></script>

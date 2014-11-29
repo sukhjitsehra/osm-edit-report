@@ -1,121 +1,21 @@
-//var host='http://localhost:3021/';
-
-
-
-var host = 'http://54.172.162.212:3022/'
-
+var host = 'http://localhost:3021/';
+//var host = 'http://54.172.162.212:3022/'
+var type = 'd';
+var dates = document.URL.split('#')[1].split('&');
+type = dates[0];
+var start_str = dates[1];
+var end_str = dates[2];
+var start_times = new Date(start_str + " 00:00:00").getTime() / 1000;
+var end_times = new Date(end_str + " 00:00:00").getTime() / 1000;
 
 $.ajax({
     dataType: "json",
-    url: host + document.URL.split('#')[1],
+    url: host + type + '&' + start_times + '&' + end_times,
     success: function(json) {
-
         draw_bart(json);
-        draw(json);
-        
+        location.href = document.URL.split('#')[0] + '#h' + '&' + start_str + '&' + end_str;
     }
 });
-
-
-
-function draw(json) {
-    nv.addGraph(function() {
-        var chart = nv.models.lineChart();
-        var fitScreen = false;
-        var width = 500;
-        var height = 100;
-        var zoom = 3;
-
-        chart.useInteractiveGuideline(true);
-        //chart.xAxis.axisLabel('Hora').tickFormat(d3.format(',r'));
-        chart.xAxis.axisLabel('Hour').tickFormat(function(d) {
-
-            return d;
-            //Caso Peru Team
-            /*  var h=d;
-             
-             if(h>=0)
-             {
-             return h +' H';
-             }else{
-             switch(h) {
-             case -4:
-             return 20 +' H';
-             case -3:
-             return 21 +' H';
-             case -2:
-             return 22 +' H';
-             case -1:
-             return 23 +' H';
-             break;
-             case 0:
-             return 22 +' H';
-             }
-             }*/
-
-
-        });
-
-        chart.yAxis
-            .axisLabel('ChangeSets');
-
-        d3.select('#chart svg')
-            .attr('perserveAspectRatio', 'xMinYMid')
-            .attr('width', width)
-            .attr('height', height)
-            .datum(json);
-
-        setChartViewBox();
-        resizeChart();
-        nv.utils.windowResize(resizeChart);
-        d3.select('#zoomIn').on('click', zoomIn);
-        d3.select('#zoomOut').on('click', zoomOut);
-
-        function setChartViewBox() {
-            var w = width * zoom,
-                h = height * zoom;
-
-            chart
-                .width(w)
-                .height(h);
-
-            d3.select('#chart svg')
-                .attr('viewBox', '0 0 ' + w + ' ' + h)
-                .transition().duration(500)
-                .call(chart);
-        }
-
-        function zoomOut() {
-            zoom += .25;
-            setChartViewBox();
-        }
-
-        function zoomIn() {
-            if (zoom <= .5)
-                return;
-            zoom -= .25;
-            setChartViewBox();
-        }
-
-        function resizeChart() {
-            var container = d3.select('#chart');
-            var svg = container.select('svg');
-
-            if (fitScreen) {
-                var windowSize = nv.utils.windowSize();
-                svg.attr("width", windowSize.width);
-                svg.attr("height", windowSize.height);
-            } else {
-                var aspect = chart.width() / chart.height();
-                var targetWidth = parseInt(container.style('width'));
-                svg.attr("width", targetWidth);
-                svg.attr("height", Math.round(targetWidth / aspect));
-            }
-        };
-        return chart;
-    });
-}
-
 
 function draw_bart(test_data) {
 
@@ -136,10 +36,19 @@ function draw_bart(test_data) {
 
         chart.reduceXTicks(false).staggerLabels(true);
 
-        chart.xAxis
-            .axisLabel("Hours")
-            .showMaxMin(true)
-            .tickFormat(d3.format(','));
+        /* chart.xAxis
+             .axisLabel("Hours")
+             .showMaxMin(true)
+             .tickFormat(d3.format(','));*/
+
+        chart.xAxis.tickFormat(function(d) {
+
+            //2014-11-09 23
+            return d.split(' ')[0].substring(8, 11) + '-' + d.split(' ')[1] + 'h';
+            /*
+                        var dx = d[0].values[d] && d[0].values[d][0] || 0;
+                        return d3.time.format('%x')(new Date(dx))*/
+        });
 
         chart.yAxis
             .tickFormat(d3.format(',.H'));
@@ -161,30 +70,77 @@ function draw_bart(test_data) {
 
 
 $(document).ready(function() {
+    //1416096000 AND d.osmdate<1416182400
+    //#h&2014-11-15&2014-11-16
 
-    $('.date-picker').val(document.URL.split('#')[1]);
+
+    if (start_times > end_times) {
+        return null;
+    } else {
+        console.log('fine');
+    }
+
+    $('.date-picker').val(dates[1]);
+    $('.date-picker1').val(dates[2]);
+
+
     $(".date-picker").datepicker({
         weekStart: 1,
         dateFormat: 'yy-mm-dd'
     });
 
-    $(".date-picker").on("change", function() {
-        $('#chart1').empty();
 
-        $('#chart').empty();
-
-        $('#chart1').html('<svg></svg>');
-        $('#chart').html('<svg></svg>');
-
-        $.ajax({
-            dataType: "json",
-            url: host + $('.date-picker').val(),
-            success: function(json) {
-                draw(json);
-                draw_bart(json);
-
-                location.href = document.URL.split('#')[0] + '#'+$('.date-picker').val();
-            }
-        });
+    $(".date-picker1").datepicker({
+        weekStart: 1,
+        dateFormat: 'yy-mm-dd'
     });
+
+
+    $(".date-picker").on("change", function() {
+        process_draw();
+    });
+
+
+    $(".date-picker1").on("change", function() {
+        process_draw();
+    });
+
+
+
+    $(".dropdown-menu li a").click(function() {
+        var selText = $(this).text();
+        $(this).parents('.btn-group').find('.dropdown-toggle').html(selText + ' <span class="caret"></span>');
+    });
+
+
+
 });
+
+
+function todate(timestamp) {
+    var date = new Date(timestamp * 1000);
+    var year = date.getFullYear();
+    var month = date.getMonth() + 1;
+    var day = date.getDate();
+
+    return year + '-' + month + '-' + day;
+}
+
+
+function process_draw() {
+    $('#chart1').empty();
+    $('#chart1').html('<svg></svg>');
+    start_str = $('.date-picker').val();
+    start_times = new Date(start_str + " 00:00:00").getTime() / 1000;
+    end_str = $('.date-picker1').val();
+    end_times = new Date(end_str + " 00:00:00").getTime() / 1000;
+    console.log(host + type + '&' + start_times + '&' + end_times);
+    $.ajax({
+        dataType: "json",
+        url: host + type + '&' + start_times + '&' + end_times,
+        success: function(json) {
+            draw_bart(json);
+            location.href = document.URL.split('#')[0] + '#h' + '&' + start_str + '&' + end_str;
+        }
+    });
+}
