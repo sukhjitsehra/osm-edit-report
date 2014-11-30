@@ -13,12 +13,11 @@ $.ajax({
     url: host + type + '&' + start_times + '&' + end_times,
     success: function(json) {
         draw_bart(json);
-        location.href = document.URL.split('#')[0] + '#h' + '&' + start_str + '&' + end_str;
+        location.href = document.URL.split('#')[0] + '#' + type + '&' + start_str + '&' + end_str;
     }
 });
 
 function draw_bart(test_data) {
-
     var chart;
     nv.addGraph(function() {
         chart = nv.models.multiBarChart()
@@ -44,7 +43,8 @@ function draw_bart(test_data) {
         chart.xAxis.tickFormat(function(d) {
 
             //2014-11-09 23
-            return d.split(' ')[0].substring(8, 11) + '-' + d.split(' ')[1] + 'h';
+            return d;
+            //return d.split(' ')[0].substring(8, 11) + '-' + d.split(' ')[1] + 'h';
             /*
                         var dx = d[0].values[d] && d[0].values[d][0] || 0;
                         return d3.time.format('%x')(new Date(dx))*/
@@ -72,48 +72,35 @@ function draw_bart(test_data) {
 $(document).ready(function() {
     //1416096000 AND d.osmdate<1416182400
     //#h&2014-11-15&2014-11-16
-
-
     if (start_times > end_times) {
         return null;
     } else {
         console.log('fine');
     }
-
     $('.date-picker').val(dates[1]);
     $('.date-picker1').val(dates[2]);
-
-
     $(".date-picker").datepicker({
         weekStart: 1,
         dateFormat: 'yy-mm-dd'
     });
 
-
     $(".date-picker1").datepicker({
         weekStart: 1,
         dateFormat: 'yy-mm-dd'
     });
-
-
     $(".date-picker").on("change", function() {
-        process_draw();
+        draw();
     });
-
 
     $(".date-picker1").on("change", function() {
-        process_draw();
+        draw();
     });
-
-
-
     $(".dropdown-menu li a").click(function() {
         var selText = $(this).text();
+        type = $(this).attr("id");
         $(this).parents('.btn-group').find('.dropdown-toggle').html(selText + ' <span class="caret"></span>');
+        draw();
     });
-
-
-
 });
 
 
@@ -127,7 +114,7 @@ function todate(timestamp) {
 }
 
 
-function process_draw() {
+function draw() {
     $('#chart1').empty();
     $('#chart1').html('<svg></svg>');
     start_str = $('.date-picker').val();
@@ -140,7 +127,7 @@ function process_draw() {
         url: host + type + '&' + start_times + '&' + end_times,
         success: function(json) {
             draw_bart(json);
-            location.href = document.URL.split('#')[0] + '#h' + '&' + start_str + '&' + end_str;
+            location.href = document.URL.split('#')[0] + '#' + type + '&' + start_str + '&' + end_str;
         }
     });
 }

@@ -29,9 +29,9 @@ client.connect(function(err) {
 app.get('/:date', function(req, res) {
 
 	var date = (req.params.date + '').split('&');
-	console.log(date);
 
 	var array_objs = [];
+
 	var query_user = "SELECT iduser, osmuser, color, estado FROM osm_user";
 	var main_query = client.query(query_user, function(error, result) {
 		if (error) {
@@ -48,14 +48,36 @@ app.get('/:date', function(req, res) {
 		}
 	});
 
-	var query = "SELECT u.osmuser, substring(to_timestamp(d.osmdate)::text,0,14) as osmdate , (w.way_v1 + w.way_vx) as way" +
-		" FROM osm_way as w" +
-		" INNER JOIN osm_user as u on   u.iduser =  w.iduser" +
-		" INNER JOIN osm_date as d on   d.idfile =  w.idfile" +
-		" WHERE d.osmdate> " + date[1] + " AND d.osmdate<" + date[2];
+	var query = '';
+	switch (date[0]) {
+		case 'h':
+			query = "SELECT u.osmuser, substring(to_timestamp(o.osmdate)::text,0,14) as osmd, (o.node_v1 + o.node_vx) as node , (o.way_v1 + o.way_vx) as way, (o.relation_v1+ o.relation_vx) as relation" +
+				" FROM osm_obj as o " +
+				" INNER JOIN osm_user as u on   u.iduser =  o.iduser" +
+				" WHERE o.osmdate> " + date[1] + " AND o.osmdate<" + date[2];
+			break;
+		case 'd':
+			query = "SELECT u.osmuser, substring(to_timestamp(o.osmdate)::text,0,11) as osmd, sum(o.node_v1 + o.node_vx) as node , sum(o.way_v1 + o.way_vx) as way, sum(o.relation_v1+ o.relation_vx) as relation " +
+				" FROM osm_obj as o  INNER JOIN osm_user as u on   u.iduser =  o.iduser " +
+				" WHERE osmdate> " + date[1] + " AND osmdate<" + date[2] + " " +
+				" GROUP BY osmd,u.osmuser ORDER BY osmd;";
+			break;
+		case 'm':
+			query = " SELECT u.osmuser, substring(to_timestamp(o.osmdate)::text,0,8) as osmd, sum(o.node_v1 + o.node_vx) as node , sum(o.way_v1 + o.way_vx) as way, sum(o.relation_v1+ o.relation_vx) as relation " +
+				" FROM osm_obj as o  INNER JOIN osm_user as u on   u.iduser =  o.iduser " +
+				" BY osmd,u.osmuser ORDER BY osmd;"
+
+			break;
+		case 'a':
+			query = " SELECT u.osmuser, sum(o.node_v1 + o.node_vx) as node , sum(o.way_v1 + o.way_vx) as way, sum(o.relation_v1+ o.relation_vx) as relation  " +
+				" FROM osm_obj as o  INNER JOIN osm_user as u on   u.iduser =  o.iduser  " +
+				" GROUP BY u.osmuser;"
+			break;
+	}
 
 
-		console.log(query);
+
+	console.log(query);
 
 	client.query(query, function(error, result) {
 		if (error) {
@@ -67,13 +89,16 @@ app.get('/:date', function(req, res) {
 				var userss = _.find(array_objs, function(obj) {
 					return obj.key === result.rows[i].osmuser
 				}).values.push({
-					x: result.rows[i].osmdate,
+					x: result.rows[i].osmd,
 					y: parseInt(result.rows[i].way)
 				});
 			}
 			res.json(array_objs);
 		}
 	});
+
+
+
 });
 
 app.listen(process.env.PORT || 3021);
