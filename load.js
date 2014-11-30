@@ -132,7 +132,8 @@ function proces_file_save(callback) {
 					function(err, result) {
 						if (err) {
 							console.log(err);
-						} /*else {
+						}
+						/*else {
 							console.log('row inserted with id: ' + result);
 						}*/
 					});
@@ -141,7 +142,7 @@ function proces_file_save(callback) {
 				//insert all data
 				_.each(count, function(val, key) {
 					var obj_data = [];
-					
+
 					obj_data.push(key);
 					obj_data.push(osmdate);
 					obj_data.push(val.osm_node.v1);
@@ -151,7 +152,7 @@ function proces_file_save(callback) {
 					obj_data.push(val.osm_relation.v1);
 					obj_data.push(val.osm_relation.vx);
 
-					var query_insert ="INSERT INTO osm_obj( iduser, osmdate, node_v1, node_vx, way_v1, way_vx, relation_v1, relation_vx)VALUES ($1, $2, $3, $4, $5, $6, $7, $8);";
+					var query_insert = "INSERT INTO osm_obj( iduser, osmdate, node_v1, node_vx, way_v1, way_vx, relation_v1, relation_vx)VALUES ($1, $2, $3, $4, $5, $6, $7, $8);";
 
 
 					//var query_insert = 'SELECT insertobjs($1, $2, $3, $4, $5, $6, $7, $8)';

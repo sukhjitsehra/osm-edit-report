@@ -14,13 +14,15 @@ $.ajax({
     success: function(json) {
         draw_way(json);
         draw_node(json);
+        draw_relation(json);
         location.href = document.URL.split('#')[0] + '#' + type + '&' + start_str + '&' + end_str;
     }
 });
 
 function draw_way(data) {
     var chart;
-    nv.addGraph(function() {
+    var nv_way = nv;
+    nv_way.addGraph(function() {
         chart = nv.models.multiBarChart()
             //.barColor(d3.scale.category20().range())
             .margin({
@@ -86,7 +88,8 @@ function draw_way(data) {
 
 function draw_node(data) {
     var chart;
-    nv.addGraph(function() {
+    var nv_node = nv;
+    nv_node.addGraph(function() {
         chart = nv.models.multiBarChart()
             .margin({
                 top: 50,
@@ -127,7 +130,53 @@ function draw_node(data) {
         nv.utils.windowResize(chart.update);
 
         chart.dispatch.on('stateChange', function(e) {
+
+            console.log(e);
             nv.log('New State:', JSON.stringify(e));
+        });
+        return chart;
+    });
+}
+
+function draw_relation(data) {
+    var chart;
+    var nv_relation=nv;
+    nv_relation.addGraph(function() {
+        chart = nv.models.multiBarChart()
+            .margin({
+                top: 50,
+                right: 20,
+                bottom: 50,
+                left: 50
+            })
+            .transitionDuration(300)
+            .delay(0)
+            .rotateLabels(0)
+            .groupSpacing(0.1);
+
+        chart.multibar
+            .hideable(true);
+
+        chart.reduceXTicks(false).staggerLabels(true);
+        chart.xAxis.tickFormat(function(d) {
+            return d;
+        });
+        chart.yAxis
+            .tickFormat(d3.format(',.H'));
+        d3.select('#chart_relation svg')
+            .datum(function() {
+                var json_relation = [];
+                _.each(data, function(val, key) {
+                    val.values = val.values_relation;
+                    json_relation.push(val);
+                });
+                return json_relation;
+            })
+            .call(chart);
+        nv.utils.windowResize(chart.update);
+        chart.dispatch.on('stateChange', function(e) {
+            nv.log('New State:', JSON.stringify(e));
+
         });
         return chart;
     });
@@ -196,10 +245,9 @@ function draw() {
         dataType: "json",
         url: host + type + '&' + start_times + '&' + end_times,
         success: function(json) {
-
-
             draw_way(json);
             draw_node(json);
+            draw_relation(json);
             location.href = document.URL.split('#')[0] + '#' + type + '&' + start_str + '&' + end_str;
         }
     });
