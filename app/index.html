@@ -28,7 +28,7 @@
                         <li><a href="#" id="h">Per Hour</a></li>
                         <li><a href="#" id="d">Per Day</a></li>
                         <li><a href="#" id="m">Per Month</a></li>
-                        <li><a href="#" id="a">All Since January 2014</a></li>
+                        <li><a href="#" id="y">Per Year</a></li>
                     </ul>
                 </div>
                 <div class="date-form  col-md-3">
@@ -60,14 +60,36 @@
             </div>
         </div>
     </div>
-    <div id="chart1" class='with-3d-shadow with-transitions'>
-        <svg></svg>
+    <div class="container container_way" >
+        <div class="page-header">
+            <h2>Counter Ways</h2>
+        </div>
+        <div id="chart_way" class='with-3d-shadow with-transitions'>
+            <svg></svg>
+        </div>
+    </div>
+    <div class="container container_node" >
+        <div class="page-header">
+            <h2>Counter Nodes</h2>
+        </div>
+        <div id="chart_node" class='with-3d-shadow with-transitions'>
+            <svg></svg>
+        </div>
     </div>
 
 
+    <div class="container container_relation" >
+        <div class="page-header">
+            <h2>Counter Relations</h2>
+        </div>
+      <div id="chart_relation" class='with-3d-shadow with-transitions'>
+        <svg></svg>
+    </div>
+    </div>
 
     <script  src="lib/jquery-2.1.1.min.js"></script>
     <script src="js/jquery-ui-1.9.2.min.js"></script>
+    <script type="text/javascript" src="http://documentcloud.github.com/underscore/underscore-min.js"></script>
     <script src="js/bootstrap.js"></script>
     <script src="lib/d3.v3.js"></script>
     <script src="lib/nv.d3.js"></script>

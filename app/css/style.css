@@ -7,11 +7,18 @@ font: 12px sans-serif;
 svg {
 display: block;
 }
-#chart{
-margin-top: 20px;
+.container_way{
+margin-top: 30px;
 }
-#chart1{
-height: 500px;
+#chart_way{
+height: 300px;
+}
+#chart_node{
+height: 300px;
+
+}
+#chart_relation{
+height: 300px;
 margin-top: 50px;
 }
 .date-form { margin: 10px; }
