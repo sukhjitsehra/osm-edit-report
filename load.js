@@ -59,15 +59,12 @@ function download_file(url, localFile, callback) {
 };
 
 function proces_file_save(callback) {
-
-	//connect data base
 	var client = new pg.Client(conString);
 	client.connect(function(err) {
 		if (err) {
 			return console.error('could not connect to postgres', err);
 		}
 	});
-
 	//proces file
 	console.log('Process file :' + name_file);
 	var osmfile = osm_file;
@@ -133,16 +130,10 @@ function proces_file_save(callback) {
 						if (err) {
 							console.log(err);
 						}
-						/*else {
-							console.log('row inserted with id: ' + result);
-						}*/
 					});
 
-				//insertobjs(idfile, iduser , node_v1 , node_vx , way_v1 , way_vx , relation_v1 , relation_vx)
-				//insert all data
 				_.each(count, function(val, key) {
 					var obj_data = [];
-
 					obj_data.push(key);
 					obj_data.push(osmdate);
 					obj_data.push(val.osm_node.v1);
@@ -153,10 +144,7 @@ function proces_file_save(callback) {
 					obj_data.push(val.osm_relation.vx);
 
 					var query_insert = "INSERT INTO osm_obj( iduser, osmdate, node_v1, node_vx, way_v1, way_vx, relation_v1, relation_vx)VALUES ($1, $2, $3, $4, $5, $6, $7, $8);";
-
-
 					//var query_insert = 'SELECT insertobjs($1, $2, $3, $4, $5, $6, $7, $8)';
-
 					client.query(query_insert, obj_data,
 						function(err, result) {
 							if (err) {
@@ -218,14 +206,9 @@ var num_directory = argv.num_directory;
 var name_directory = ''
 name_directory = '0' + num_directory;
 var osmdate = 0;
-
 //setInterval(function() {
 var url_file = get_url_file();
 osm_file = name_file + '.osc'
 download_file(url_file, osm_file, proces_file_save);
-
 //}, 60 * 60 * 1000);
-
-
-
 //node load.js --num_file=0 --num_directory=18

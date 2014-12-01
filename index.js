@@ -4,12 +4,9 @@ var request = require('request');
 var fs = require('fs');
 var zlib = require('zlib');
 var _ = require('underscore');
-
 var pg = require('pg');
 var conString = "postgres://postgres:1234@localhost/dbstatistic";
-
 var osm_file = '';
-
 var obj = function() {
 	return {
 		osm_user: {
@@ -35,8 +32,6 @@ var obj = function() {
 	};
 };
 
-
-
 function format_num(n) {
 	return numeral(n).format('0,0');
 }
@@ -59,20 +54,16 @@ function download_file(url, localFile, callback) {
 };
 
 function proces_file_save(callback) {
-
-	//connect data base
 	var client = new pg.Client(conString);
 	client.connect(function(err) {
 		if (err) {
 			return console.error('could not connect to postgres', err);
 		}
 	});
-
 	//proces file
-	console.log('Process file :' + name_file);
+	//console.log('Process file :' + name_file);
 	var osmfile = osm_file;
 	var count = {};
-
 	var query_user = "SELECT iduser, osmuser, color, estado FROM osm_user";
 	//console.log(query_user)
 	var main_query = client.query(query_user, function(error, result) {
@@ -86,7 +77,6 @@ function proces_file_save(callback) {
 					user = new obj();
 					count[result.rows[i].iduser] = user;
 				}
-
 				//Procesamiento de datos
 				var file = new osmium.File(osmfile);
 				var reader = new osmium.Reader(file);
@@ -132,16 +122,11 @@ function proces_file_save(callback) {
 					function(err, result) {
 						if (err) {
 							console.log(err);
-						}/* else {
-							console.log('row inserted with id: ' + result);
-						}*/
+						}
 					});
 
-				//insertobjs(idfile, iduser , node_v1 , node_vx , way_v1 , way_vx , relation_v1 , relation_vx)
-				//insert all data
 				_.each(count, function(val, key) {
 					var obj_data = [];
-					
 					obj_data.push(key);
 					obj_data.push(osmdate);
 					obj_data.push(val.osm_node.v1);
@@ -150,21 +135,14 @@ function proces_file_save(callback) {
 					obj_data.push(val.osm_way.vx);
 					obj_data.push(val.osm_relation.v1);
 					obj_data.push(val.osm_relation.vx);
-
-					var query_insert "INSERT INTO osm_obj( iduser, osmdate, node_v1, node_vx, way_v1, way_vx, relation_v1, relation_vx)VALUES ($1, $2, $3, $4, $5, $6, $7, $8);"
-
-
-					//var query_insert = 'SELECT insertobjs($1, $2, $3, $4, $5, $6, $7, $8)';
+					var query_insert = "INSERT INTO osm_obj( iduser, osmdate, node_v1, node_vx, way_v1, way_vx, relation_v1, relation_vx)VALUES ($1, $2, $3, $4, $5, $6, $7, $8);"
 					client.query(query_insert, obj_data,
 						function(err, result) {
 							if (err) {
 								console.log(err);
-							} /*else {
-								console.log('row inserted with id: ' + result);
-							}*/
+							}
 						});
 				});
-				//console.log(count);
 			} catch (e) {
 				console.log("entering catch block");
 			}
@@ -181,15 +159,12 @@ function proces_file_save(callback) {
 		} else {
 			console.log('Error in remove file');
 		}
-
 		setTimeout(
 			function() {
 				client.end();
 			}, 5000);
 	});
 }
-
-
 
 function get_url_file() {
 	if (num_file < 10) {
@@ -209,21 +184,18 @@ function get_url_file() {
 	return url + '/' + name_directory + '/' + name_file + '.osc.gz';
 }
 
-
-
 //intitializar parameters
 var url = 'http://planet.openstreetmap.org/replication/hour/000';
 var name_file = '';
-var num_file = 46;
+var num_file = 450;
 var num_directory = 19;
 var name_directory = ''
 name_directory = '0' + num_directory;
 var osmdate = 0;
 
+setInterval(function() {
+	var url_file = get_url_file();
+	osm_file = name_file + '.osc'
+	download_file(url_file, osm_file, proces_file_save);
 
-//setInterval(function() {
-var url_file = get_url_file();
-osm_file = name_file + '.osc'
-download_file(url_file, osm_file, proces_file_save);
-
-//}, 60 * 60 * 1000);
+}, 5 * 60 * 1000);
