@@ -47,7 +47,7 @@ function draw_way(data) {
         chart.reduceXTicks(false).staggerLabels(true);
         chart.xAxis.tickFormat(function(d) {
             return d;
-        });//.rotateLabels(-90);
+        }); //.rotateLabels(-90);
 
         chart.yAxis
             .tickFormat(d3.format(',.H'));
@@ -66,8 +66,8 @@ function draw_way(data) {
             .call(chart);
         nv.utils.windowResize(chart.update);
         return chart;
-
     });
+    $('#chart_way').removeClass("loading");
 }
 
 function draw_node(data) {
@@ -111,6 +111,7 @@ function draw_node(data) {
         nv.utils.windowResize(chart.update);
         return chart;
     });
+    $('#chart_node').removeClass("loading");
 }
 
 function draw_relation(data) {
@@ -154,21 +155,28 @@ function draw_relation(data) {
         nv.utils.windowResize(chart.update);
         return chart;
     });
+    $('#chart_relation').removeClass("loading");
 }
 
 $(document).ready(function() {
 
+    //$('.loading').css('top', '-50%');
     $('.from').val(dates[1]);
     $('.to').val(dates[2]);
     $(".from").datepicker({
         weekStart: 1,
         dateFormat: 'yy-mm-dd',
-        numberOfMonths: 2
+        //numberOfMonths: 2,
+        changeMonth: true,
+        changeYear: true
     });
     $(".to").datepicker({
         weekStart: 1,
         dateFormat: 'yy-mm-dd',
-        numberOfMonths: 2
+        //numberOfMonths: 2,
+        changeMonth: true,
+        changeYear: true
+
     });
     $(".from").on("change", function() {
         draw();
@@ -196,6 +204,10 @@ function todate(timestamp) {
 }
 
 function draw() {
+    $('#chart_node').addClass("loading");
+    $('#chart_way').addClass("loading");
+    $('#chart_relation').addClass("loading");
+
     start_str = $('.from').val();
     start_times = new Date(start_str + " 00:00:00").getTime() / 1000;
     end_str = $('.to').val();
@@ -249,6 +261,8 @@ function draw() {
     $('#chart_node').html('<svg></svg>');
     $('#chart_relation').empty();
     $('#chart_relation').html('<svg></svg>');
+    console.log(host + type + '&' + start_times + '&' + end_times);
+    location.href = document.URL.split('#')[0] + '#' + type + '&' + start_str + '&' + end_str;
     $.ajax({
         dataType: "json",
         url: host + type + '&' + start_times + '&' + end_times,
@@ -259,7 +273,8 @@ function draw() {
             draw_node(json_node);
             draw_way(json_way);
             draw_relation(json_relation);
-            location.href = document.URL.split('#')[0] + '#' + type + '&' + start_str + '&' + end_str;
+
         }
     });
+
 }

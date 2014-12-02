@@ -41,3 +41,21 @@ margin-right: 5px;
 padding-left: -10px;
 text-align: right;
 }
+
+.loading:after {
+background: url(../img/ajax-loader.gif) no-repeat;
+content: "Loading...";
+color: #666;
+left: 50%;
+height: 16px;
+line-height: 16px;
+margin-top: -8px;
+margin-left: -40px;
+position: relative;
+font-size: 12px;
+text-indent: 26px;
+top: -80%;
+width: 80px;
+z-index: 9999;
+display:block;
+}
