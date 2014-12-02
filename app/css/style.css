@@ -15,7 +15,6 @@ height: 300px;
 }
 #chart_node{
 height: 300px;
-
 }
 #chart_relation{
 height: 300px;
@@ -26,7 +25,19 @@ label.control-label span { cursor: pointer; }
 #date-picker-2{
 z-index: 9999;
 }
-
 #date-picker-3{
 z-index: 9999;
+}
+.date_form{
+margin-left: 0px;
+margin-right: 0px;
+padding-left: 0px;
+padding-right: 0px;
+}
+.title_date{
+margin-top: -7px;
+margin-left: 0px;
+margin-right: 5px;
+padding-left: -10px;
+text-align: right;
 }

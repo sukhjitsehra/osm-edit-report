@@ -5,12 +5,9 @@ var fs = require('fs');
 var zlib = require('zlib');
 var _ = require('underscore');
 var argv = require('optimist').argv;
-
 var pg = require('pg');
 var conString = "postgres://postgres:1234@localhost/dbstatistic";
-
 var osm_file = '';
-
 var obj = function() {
 	return {
 		osm_user: {
@@ -36,6 +33,12 @@ var obj = function() {
 	};
 };
 
+var client = new pg.Client(conString);
+client.connect(function(err) {
+	if (err) {
+		return console.error('could not connect to postgres', err);
+	}
+});
 
 function format_num(n) {
 	return numeral(n).format('0,0');
@@ -59,18 +62,11 @@ function download_file(url, localFile, callback) {
 };
 
 function proces_file_save(callback) {
-	var client = new pg.Client(conString);
-	client.connect(function(err) {
-		if (err) {
-			return console.error('could not connect to postgres', err);
-		}
-	});
 	//proces file
 	console.log('Process file :' + name_file);
 	var osmfile = osm_file;
 	var count = {};
-
-	var query_user = "SELECT iduser, osmuser, color, estado FROM osm_user";
+	var query_user = "SELECT iduser, osmuser, color, estado FROM osm_user where estado=true";
 	//console.log(query_user)
 	var main_query = client.query(query_user, function(error, result) {
 		if (error) {
@@ -83,7 +79,6 @@ function proces_file_save(callback) {
 					user = new obj();
 					count[result.rows[i].iduser] = user;
 				}
-
 				//Procesamiento de datos
 				var file = new osmium.File(osmfile);
 				var reader = new osmium.Reader(file);
@@ -102,7 +97,6 @@ function proces_file_save(callback) {
 				});
 				//NODE
 				handler.on('node', function(node) {
-
 					if (count.hasOwnProperty(node.uid) && _.size(node.tags()) > 0) {
 						if (node.version === 1) {
 							++count[node.uid].osm_node.v1;
@@ -116,9 +110,9 @@ function proces_file_save(callback) {
 				handler.on('relation', function(relation) {
 					if (count.hasOwnProperty(relation.uid) && _.size(relation.tags()) > 0) {
 						if (relation.version === 1) {
-							++count[relation.uid].osm_node.v1;
+							++count[relation.uid].osm_relation.v1;
 						} else {
-							++count[relation.uid].osm_node.vx;
+							++count[relation.uid].osm_relation.vx;
 						}
 					}
 				});
@@ -142,9 +136,7 @@ function proces_file_save(callback) {
 					obj_data.push(val.osm_way.vx);
 					obj_data.push(val.osm_relation.v1);
 					obj_data.push(val.osm_relation.vx);
-
 					var query_insert = "INSERT INTO osm_obj( iduser, osmdate, node_v1, node_vx, way_v1, way_vx, relation_v1, relation_vx)VALUES ($1, $2, $3, $4, $5, $6, $7, $8);";
-					//var query_insert = 'SELECT insertobjs($1, $2, $3, $4, $5, $6, $7, $8)';
 					client.query(query_insert, obj_data,
 						function(err, result) {
 							if (err) {
@@ -152,7 +144,6 @@ function proces_file_save(callback) {
 							}
 						});
 				});
-				//console.log(count);
 			} catch (e) {
 				console.log("entering catch block");
 			}
@@ -170,41 +161,50 @@ function proces_file_save(callback) {
 			console.log('Error in remove file');
 		}
 
-		setTimeout(
-			function() {
-				client.end();
-				url_file = get_url_file();
-				osm_file = name_file + '.osc'
-				download_file(url_file, osm_file, proces_file_save);
-			}, 5000);
+		//setTimeout(
+		//function() {
+		//client.end();
+		url_file = get_url_file();
+		osm_file = name_file + '.osc'
+		download_file(url_file, osm_file, proces_file_save);
+		//}, 5000);
 	});
 }
 
 function get_url_file() {
-	if (num_file < 10) {
-		name_file = '00' + num_file;
-		num_file++;
-	} else if (num_file >= 10 && num_file < 100) {
-		name_file = '0' + num_file;
-		num_file++;
-	} else if (num_file >= 100 && num_file < 1000) {
-		name_file = '' + num_file;
-		num_file++;
-	} else {
-		num_file = 0;
-		num_directory++;
-		name_directory = '0' + num_directory;
+		if (num_file < 10) {
+			name_file = '00' + num_file;
+			num_file++;
+		} else if (num_file >= 10 && num_file < 100) {
+			name_file = '0' + num_file;
+			num_file++;
+		} else if (num_file >= 100 && num_file < 1000) {
+			name_file = '' + num_file;
+			num_file++;
+		} else {
+			num_file = 1;
+			name_file = '00' + num_file;
+			num_file++;
+			if (num_directory < 10) {
+				num_directory++;
+				name_directory = '00' + num_directory;
+			} else if (num_directory >= 10 && num_directory < 100) {
+				num_directory++;
+				name_directory = '0' + num_directory;
+			}
+		}
+		return url + '/' + name_directory + '/' + name_file + '.osc.gz';
 	}
-	return url + '/' + name_directory + '/' + name_file + '.osc.gz';
-}
-
-//intitializar parameters
+	//intitializar parameters
 var url = 'http://planet.openstreetmap.org/replication/hour/000';
 var name_file = '';
 var num_file = argv.num_file;
 var num_directory = argv.num_directory;
 var name_directory = ''
 name_directory = '0' + num_directory;
+if (num_directory < 10) {
+	name_directory = '00' + num_directory;
+}
 var osmdate = 0;
 //setInterval(function() {
 var url_file = get_url_file();

@@ -7,7 +7,7 @@ var start_str = dates[1];
 var end_str = dates[2];
 var start_times = (new Date(start_str + " 00:00:00").getTime() / 1000);
 var end_times = new Date(end_str + " 00:00:00").getTime() / 1000 + 24 * 60 * 60;
-
+var months = [31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31];
 var json_way = null;
 var json_node = null;
 var json_relation = null;
@@ -55,15 +55,15 @@ function draw_way(data) {
                 var json_way = [];
                 _.each(data, function(val, key) {
                     val.values = val.values_way;
+                    val.values_node = null;
+                    val.values_way = null;
+                    val.values_relation = null;
                     json_way.push(val);
                 });
-                console.log(json_way)
                 return json_way;
-
             })
             .call(chart);
         nv.utils.windowResize(chart.update);
-        console.log(chart);
         return chart;
 
     });
@@ -92,7 +92,6 @@ function draw_node(data) {
         chart.xAxis.tickFormat(function(d) {
             return d;
         });
-
         chart.yAxis
             .tickFormat(d3.format(',.H'));
         d3.select('#chart_node svg')
@@ -100,15 +99,12 @@ function draw_node(data) {
                 var json_node = [];
                 _.each(data, function(val, key) {
                     val.values = val.values_node;
-                    // val.values_node = null;
-
+                    val.values_node = null;
+                    val.values_way = null;
+                    val.values_relation = null;
                     json_node.push(val);
                 });
-
-                console.log(json_node)
-
                 return json_node;
-
             })
             .call(chart);
         nv.utils.windowResize(chart.update);
@@ -146,8 +142,9 @@ function draw_relation(data) {
                 var json_relation = [];
                 _.each(data, function(val, key) {
                     val.values = val.values_relation;
-
-                    //val.values_relation = null;
+                    val.values_node = null;
+                    val.values_way = null;
+                    val.values_relation = null;
                     json_relation.push(val);
                 });
                 return json_relation;
@@ -158,30 +155,27 @@ function draw_relation(data) {
     });
 }
 
-
-
 $(document).ready(function() {
-    //1416096000 AND d.osmdate<1416182400
-    //#h&2014-11-15&2014-11-16
     if (start_times > end_times) {
         alert('Select a range of correct dates');
     }
-    $('.date-picker').val(dates[1]);
-    $('.date-picker1').val(dates[2]);
-    $(".date-picker").datepicker({
+    $('.from').val(dates[1]);
+    $('.to').val(dates[2]);
+    $(".from").datepicker({
         weekStart: 1,
-        dateFormat: 'yy-mm-dd'
+        dateFormat: 'yy-mm-dd',
+        numberOfMonths: 2
     });
-
-    $(".date-picker1").datepicker({
+    $(".to").datepicker({
         weekStart: 1,
-        dateFormat: 'yy-mm-dd'
+        dateFormat: 'yy-mm-dd',
+        numberOfMonths: 2
     });
-    $(".date-picker").on("change", function() {
+    $(".from").on("change", function() {
         draw();
     });
 
-    $(".date-picker1").on("change", function() {
+    $(".to").on("change", function() {
         draw();
     });
     $(".dropdown-menu li a").click(function() {
@@ -192,7 +186,6 @@ $(document).ready(function() {
     });
 });
 
-
 function todate(timestamp) {
     var date = new Date(timestamp * 1000);
     var year = date.getFullYear();
@@ -201,20 +194,59 @@ function todate(timestamp) {
     return year + '-' + month + '-' + day;
 }
 
-
 function draw() {
+    start_str = $('.from').val();
+    start_times = new Date(start_str + " 00:00:00").getTime() / 1000;
+    end_str = $('.to').val();
+    end_times = new Date(end_str + " 00:00:00").getTime() / 1000 + 24 * 60 * 60;
+    //console.log(host + type + '&' + start_times + '&' + end_times);
+
+    if (start_times > end_times) {
+        alert('Select a range of correct dates');
+        return null;
+    } else {
+
+        switch (type) {
+            case 'h':
+                if ((end_times - start_times) > 24 * 60 * 60 * 5) {
+                    alert('Select two 5 days at most');
+                    return null;
+                }
+                break;
+            case 'd':
+                /*if ((end_times - start_times) > 24 * 60 * 60 * 30 * 2) {
+                    alert('Select two 2 month at most');
+                    return null;
+                }*/
+                break;
+            case 'm':
+                start_str = $('.from').val();
+                start_times = new Date(start_str.substring(0, 7) + "-01 00:00:00").getTime() / 1000;
+                end_str = $('.to').val();
+                console.log(parseInt(end_str.substring(5, 7)));
+                end_times = new Date(end_str.substring(0, 7) + "-01 00:00:00").getTime() / 1000 + 24 * 60 * 60 * months[parseInt(end_str.substring(5, 7)) - 1];
+                /*if ((end_times - start_times) > 24 * 60 * 60 * 30 * 12 * 2) {
+                    alert('Select two years at most');
+                    return null;
+                }*/
+                break;
+            case 'y':
+                start_str = $('.from').val();
+                start_times = new Date(start_str.substring(0, 4) + "-01-01 00:00:00").getTime() / 1000;
+                end_str = $('.to').val();
+                console.log(parseInt(end_str.substring(0, 4)));
+                end_times = new Date(end_str.substring(0, 4) + "-01-01 00:00:00").getTime() / 1000 + 24 * 60 * 60 * 365;
+                break;
+        }
+
+    }
+
     $('#chart_way').empty();
     $('#chart_way').html('<svg></svg>');
     $('#chart_node').empty();
     $('#chart_node').html('<svg></svg>');
     $('#chart_relation').empty();
     $('#chart_relation').html('<svg></svg>');
-
-    start_str = $('.date-picker').val();
-    start_times = new Date(start_str + " 00:00:00").getTime() / 1000;
-    end_str = $('.date-picker1').val();
-    end_times = new Date(end_str + " 00:00:00").getTime() / 1000 + 24 * 60 * 60;
-    console.log(host + type + '&' + start_times + '&' + end_times);
 
     $.ajax({
         dataType: "json",

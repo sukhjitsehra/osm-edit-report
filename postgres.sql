@@ -57,3 +57,7 @@ GROUP BY osmd,u.osmuser ORDER BY osmd
 SELECT u.osmuser, '2014' as osmd sum(o.node_v1 + o.node_vx) as node , sum(o.way_v1 + o.way_vx) as way, sum(o.relation_v1+ o.relation_vx) as relation
 FROM osm_obj as o  INNER JOIN osm_user as u on   u.iduser =  o.iduser
 GROUP BY u.osmuser
+
+
+
+SELECT iduser, osmuser, color, estado FROM osm_user where estado=true
