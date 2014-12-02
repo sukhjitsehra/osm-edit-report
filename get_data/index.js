@@ -31,6 +31,12 @@ var obj = function() {
 		}
 	};
 };
+var client = new pg.Client(conString);
+client.connect(function(err) {
+	if (err) {
+		return console.error('could not connect to postgres', err);
+	}
+});
 
 function format_num(n) {
 	return numeral(n).format('0,0');
@@ -54,13 +60,6 @@ function download_file(url, localFile, callback) {
 };
 
 function proces_file_save(callback) {
-	var client = new pg.Client(conString);
-	client.connect(function(err) {
-		if (err) {
-			return console.error('could not connect to postgres', err);
-		}
-	});
-	//proces file
 	//console.log('Process file :' + name_file);
 	var osmfile = osm_file;
 	var count = {};
@@ -159,10 +158,10 @@ function proces_file_save(callback) {
 		} else {
 			console.log('Error in remove file');
 		}
-		setTimeout(
-			function() {
-				client.end();
-			}, 5000);
+		//setTimeout(
+		//function() {
+		//	client.end();
+		//}, 5000);
 	});
 }
 
@@ -187,7 +186,7 @@ function get_url_file() {
 //intitializar parameters
 var url = 'http://planet.openstreetmap.org/replication/hour/000';
 var name_file = '';
-var num_file = 450;
+var num_file = 458;
 var num_directory = 19;
 var name_directory = ''
 name_directory = '0' + num_directory;
@@ -198,4 +197,4 @@ setInterval(function() {
 	osm_file = name_file + '.osc'
 	download_file(url_file, osm_file, proces_file_save);
 
-}, 5 * 60 * 1000);
+}, 3 * 60 * 1000);

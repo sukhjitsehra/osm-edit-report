@@ -71,7 +71,7 @@ app.get('/:date', function(req, res) {
 			break;
 	}
 
-	console.log(query);
+	//console.log(query);
 	client.query(query, function(error, result) {
 		if (error) {
 			console.log(error);
