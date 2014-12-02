@@ -11,21 +11,6 @@ var months = [31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31];
 var json_way = null;
 var json_node = null;
 var json_relation = null;
-
-/*$.ajax({
-    dataType: "json",
-    url: host + type + '&' + start_times + '&' + end_times,
-    success: function(json) {
-        json_way = _.map(json, _.clone);
-        json_node = _.map(json, _.clone);
-        json_relation = _.map(json, _.clone);
-        draw_node(json_node);
-        draw_way(json_way);
-        draw_relation(json_relation);
-        location.href = document.URL.split('#')[0] + '#' + type + '&' + start_str + '&' + end_str;
-    }
-});*/
-
 function draw_way(data) {
     var chart;
     var nv_way = nv;
@@ -204,10 +189,6 @@ function todate(timestamp) {
 }
 
 function draw() {
-    $('#chart_node').addClass("loading");
-    $('#chart_way').addClass("loading");
-    $('#chart_relation').addClass("loading");
-
     start_str = $('.from').val();
     start_times = new Date(start_str + " 00:00:00").getTime() / 1000;
     end_str = $('.to').val();
@@ -251,7 +232,6 @@ function draw() {
                 break;
         }
     }
-
     $('.label_way').text('Number of ways  by ' + $('#' + type).text().split(' ')[1] + ' from ' + start_str + ' to ' + end_str);
     $('.label_node').text('Number of nodes by ' + $('#' + type).text().split(' ')[1] + ' from ' + start_str + ' to ' + end_str);
     $('.label_relation').text('Number of relations by ' + $('#' + type).text().split(' ')[1] + ' from ' + start_str + ' to ' + end_str);
@@ -273,8 +253,9 @@ function draw() {
             draw_node(json_node);
             draw_way(json_way);
             draw_relation(json_relation);
-
         }
     });
-
+    $('#chart_node').addClass("loading");
+    $('#chart_way').addClass("loading");
+    $('#chart_relation').addClass("loading");
 }
