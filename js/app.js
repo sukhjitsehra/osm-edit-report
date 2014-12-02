@@ -47,7 +47,7 @@ function draw_way(data) {
         chart.reduceXTicks(false).staggerLabels(true);
         chart.xAxis.tickFormat(function(d) {
             return d;
-        });
+        });//.rotateLabels(-90);
 
         chart.yAxis
             .tickFormat(d3.format(',.H'));
@@ -239,6 +239,10 @@ function draw() {
                 break;
         }
     }
+
+    $('.label_way').text('Number of ways  by ' + $('#' + type).text().split(' ')[1] + ' from ' + start_str + ' to ' + end_str);
+    $('.label_node').text('Number of nodes by ' + $('#' + type).text().split(' ')[1] + ' from ' + start_str + ' to ' + end_str);
+    $('.label_relation').text('Number of relations by ' + $('#' + type).text().split(' ')[1] + ' from ' + start_str + ' to ' + end_str);
     $('#chart_way').empty();
     $('#chart_way').html('<svg></svg>');
     $('#chart_node').empty();
