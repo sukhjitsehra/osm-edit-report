@@ -197,4 +197,4 @@ setInterval(function() {
 	osm_file = name_file + '.osc'
 	download_file(url_file, osm_file, proces_file_save);
 
-}, 3 * 60 * 1000);
+}, 60 * 60 * 1000);
