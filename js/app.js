@@ -200,7 +200,6 @@ function draw() {
     end_str = $('.to').val();
     end_times = new Date(end_str + " 00:00:00").getTime() / 1000 + 24 * 60 * 60;
     //console.log(host + type + '&' + start_times + '&' + end_times);
-
     if (start_times > end_times) {
         alert('Select a range of correct dates');
         return null;
@@ -238,16 +237,13 @@ function draw() {
                 end_times = new Date(end_str.substring(0, 4) + "-01-01 00:00:00").getTime() / 1000 + 24 * 60 * 60 * 365;
                 break;
         }
-
     }
-
     $('#chart_way').empty();
     $('#chart_way').html('<svg></svg>');
     $('#chart_node').empty();
     $('#chart_node').html('<svg></svg>');
     $('#chart_relation').empty();
     $('#chart_relation').html('<svg></svg>');
-
     $.ajax({
         dataType: "json",
         url: host + type + '&' + start_times + '&' + end_times,
