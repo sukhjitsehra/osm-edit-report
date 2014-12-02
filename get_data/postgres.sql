@@ -1,6 +1,7 @@
 ﻿--DROP TABLE osm_obj;
 --DROP TABLE osm_user
 --DROP TABLE osm_date;
+--SELECT pg_size_pretty(pg_database_size('dbstatistic'));
 CREATE TABLE osm_user(
 iduser INTEGER NOT NULL  PRIMARY KEY,
 osmuser character(100),

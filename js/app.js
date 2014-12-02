@@ -11,7 +11,8 @@ var months = [31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31];
 var json_way = null;
 var json_node = null;
 var json_relation = null;
-$.ajax({
+
+/*$.ajax({
     dataType: "json",
     url: host + type + '&' + start_times + '&' + end_times,
     success: function(json) {
@@ -23,7 +24,7 @@ $.ajax({
         draw_relation(json_relation);
         location.href = document.URL.split('#')[0] + '#' + type + '&' + start_str + '&' + end_str;
     }
-});
+});*/
 
 function draw_way(data) {
     var chart;
@@ -156,9 +157,7 @@ function draw_relation(data) {
 }
 
 $(document).ready(function() {
-    if (start_times > end_times) {
-        alert('Select a range of correct dates');
-    }
+
     $('.from').val(dates[1]);
     $('.to').val(dates[2]);
     $(".from").datepicker({
@@ -184,6 +183,8 @@ $(document).ready(function() {
         $(this).parents('.btn-group').find('.dropdown-toggle').html(selText + ' <span class="caret"></span>');
         draw();
     });
+    $('.type_label').text($('#' + type).text());
+    draw();
 });
 
 function todate(timestamp) {
@@ -213,10 +214,10 @@ function draw() {
                 }
                 break;
             case 'd':
-                /*if ((end_times - start_times) > 24 * 60 * 60 * 30 * 2) {
+                if ((end_times - start_times) > 24 * 60 * 60 * 30 * 3) {
                     alert('Select two 2 month at most');
                     return null;
-                }*/
+                }
                 break;
             case 'm':
                 start_str = $('.from').val();
