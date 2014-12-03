@@ -198,10 +198,11 @@ function todate(timestamp) {
 
 function draw() {
     start_str = $('.from').val();
-    start_times = new Date(start_str + " 00:00:00").getTime() / 1000;
+    start_times = Date.UTC(parseInt(start_str.split('-')[0]), parseInt(start_str.split('-')[1]) - 1, parseInt(start_str.split('-')[2])) / 1000;
     end_str = $('.to').val();
-    end_times = new Date(end_str + " 00:00:00").getTime() / 1000 + 24 * 60 * 60;
+    end_times = Date.UTC(parseInt(end_str.split('-')[0]), parseInt(end_str.split('-')[1]) - 1, parseInt(end_str.split('-')[2])) / 1000 + 24 * 60 * 60;
     //console.log(host + type + '&' + start_times + '&' + end_times);
+
     if (start_times > end_times) {
         alert('Select a range of correct dates');
         return null;
