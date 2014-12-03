@@ -145,31 +145,93 @@ function draw_relation(data) {
 }
 
 $(document).ready(function() {
-
-    //$('.loading').css('top', '-50%');
     $('.from').val(dates[1]);
     $('.to').val(dates[2]);
+
     $(".from").datepicker({
         weekStart: 1,
         dateFormat: 'yy-mm-dd',
-        //numberOfMonths: 2,
         showButtonPanel: true,
         changeMonth: true,
-        changeYear: true
+        changeYear: true,
+        beforeShow: function(input, inst) {
+            if (type === 'm') {
+                $(inst.dpDiv).addClass('calendar-off');
+            } else if (type === 'y') {} else {
+                $(inst.dpDiv).removeClass('calendar-off');
+            }
+        },
+        onClose: function(selectedDate) {
+            if ($(window.event.srcElement).hasClass('ui-datepicker-close')) {
+                if (type === 'm') {
+                    var m = parseInt($("#ui-datepicker-div .ui-datepicker-month :selected").val());
+                    var y = parseInt($("#ui-datepicker-div .ui-datepicker-year :selected").val());
+                    $(this).datepicker("setDate", new Date(y, m, '01'));
+                    draw();
+                } else if (type === 'y') {
+
+                } else {
+
+                }
+            }
+            setTimeout(function() {
+                $(".to").datepicker("option", "minDate", start_str);
+            }, 300);
+        },
+        yearRange: '2012:2020'
+
     });
+
+
+
     $(".to").datepicker({
         weekStart: 1,
         dateFormat: 'yy-mm-dd',
         //numberOfMonths: 2,
         showButtonPanel: true,
         changeMonth: true,
-        changeYear: true
+        changeYear: true,
+        beforeShow: function(input, inst) {
+            if (type === 'm') {
+                $(inst.dpDiv).addClass('calendar-off');
+                // $(this).datepicker("hide");
+                //$("#ui-datepicker-div").addClass("hide-calendar");
+                //$("#ui-datepicker-div").addClass('MonthDatePicker');
+                //$("#ui-datepicker-div").addClass('HideTodayButton');
+            } else if (type === 'y') {} else {
+                $(inst.dpDiv).removeClass('calendar-off');
+            }
+        },
+        onClose: function(selectedDate) {
 
+
+            if ($(window.event.srcElement).hasClass('ui-datepicker-close')) {
+                if (type === 'm') {
+                    var m = parseInt($("#ui-datepicker-div .ui-datepicker-month :selected").val());
+                    var y = parseInt($("#ui-datepicker-div .ui-datepicker-year :selected").val());
+
+                    $(this).datepicker("setDate", new Date(y, m, '01'));
+
+                    draw();
+
+                    console.log(selectedDate);
+                } else if (type === 'y') {
+
+                } else {
+
+                }
+            }
+            setTimeout(function() {
+                $(".from").datepicker("option", "maxDate", end_str);
+            }, 300);
+        },
+        yearRange: '2012:2020'
     });
 
-    $('.ui-datepicker-close').click(function() {
-        alert('dd');
-    });
+    $(".from").datepicker("option", "maxDate", end_str);
+    $(".to").datepicker("option", "minDate", start_str);
+
+
 
     $(".from").on("change", function() {
         draw();
@@ -179,10 +241,11 @@ $(document).ready(function() {
         draw();
     });
     $(".dropdown-menu li a").click(function() {
+        console.log('select')
         var selText = $(this).text();
         type = $(this).attr("id");
         $(this).parents('.btn-group').find('.dropdown-toggle').html(selText + ' <span class="caret"></span>');
-        draw();
+        //draw();
     });
     $('.type_label').text($('#' + type).text());
     draw();
@@ -223,10 +286,9 @@ function draw() {
                 break;
             case 'm':
                 start_str = $('.from').val();
-                start_times = new Date(start_str.substring(0, 7) + "-01 00:00:00").getTime() / 1000;
+                start_times = Date.UTC(parseInt(start_str.split('-')[0]), parseInt(start_str.split('-')[1]) - 1, 1) / 1000;
                 end_str = $('.to').val();
-                console.log(parseInt(end_str.substring(5, 7)));
-                end_times = new Date(end_str.substring(0, 7) + "-01 00:00:00").getTime() / 1000 + 24 * 60 * 60 * months[parseInt(end_str.substring(5, 7)) - 1];
+                end_times = Date.UTC(parseInt(end_str.split('-')[0]), parseInt(end_str.split('-')[1]) - 1, 1) / 1000 + 24 * 60 * 60 * months[parseInt(end_str.substring(5, 7)) - 1];
                 /*if ((end_times - start_times) > 24 * 60 * 60 * 30 * 12 * 2) {
                     alert('Select two years at most');
                     return null;
