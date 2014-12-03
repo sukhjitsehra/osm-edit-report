@@ -157,6 +157,7 @@ $(document).ready(function() {
         beforeShow: function(input, inst) {
             if (type === 'm') {
                 $(inst.dpDiv).addClass('calendar-off');
+                $("#ui-datepicker-div").removeClass('YearDatePicker');
             } else if (type === 'y') {
                 $(inst.dpDiv).addClass('calendar-off');
                 $("#ui-datepicker-div").addClass('YearDatePicker');
@@ -200,6 +201,7 @@ $(document).ready(function() {
         beforeShow: function(input, inst) {
             if (type === 'm') {
                 $(inst.dpDiv).addClass('calendar-off');
+                $("#ui-datepicker-div").removeClass('YearDatePicker');
             } else if (type === 'y') {
                 $(inst.dpDiv).addClass('calendar-off');
                 $("#ui-datepicker-div").addClass('YearDatePicker');
@@ -291,23 +293,28 @@ function draw() {
                 start_times = Date.UTC(parseInt(start_str.split('-')[0]), parseInt(start_str.split('-')[1]) - 1, 1) / 1000;
                 end_str = $('.to').val();
                 end_times = Date.UTC(parseInt(end_str.split('-')[0]), parseInt(end_str.split('-')[1]) - 1, 1) / 1000 + 24 * 60 * 60 * months[parseInt(end_str.substring(5, 7)) - 1];
-                /*if ((end_times - start_times) > 24 * 60 * 60 * 30 * 12 * 2) {
-                    alert('Select two years at most');
-                    return null;
-                }*/
+                start_str = start_str.split('-')[0] + '-' + start_str.split('-')[1] + '-01';
+                end_str = end_str.split('-')[0] + '-' + end_str.split('-')[1] + '-' + months[parseInt(end_str.substring(5, 7)) - 1];
+                $('.from').val(start_str);
+                $('.to').val(end_str);
+
                 break;
             case 'y':
                 start_str = $('.from').val();
-                start_times = new Date(start_str.substring(0, 4) + "-01-01 00:00:00").getTime() / 1000;
+                start_times = Date.UTC(parseInt(start_str.split('-')[0]), 1, 1) / 1000;
                 end_str = $('.to').val();
-                console.log(parseInt(end_str.substring(0, 4)));
-                end_times = new Date(end_str.substring(0, 4) + "-01-01 00:00:00").getTime() / 1000 + 24 * 60 * 60 * 365;
+                end_times = Date.UTC(parseInt(end_str.split('-')[0]), 1, 1) / 1000 + 24 * 60 * 60 * 365;
+                start_str = start_str.split('-')[0] + '-01-01';
+                end_str = end_str.split('-')[0] + '-12-31'
+                $('.from').val(start_str);
+                $('.to').val(end_str);
                 break;
         }
     }
     $('.label_way').text('Number of ways  by ' + $('#' + type).text().split(' ')[1] + ' from ' + start_str + ' to ' + end_str);
     $('.label_node').text('Number of nodes by ' + $('#' + type).text().split(' ')[1] + ' from ' + start_str + ' to ' + end_str);
     $('.label_relation').text('Number of relations by ' + $('#' + type).text().split(' ')[1] + ' from ' + start_str + ' to ' + end_str);
+
     $('#chart_way').empty();
     $('#chart_way').html('<svg></svg>');
     $('#chart_node').empty();
