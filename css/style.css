@@ -69,13 +69,9 @@ display:block;
 {
     display:none;   
 }
-.HideTodayButton .ui-datepicker-buttonpane .ui-datepicker-current
-{
-    visibility:hidden;
-}
 
-.hide-calendar .ui-datepicker-calendar
+
+.YearDatePicker .ui-datepicker-month
 {
-	display:none!important;
-	visibility:hidden!important
+    display:none;   
 }

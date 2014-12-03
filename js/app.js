@@ -157,7 +157,11 @@ $(document).ready(function() {
         beforeShow: function(input, inst) {
             if (type === 'm') {
                 $(inst.dpDiv).addClass('calendar-off');
-            } else if (type === 'y') {} else {
+            } else if (type === 'y') {
+                $(inst.dpDiv).addClass('calendar-off');
+                $("#ui-datepicker-div").addClass('YearDatePicker');
+            } else {
+                $("#ui-datepicker-div").removeClass('YearDatePicker');
                 $(inst.dpDiv).removeClass('calendar-off');
             }
         },
@@ -169,14 +173,16 @@ $(document).ready(function() {
                     $(this).datepicker("setDate", new Date(y, m, '01'));
                     draw();
                 } else if (type === 'y') {
-
+                    var y = parseInt($("#ui-datepicker-div .ui-datepicker-year :selected").val());
+                    $(this).datepicker("setDate", new Date(y, '01', '01'));
+                    draw();
                 } else {
 
                 }
             }
-            setTimeout(function() {
-                $(".to").datepicker("option", "minDate", start_str);
-            }, 300);
+            //  setTimeout(function() {
+            $(".to").datepicker("option", "minDate", start_str);
+            //  }, 10);
         },
         yearRange: '2012:2020'
 
@@ -194,36 +200,32 @@ $(document).ready(function() {
         beforeShow: function(input, inst) {
             if (type === 'm') {
                 $(inst.dpDiv).addClass('calendar-off');
-                // $(this).datepicker("hide");
-                //$("#ui-datepicker-div").addClass("hide-calendar");
-                //$("#ui-datepicker-div").addClass('MonthDatePicker');
-                //$("#ui-datepicker-div").addClass('HideTodayButton');
-            } else if (type === 'y') {} else {
+            } else if (type === 'y') {
+                $(inst.dpDiv).addClass('calendar-off');
+                $("#ui-datepicker-div").addClass('YearDatePicker');
+            } else {
+                $("#ui-datepicker-div").removeClass('YearDatePicker');
                 $(inst.dpDiv).removeClass('calendar-off');
             }
         },
         onClose: function(selectedDate) {
-
-
             if ($(window.event.srcElement).hasClass('ui-datepicker-close')) {
                 if (type === 'm') {
                     var m = parseInt($("#ui-datepicker-div .ui-datepicker-month :selected").val());
                     var y = parseInt($("#ui-datepicker-div .ui-datepicker-year :selected").val());
-
                     $(this).datepicker("setDate", new Date(y, m, '01'));
-
                     draw();
-
-                    console.log(selectedDate);
                 } else if (type === 'y') {
-
+                    var y = parseInt($("#ui-datepicker-div .ui-datepicker-year :selected").val());
+                    $(this).datepicker("setDate", new Date(y, '01', '01'));
+                    draw();
                 } else {
 
                 }
             }
-            setTimeout(function() {
-                $(".from").datepicker("option", "maxDate", end_str);
-            }, 300);
+            //  setTimeout(function() {
+            $(".from").datepicker("option", "maxDate", end_str);
+            // }, 10);
         },
         yearRange: '2012:2020'
     });
@@ -245,7 +247,7 @@ $(document).ready(function() {
         var selText = $(this).text();
         type = $(this).attr("id");
         $(this).parents('.btn-group').find('.dropdown-toggle').html(selText + ' <span class="caret"></span>');
-        //draw();
+        draw();
     });
     $('.type_label').text($('#' + type).text());
     draw();
