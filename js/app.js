@@ -11,6 +11,7 @@ var months = [31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31];
 var json_way = null;
 var json_node = null;
 var json_relation = null;
+
 function draw_way(data) {
     var chart;
     var nv_way = nv;
@@ -152,6 +153,7 @@ $(document).ready(function() {
         weekStart: 1,
         dateFormat: 'yy-mm-dd',
         //numberOfMonths: 2,
+        showButtonPanel: true,
         changeMonth: true,
         changeYear: true
     });
@@ -159,10 +161,16 @@ $(document).ready(function() {
         weekStart: 1,
         dateFormat: 'yy-mm-dd',
         //numberOfMonths: 2,
+        showButtonPanel: true,
         changeMonth: true,
         changeYear: true
 
     });
+
+    $('.ui-datepicker-close').click(function() {
+        alert('dd');
+    });
+
     $(".from").on("change", function() {
         draw();
     });
