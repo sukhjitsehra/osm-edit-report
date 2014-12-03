@@ -189,8 +189,6 @@ $(document).ready(function() {
 
     });
 
-
-
     $(".to").datepicker({
         weekStart: 1,
         dateFormat: 'yy-mm-dd',
@@ -311,9 +309,19 @@ function draw() {
                 break;
         }
     }
-    $('.label_way').text('Number of ways  by ' + $('#' + type).text().split(' ')[1] + ' from ' + start_str + ' to ' + end_str);
-    $('.label_node').text('Number of nodes by ' + $('#' + type).text().split(' ')[1] + ' from ' + start_str + ' to ' + end_str);
-    $('.label_relation').text('Number of relations by ' + $('#' + type).text().split(' ')[1] + ' from ' + start_str + ' to ' + end_str);
+    if (start_str === end_str) {
+
+        $('.label_way').text('Number of ways  at ' + start_str);
+        $('.label_node').text('Number of nodes  at ' + start_str);
+        $('.label_relation').text('Number of relations  at ' + start_str);
+
+    } else {
+
+        $('.label_way').text('Number of ways  by ' + $('#' + type).text().split(' ')[1] + ' from ' + start_str + ' to ' + end_str);
+        $('.label_node').text('Number of nodes by ' + $('#' + type).text().split(' ')[1] + ' from ' + start_str + ' to ' + end_str);
+        $('.label_relation').text('Number of relations by ' + $('#' + type).text().split(' ')[1] + ' from ' + start_str + ' to ' + end_str);
+
+    }
 
     $('#chart_way').empty();
     $('#chart_way').html('<svg></svg>');

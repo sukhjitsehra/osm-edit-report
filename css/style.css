@@ -75,3 +75,10 @@ display:block;
 {
     display:none;   
 }
+
+
+.container_relation small , .container_way small ,.container_node small {
+	font-size: 16px;
+	color: #9b9b9b;
+
+}
