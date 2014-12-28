@@ -28,10 +28,10 @@ add constraint fk_iduser_osm_obj
 Foreign key (iduser)
 references osm_user(iduser);
 
-alter table osm_obj
-add constraint fk_idfile_osm_obj
-Foreign key (osmdate )
-references osm_date(osmdate);
+--alter table osm_obj
+--add constraint fk_idfile_osm_obj
+--Foreign key (osmdate )
+--references osm_date(osmdate);
 
 INSERT INTO osm_user( iduser, osmuser, color, estado)  VALUES (510836,'Rub21','0171C5',true);
 INSERT INTO osm_user( iduser, osmuser, color, estado)  VALUES (1240849,'ediyes','FFFF00',true);

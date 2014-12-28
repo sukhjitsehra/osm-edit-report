@@ -1,6 +1,7 @@
 var osmium = require('osmium');
 var numeral = require('numeral');
 var request = require('request');
+var cheerio = require("cheerio");
 var fs = require('fs');
 var zlib = require('zlib');
 var _ = require('underscore');
@@ -116,32 +117,42 @@ function proces_file_save(callback) {
 				});
 				reader.apply(handler);
 				//insert date
+				var insert_osm_obj = true;
+
 				var query_data = 'INSERT INTO osm_date(idfile, osmdate)  VALUES ($1, $2);';
 				client.query(query_data, [name_directory + '-' + name_file, osmdate],
 					function(err, result) {
 						if (err) {
+							insert_osm_obj = false;
 							console.log(err);
+						} else {
+							insert_osm_obj = true;
 						}
 					});
 
-				_.each(count, function(val, key) {
-					var obj_data = [];
-					obj_data.push(key);
-					obj_data.push(osmdate);
-					obj_data.push(val.osm_node.v1);
-					obj_data.push(val.osm_node.vx);
-					obj_data.push(val.osm_way.v1);
-					obj_data.push(val.osm_way.vx);
-					obj_data.push(val.osm_relation.v1);
-					obj_data.push(val.osm_relation.vx);
-					var query_insert = "INSERT INTO osm_obj( iduser, osmdate, node_v1, node_vx, way_v1, way_vx, relation_v1, relation_vx)VALUES ($1, $2, $3, $4, $5, $6, $7, $8);"
-					client.query(query_insert, obj_data,
-						function(err, result) {
-							if (err) {
-								console.log(err);
-							}
-						});
-				});
+				if (insert_osm_obj) {
+					_.each(count, function(val, key) {
+						var obj_data = [];
+						obj_data.push(key);
+						obj_data.push(osmdate);
+						obj_data.push(val.osm_node.v1);
+						obj_data.push(val.osm_node.vx);
+						obj_data.push(val.osm_way.v1);
+						obj_data.push(val.osm_way.vx);
+						obj_data.push(val.osm_relation.v1);
+						obj_data.push(val.osm_relation.vx);
+						var query_insert = "INSERT INTO osm_obj( iduser, osmdate, node_v1, node_vx, way_v1, way_vx, relation_v1, relation_vx)VALUES ($1, $2, $3, $4, $5, $6, $7, $8);"
+						client.query(query_insert, obj_data,
+							function(err, result) {
+								if (err) {
+									console.log('No insertados');
+									console.log(err);
+								}
+							});
+					});
+
+				}
+
 			} catch (e) {
 				console.log("entering catch block");
 			}
@@ -185,14 +196,33 @@ function get_url_file() {
 	//intitializar parameters
 var url = 'http://planet.openstreetmap.org/replication/hour/000';
 var name_file = '';
-var num_file = 484;
-var num_directory = 19;
+var num_file = 100;
+var num_directory = 20;
 var name_directory = ''
 name_directory = '0' + num_directory;
 var osmdate = 0;
 
 setInterval(function() {
+
 	var url_file = get_url_file();
 	osm_file = name_file + '.osc'
-	download_file(url_file, osm_file, proces_file_save);
-}, 60 * 60 * 1000);
+
+
+	request(url_file, function(err, resp, body) {
+		if (!err && resp.statusCode == 200) {
+			console.log(url_file);
+			download_file(url_file, osm_file, proces_file_save);
+
+		} else {
+			console.log('no exsiste' + url_file);
+			if (num_file === 1) {
+				num_file = 999;
+				name_directory = name_directory - 1;
+			} else {
+				num_file = num_file - 1;
+			}
+		}
+	});
+
+
+}, 3 * 60 * 1000);

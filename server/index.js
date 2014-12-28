@@ -14,7 +14,7 @@ var obj = function() {
 		color: null
 	};
 };
-var conString = "postgres://postgres:1234@localhost/dbstatistic";
+var conString = "postgres://postgres:1234@54.172.162.212/dbstatistic";
 console.log("http://localhost:3021/");
 var client = new pg.Client(conString);
 client.connect(function(err) {
@@ -44,7 +44,11 @@ app.get('/:date', function(req, res) {
 		var query = '';
 		switch (date[0]) {
 			case 'h':
-				query = "SELECT u.osmuser, replace(substring(to_timestamp(o.osmdate)::text,9,5) || 'h',' ','-') as osmd, (o.node_v1 + o.node_vx) as node , (o.way_v1 + o.way_vx) as way, (o.relation_v1+ o.relation_vx) as relation" +
+				/*query = "SELECT u.osmuser, replace(substring(to_timestamp(o.osmdate)::text,9,5) || 'h',' ','-') as osmd, (o.node_v1 + o.node_vx) as node , (o.way_v1 + o.way_vx) as way, (o.relation_v1+ o.relation_vx) as relation" +
+					" FROM osm_obj as o " +
+					" INNER JOIN osm_user as u on  u.iduser =  o.iduser" +
+					" WHERE o.osmdate>=" + date[1] + " AND o.osmdate<" + date[2] + " AND u.estado=true";*/
+				query = "SELECT u.osmuser, replace(to_timestamp(o.osmdate)::text || 'h',' ','-') as osmd, (o.node_v1 + o.node_vx) as node , (o.way_v1 + o.way_vx) as way, (o.relation_v1+ o.relation_vx) as relation" +
 					" FROM osm_obj as o " +
 					" INNER JOIN osm_user as u on  u.iduser =  o.iduser" +
 					" WHERE o.osmdate>=" + date[1] + " AND o.osmdate<" + date[2] + " AND u.estado=true";
