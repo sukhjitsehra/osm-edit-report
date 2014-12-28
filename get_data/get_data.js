@@ -129,7 +129,7 @@ function proces_file_save(callback) {
 						}
 					});
 
-		
+				if (insert_osm_obj) {
 					_.each(count, function(val, key) {
 						var obj_data = [];
 						obj_data.push(key);
