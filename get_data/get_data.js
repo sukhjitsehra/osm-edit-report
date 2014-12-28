@@ -201,18 +201,13 @@ var num_directory = 20;
 var name_directory = ''
 name_directory = '0' + num_directory;
 var osmdate = 0;
-
 setInterval(function() {
-
 	var url_file = get_url_file();
 	osm_file = name_file + '.osc'
-
-
 	request(url_file, function(err, resp, body) {
 		if (!err && resp.statusCode == 200) {
 			console.log(url_file);
 			download_file(url_file, osm_file, proces_file_save);
-
 		} else {
 			console.log('no exsiste' + url_file);
 			if (num_file === 1) {
@@ -223,6 +218,4 @@ setInterval(function() {
 			}
 		}
 	});
-
-
 }, 3 * 60 * 1000);
