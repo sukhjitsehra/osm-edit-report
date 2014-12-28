@@ -208,7 +208,7 @@ setInterval(function() {
 			console.log(url_file);
 			download_file(url_file, osm_file, proces_file_save);
 		} else {
-			console.log('no exsiste' + url_file);
+			console.log('no exsiste : ' + url_file);
 			if (num_file === 1) {
 				num_file = 999;
 				name_directory = name_directory - 1;
