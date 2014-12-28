@@ -243,12 +243,15 @@ $(document).ready(function() {
         draw();
     });
     $(".dropdown-menu li a").click(function() {
-        console.log('select')
         var selText = $(this).text();
         type = $(this).attr("id");
         $(this).parents('.btn-group').find('.dropdown-toggle').html(selText + ' <span class="caret"></span>');
         draw();
+        setTimeout(function() {
+            location.href = document.URL.split('#')[0] + '#' + type + '&' + start_str + '&' + end_str;
+        }, 200);
     });
+
     $('.type_label').text($('#' + type).text());
     draw();
 });
@@ -266,8 +269,6 @@ function draw() {
     start_times = Date.UTC(parseInt(start_str.split('-')[0]), parseInt(start_str.split('-')[1]) - 1, parseInt(start_str.split('-')[2])) / 1000;
     end_str = $('.to').val();
     end_times = Date.UTC(parseInt(end_str.split('-')[0]), parseInt(end_str.split('-')[1]) - 1, parseInt(end_str.split('-')[2])) / 1000 + 24 * 60 * 60;
-    //console.log(host + type + '&' + start_times + '&' + end_times);
-
     if (start_times > end_times) {
         alert('Select a range of correct dates');
         return null;
@@ -329,8 +330,7 @@ function draw() {
     $('#chart_node').html('<svg></svg>');
     $('#chart_relation').empty();
     $('#chart_relation').html('<svg></svg>');
-    console.log(host + type + '&' + start_times + '&' + end_times);
-    location.href = document.URL.split('#')[0] + '#' + type + '&' + start_str + '&' + end_str;
+
     $.ajax({
         dataType: "json",
         url: host + type + '&' + start_times + '&' + end_times,
@@ -346,4 +346,5 @@ function draw() {
     $('#chart_node').addClass("loading");
     $('#chart_way').addClass("loading");
     $('#chart_relation').addClass("loading");
+    location.href = document.URL.split('#')[0] + '#' + type + '&' + start_str + '&' + end_str;
 }
