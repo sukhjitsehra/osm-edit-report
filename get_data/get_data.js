@@ -1,7 +1,6 @@
 var osmium = require('osmium');
 var numeral = require('numeral');
 var request = require('request');
-var cheerio = require("cheerio");
 var fs = require('fs');
 var zlib = require('zlib');
 var _ = require('underscore');
@@ -130,7 +129,7 @@ function proces_file_save(callback) {
 						}
 					});
 
-				if (insert_osm_obj) {
+		
 					_.each(count, function(val, key) {
 						var obj_data = [];
 						obj_data.push(key);

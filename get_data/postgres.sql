@@ -10,7 +10,7 @@ estado boolean not null
 );
 CREATE TABLE osm_date(
 idfile character(10) NOT NULL  PRIMARY KEY ,
-osmdate INTEGER
+osmdate INTEGER 
 );
 CREATE TABLE osm_obj(
 iduser INTEGER ,
@@ -32,6 +32,8 @@ alter table osm_obj
 add constraint fk_idfile_osm_obj
 Foreign key (osmdate )
 references osm_date(osmdate);
+
+ALTER TABLE osm_date ADD CONSTRAINT unique_osmdate UNIQUE (osmdate);
 
 INSERT INTO osm_user( iduser, osmuser, color, estado)  VALUES (510836,'Rub21','0171C5',true);
 INSERT INTO osm_user( iduser, osmuser, color, estado)  VALUES (1240849,'ediyes','FFFF00',true);
