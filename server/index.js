@@ -10,6 +10,7 @@ var obj = function() {
 		values_way: [],
 		values_node: [],
 		values_relation: [],
+		values_obj: [],
 		key: null,
 		color: null
 	};
@@ -102,6 +103,12 @@ app.get('/:date', function(req, res) {
 						x: result.rows[i].osmd,
 						y: parseInt(result.rows[i].relation)
 					});
+					userss.values_obj.push({
+						x: result.rows[i].osmd,
+						y: parseInt(result.rows[i].relation) + parseInt(result.rows[i].way) + parseInt(result.rows[i].node)
+					});
+
+
 				}
 				res.json(array_objs);
 			}
