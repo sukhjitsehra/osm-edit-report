@@ -11,6 +11,7 @@ var months = [31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31];
 var json_way = null;
 var json_node = null;
 var json_relation = null;
+var json_obj = null;
 
 function draw_way(data) {
     var chart;
@@ -100,6 +101,7 @@ function draw_node(data) {
     $('#chart_node').removeClass("loading");
 }
 
+
 function draw_relation(data) {
     var chart;
     var nv_relation = nv;
@@ -142,6 +144,50 @@ function draw_relation(data) {
         return chart;
     });
     $('#chart_relation').removeClass("loading");
+}
+
+function draw_obj(data) {
+    var chart;
+    var nv_obj = nv;
+    nv_obj.addGraph(function() {
+        chart = nv.models.multiBarChart()
+            .margin({
+                top: 50,
+                right: 20,
+                bottom: 50,
+                left: 50
+            })
+            .transitionDuration(300)
+            .delay(0)
+            .rotateLabels(0)
+            .groupSpacing(0.1);
+
+        chart.multibar
+            .hideable(true);
+
+        chart.reduceXTicks(false).staggerLabels(true);
+        chart.xAxis.tickFormat(function(d) {
+            return d;
+        });
+        chart.yAxis
+            .tickFormat(d3.format(',.H'));
+        d3.select('#chart_obj svg')
+            .datum(function() {
+                var json_obj = [];
+                _.each(data, function(val, key) {
+                    val.values = val.values_obj;
+                    val.values_node = null;
+                    val.values_way = null;
+                    val.values_obj = null;
+                    json_obj.push(val);
+                });
+                return json_obj;
+            })
+            .call(chart);
+        nv.utils.windowResize(chart.update);
+        return chart;
+    });
+    $('#chart_obj').removeClass("loading");
 }
 
 $(document).ready(function() {
@@ -312,39 +358,45 @@ function draw() {
     }
     if (start_str === end_str) {
 
-        $('.label_way').text('Number of ways  at ' + start_str);
-        $('.label_node').text('Number of nodes  at ' + start_str);
-        $('.label_relation').text('Number of relations  at ' + start_str);
+        //$('.label_way').text('Number of ways  at ' + start_str);
+        //$('.label_node').text('Number of nodes  at ' + start_str);
+        //$('.label_relation').text('Number of relations  at ' + start_str);
+        $('.label_obj').text('Date ' + start_str);
 
     } else {
 
-        $('.label_way').text('Number of ways  by ' + $('#' + type).text().split(' ')[1] + ' from ' + start_str + ' to ' + end_str);
-        $('.label_node').text('Number of nodes by ' + $('#' + type).text().split(' ')[1] + ' from ' + start_str + ' to ' + end_str);
-        $('.label_relation').text('Number of relations by ' + $('#' + type).text().split(' ')[1] + ' from ' + start_str + ' to ' + end_str);
+        // $('.label_way').text('Number of ways  by ' + $('#' + type).text().split(' ')[1] + ' from ' + start_str + ' to ' + end_str);
+        // $('.label_node').text('Number of nodes by ' + $('#' + type).text().split(' ')[1] + ' from ' + start_str + ' to ' + end_str);
+        // $('.label_relation').text('Number of relations by ' + $('#' + type).text().split(' ')[1] + ' from ' + start_str + ' to ' + end_str);
+        $('.label_obj').text('Date ' + $('#' + type).text().split(' ')[1] + ' from ' + start_str + ' to ' + end_str);
 
     }
 
-    $('#chart_way').empty();
-    $('#chart_way').html('<svg></svg>');
-    $('#chart_node').empty();
-    $('#chart_node').html('<svg></svg>');
-    $('#chart_relation').empty();
-    $('#chart_relation').html('<svg></svg>');
+    //$('#chart_way').empty();
+    //$('#chart_way').html('<svg></svg>');
+    //$('#chart_node').empty();
+    //$('#chart_node').html('<svg></svg>');
+    //$('#chart_relation').empty();
+    //$('#chart_relation').html('<svg></svg>');
+    $('#chart_obj').empty();
+    $('#chart_obj').html('<svg></svg>');
 
     $.ajax({
         dataType: "json",
         url: host + type + '&' + start_times + '&' + end_times,
         success: function(json) {
-            json_way = _.map(json, _.clone);
-            json_node = _.map(json, _.clone);
-            json_relation = _.map(json, _.clone);
-            draw_node(json_node);
-            draw_way(json_way);
-            draw_relation(json_relation);
+            //json_way = _.map(json, _.clone);
+            //json_node = _.map(json, _.clone);
+            //json_relation = _.map(json, _.clone);
+            //draw_node(json_node);
+            //draw_way(json_way);
+            //draw_relation(json_relation);
+            draw_obj(json);
         }
     });
-    $('#chart_node').addClass("loading");
-    $('#chart_way').addClass("loading");
-    $('#chart_relation').addClass("loading");
+    // $('#chart_node').addClass("loading");
+    // $('#chart_way').addClass("loading");
+    // $('#chart_relation').addClass("loading");
+    $('#chart_obj').addClass("loading");
     location.href = document.URL.split('#')[0] + '#' + type + '&' + start_str + '&' + end_str;
 }

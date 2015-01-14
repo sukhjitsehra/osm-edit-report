@@ -7,7 +7,7 @@ font: 12px sans-serif;
 svg {
 display: block;
 }
-.container_way{
+.container_way, .container_obj {
 margin-top: 30px;
 }
 #chart_way{
@@ -19,6 +19,9 @@ height: 300px;
 #chart_relation{
 height: 300px;
 margin-top: 50px;
+}
+#chart_obj{
+height: 400px;
 }
 .date-form { margin: 10px; }
 label.control-label span { cursor: pointer; }
@@ -77,7 +80,7 @@ display:block;
 }
 
 
-.container_relation small , .container_way small ,.container_node small {
+.container_relation small , .container_way small ,.container_node small,.container_obj small {
 	font-size: 16px;
 	color: #9b9b9b;
 
