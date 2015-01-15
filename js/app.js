@@ -368,7 +368,7 @@ function draw() {
         // $('.label_way').text('Number of ways  by ' + $('#' + type).text().split(' ')[1] + ' from ' + start_str + ' to ' + end_str);
         // $('.label_node').text('Number of nodes by ' + $('#' + type).text().split(' ')[1] + ' from ' + start_str + ' to ' + end_str);
         // $('.label_relation').text('Number of relations by ' + $('#' + type).text().split(' ')[1] + ' from ' + start_str + ' to ' + end_str);
-        $('.label_obj').text('Date ' + $('#' + type).text().split(' ')[1] + ' from ' + start_str + ' to ' + end_str);
+        $('.label_obj').text('Date: From ' + start_str + ' to ' + end_str);
 
     }
 
