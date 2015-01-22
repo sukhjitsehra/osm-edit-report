@@ -7,7 +7,7 @@ font: 12px sans-serif;
 svg {
 display: block;
 }
-.container_way, .container_obj {
+.container_way, .container_obj , .container_line {
 margin-top: 30px;
 }
 #chart_way{
@@ -21,6 +21,9 @@ height: 300px;
 margin-top: 50px;
 }
 #chart_obj{
+height: 400px;
+}
+#chart_line{
 height: 400px;
 }
 .date-form { margin: 10px; }
@@ -84,4 +87,48 @@ display:block;
 	font-size: 16px;
 	color: #9b9b9b;
 
+}
+
+
+/*
+
+ */
+body {
+  overflow-y:scroll;
+  font-family: arial;
+}
+
+text {
+  font: 12px sans-serif;
+}
+
+.chart {
+  float:left;
+  height: 500px;
+  text-align: center;
+  font-weight: bold;
+  margin-bottom: 2em;
+}
+.chart.full {
+  width: 100%;
+}
+
+.chart.half {
+  width: 50%;
+}
+
+.chart.third {
+  width: 33%;
+}
+
+.chart.selected {
+  width: 100% !important;
+}
+
+.navigation a{
+  margin-right: 1em;
+}
+
+.navigation {
+  margin-bottom: 1em;
 }

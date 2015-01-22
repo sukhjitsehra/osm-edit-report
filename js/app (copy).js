@@ -7,10 +7,144 @@ var start_str = dates[1];
 var end_str = dates[2];
 var start_times = (new Date(start_str + " 00:00:00").getTime() / 1000);
 var end_times = new Date(end_str + " 00:00:00").getTime() / 1000 + 24 * 60 * 60;
+var months = [31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31];
+var json_way = null;
+var json_node = null;
+var json_relation = null;
 var json_obj = null;
-var date = [];
-var json_line = null;
 
+function draw_way(data) {
+    var chart;
+    var nv_way = nv;
+
+    nv_way.addGraph(function() {
+        chart = nv_way.models.multiBarChart()
+            .margin({
+                top: 50,
+                right: 20,
+                bottom: 50,
+                left: 50
+            })
+            .transitionDuration(300)
+            .delay(0)
+            .rotateLabels(0)
+            .groupSpacing(0.1);
+
+        chart.multibar.hideable(true);
+        chart.reduceXTicks(false).staggerLabels(true);
+        chart.xAxis.tickFormat(function(d) {
+            return d;
+        }); //.rotateLabels(-90);
+
+        chart.yAxis
+            .tickFormat(d3.format(',.H'));
+        d3.select('#chart_way svg')
+            .datum(function() {
+                var json_way = [];
+                _.each(data, function(val, key) {
+                    val.values = val.values_way;
+                    val.values_node = null;
+                    val.values_way = null;
+                    val.values_relation = null;
+                    json_way.push(val);
+                });
+                return json_way;
+            })
+            .call(chart);
+        nv.utils.windowResize(chart.update);
+        return chart;
+    });
+    $('#chart_way').removeClass("loading");
+}
+
+function draw_node(data) {
+    var chart;
+    var nv_node = nv;
+    nv_node.addGraph(function() {
+        chart = nv.models.multiBarChart()
+            .margin({
+                top: 50,
+                right: 20,
+                bottom: 50,
+                left: 50
+            })
+            .transitionDuration(300)
+            .delay(0)
+            .rotateLabels(0)
+            .groupSpacing(0.1);
+
+        chart.multibar
+            .hideable(true);
+
+        chart.reduceXTicks(false).staggerLabels(true);
+        chart.xAxis.tickFormat(function(d) {
+            return d;
+        });
+        chart.yAxis
+            .tickFormat(d3.format(',.H'));
+        d3.select('#chart_node svg')
+            .datum(function() {
+                var json_node = [];
+                _.each(data, function(val, key) {
+                    val.values = val.values_node;
+                    val.values_node = null;
+                    val.values_way = null;
+                    val.values_relation = null;
+                    json_node.push(val);
+                });
+                return json_node;
+            })
+            .call(chart);
+        nv.utils.windowResize(chart.update);
+        return chart;
+    });
+    $('#chart_node').removeClass("loading");
+}
+
+
+function draw_relation(data) {
+    var chart;
+    var nv_relation = nv;
+    nv_relation.addGraph(function() {
+        chart = nv.models.multiBarChart()
+            .margin({
+                top: 50,
+                right: 20,
+                bottom: 50,
+                left: 50
+            })
+            .transitionDuration(300)
+            .delay(0)
+            .rotateLabels(0)
+            .groupSpacing(0.1);
+
+        chart.multibar
+            .hideable(true);
+
+        chart.reduceXTicks(false).staggerLabels(true);
+        chart.xAxis.tickFormat(function(d) {
+            return d;
+        });
+        chart.yAxis
+            .tickFormat(d3.format(',.H'));
+        d3.select('#chart_relation svg')
+            .datum(function() {
+                var json_relation = [];
+                _.each(data, function(val, key) {
+                    val.values = val.values_relation;
+                    val.values_node = null;
+                    val.values_way = null;
+                    val.values_relation = null;
+                    json_relation.push(val);
+                });
+                return json_relation;
+            })
+            .call(chart);
+        nv.utils.windowResize(chart.update);
+        return chart;
+    });
+    $('#chart_relation').removeClass("loading");
+}
 
 function draw_obj(data) {
     var chart;
@@ -56,58 +190,10 @@ function draw_obj(data) {
     $('#chart_obj').removeClass("loading");
 }
 
-function draw_line(data) {
-    console.log(data);
-    var chart;
-    var nv_line = nv;
-    nv_line.addGraph(function() {
-        var chart;
-        chart = nv_line.models.lineChart().useInteractiveGuideline(true);
-        chart
-            .x(function(d, i) {
-                return d.x;
-            });
-
-        var formatter;
-        // console.log(date);
-        date = _.uniq(date);
-        formatter = function(d, i) {
-            if (typeof d === 'object') {
-                d = d + "";
-                return d.substr(4, 11);
-            } else {
-                var date = new Date(d);
-                return d3.time.format('%b %d %Y')(date);
-            }
-        }
-
-        chart.margin({
-            right: 20
-        });
-        chart.xAxis 
-            .tickFormat(
-                formatter
-            ).ticks(1);
-
-        chart.yAxis
-            .tickFormat(d3.format(',.1f'));
-
-        d3.select('#chart_line svg')
-            .datum(data)
-            .transition().duration(500)
-            .call(chart);
-        nv_line.utils.windowResize(chart.update);
-        return chart;
-    });
-
-    $('#chart_line').removeClass("loading");
-
-
-}
-
 $(document).ready(function() {
     $('.from').val(dates[1]);
     $('.to').val(dates[2]);
+
     $(".from").datepicker({
         weekStart: 1,
         dateFormat: 'yy-mm-dd',
@@ -146,7 +232,9 @@ $(document).ready(function() {
             //  }, 10);
         },
         yearRange: '2012:2020'
+
     });
+
     $(".to").datepicker({
         weekStart: 1,
         dateFormat: 'yy-mm-dd',
@@ -190,9 +278,13 @@ $(document).ready(function() {
 
     $(".from").datepicker("option", "maxDate", end_str);
     $(".to").datepicker("option", "minDate", start_str);
+
+
+
     $(".from").on("change", function() {
         draw();
     });
+
     $(".to").on("change", function() {
         draw();
     });
@@ -299,35 +391,7 @@ function draw() {
             //draw_node(json_node);
             //draw_way(json_way);
             //draw_relation(json_relation);
-
-
-
-            // draw_obj(json);
-            date = [];
-            json_line = [];
-            console.log(json);
-            _.each(json, function(val, key) {
-                val.values_obj = null;
-                //console.log(val);
-
-                _.each(val.values, function(v, k) {
-                    //console.log(k);
-                    var d = val.values[k].x.split('-');
-
-                    var utc = new Date(Date.UTC(2015,
-                        parseInt(d[0]) - 1,
-                        parseInt(d[1]) + 1, 0,
-                        0));
-                    console.log(utc);
-
-                    val.values[k].label = val.values[k].x;
-                    val.values[k].x = utc;
-
-                });
-                json_line.push(val);
-            });
-            // console.log(json_line);
-            draw_line(json_line);
+            draw_obj(json);
         }
     });
     // $('#chart_node').addClass("loading");

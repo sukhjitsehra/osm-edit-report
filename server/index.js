@@ -11,11 +11,12 @@ var obj = function() {
 		values_node: [],
 		values_relation: [],
 		values_obj: [],
+		values: [],
 		key: null,
 		color: null
 	};
 };
-var conString = "postgres://postgres:1234@localhost/dbstatistic";
+var conString = "postgres://postgres:1234@54.172.162.212/dbstatistic";
 console.log("http://localhost:3021/");
 var client = new pg.Client(conString);
 client.connect(function(err) {
@@ -91,19 +92,23 @@ app.get('/:date', function(req, res) {
 					var userss = _.find(array_objs, function(obj) {
 						return obj.key === result.rows[i].osmuser
 					});
-					userss.values_way.push({
-						x: result.rows[i].osmd,
-						y: parseInt(result.rows[i].way)
-					});
-					userss.values_node.push({
-						x: result.rows[i].osmd,
-						y: parseInt(result.rows[i].node)
-					});
-					userss.values_relation.push({
-						x: result.rows[i].osmd,
-						y: parseInt(result.rows[i].relation)
-					});
+					// userss.values_way.push({
+					// 	x: result.rows[i].osmd,
+					// 	y: parseInt(result.rows[i].way)
+					// });
+					// userss.values_node.push({
+					// 	x: result.rows[i].osmd,
+					// 	y: parseInt(result.rows[i].node)
+					// });
+					// userss.values_relation.push({
+					// 	x: result.rows[i].osmd,
+					// 	y: parseInt(result.rows[i].relation)
+					// });
 					userss.values_obj.push({
+						x: result.rows[i].osmd,
+						y: parseInt(result.rows[i].relation) + parseInt(result.rows[i].way) + parseInt(result.rows[i].node)
+					});
+					userss.values.push({
 						x: result.rows[i].osmd,
 						y: parseInt(result.rows[i].relation) + parseInt(result.rows[i].way) + parseInt(result.rows[i].node)
 					});
