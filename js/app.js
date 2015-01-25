@@ -57,18 +57,20 @@ function draw_obj(data) {
 }
 
 function draw_line(data) {
-    num_global_lenght=data[0].values.length;
+    num_global_lenght = data[0].values.length;
     console.log(num_global_lenght);
     var chart;
     var nv_line = nv;
     nv_line.addGraph(function() {
         var chart;
         chart = nv_line.models.lineChart().useInteractiveGuideline(true);
+        //chart.forceX(2001,2011);
         chart
             .x(function(d, i) {
                 return d.x;
             });
 
+        //  chart.xAxis.scale().domain([0, 1233]);
 
 
         var formatter;
@@ -93,15 +95,19 @@ function draw_line(data) {
 
         chart.xAxis
             .axisLabel('Date')
-            .ticks(d3.time.day,10)
+            //.ticks(d3.time.day)
             .tickFormat(
                 formatter
             );
 
-
+        chart.xScale(d3.time.scale());
 
         chart.yAxis
             .tickFormat(d3.format(',.2f'));
+
+        //chart.yAxis.orient('right');
+       // chart.yAxis.attr("transform", "translate(0," + 234 + ")")
+       
 
         d3.select('#chart_line svg')
             .datum(data)

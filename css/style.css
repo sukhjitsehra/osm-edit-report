@@ -132,3 +132,7 @@ text {
 .navigation {
   margin-bottom: 1em;
 }
+
+.nv-x .tick line {
+  display: none;
+}
