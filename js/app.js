@@ -57,7 +57,8 @@ function draw_obj(data) {
 }
 
 function draw_line(data) {
-    console.log(data);
+    num_global_lenght=data[0].values.length;
+    console.log(num_global_lenght);
     var chart;
     var nv_line = nv;
     nv_line.addGraph(function() {
@@ -67,6 +68,8 @@ function draw_line(data) {
             .x(function(d, i) {
                 return d.x;
             });
+
+
 
         var formatter;
         // console.log(date);
@@ -78,19 +81,27 @@ function draw_line(data) {
             } else {
                 var date = new Date(d);
                 return d3.time.format('%b %d %Y')(date);
+                //return d3.time.format('%b %d %Y')(date);
             }
         }
 
         chart.margin({
             right: 20
         });
-        chart.xAxis 
+
+        //chart.xScale(d3.time.scale());
+
+        chart.xAxis
+            .axisLabel('Date')
+            .ticks(d3.time.day,10)
             .tickFormat(
                 formatter
-            ).ticks(1);
+            );
+
+
 
         chart.yAxis
-            .tickFormat(d3.format(',.1f'));
+            .tickFormat(d3.format(',.2f'));
 
         d3.select('#chart_line svg')
             .datum(data)
@@ -318,7 +329,7 @@ function draw() {
                         parseInt(d[0]) - 1,
                         parseInt(d[1]) + 1, 0,
                         0));
-                    console.log(utc);
+                    //console.log(utc);
 
                     val.values[k].label = val.values[k].x;
                     val.values[k].x = utc;
