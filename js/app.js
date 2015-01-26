@@ -125,8 +125,8 @@ function draw_line(data) {
         }
 
         chart.margin({
-            right: 60,
-            left: 30
+            right: 63,
+            left: 35
         });
 
         chart.xAxis
@@ -298,21 +298,19 @@ function draw() {
                 break;
             case 'y':
                 start_str = $('.from').val();
-                start_times = Date.UTC(parseInt(start_str.split('-')[0]), 1, 1) / 1000;
+                start_times = Date.UTC(parseInt(start_str.split('-')[0]), 0, 1) / 1000;
+                console.log(start_times);
                 end_str = $('.to').val();
                 end_times = Date.UTC(parseInt(end_str.split('-')[0]), 1, 1) / 1000 + 24 * 60 * 60 * 365;
                 start_str = start_str.split('-')[0] + '-01-01';
                 end_str = end_str.split('-')[0] + '-12-31'
                 $('.from').val(start_str);
                 $('.to').val(end_str);
+
                 break;
         }
     }
     if (start_str === end_str) {
-
-        //$('.label_way').text('Number of ways  at ' + start_str);
-        //$('.label_node').text('Number of nodes  at ' + start_str);
-        //$('.label_relation').text('Number of relations  at ' + start_str);
         $('.label_obj').text('Date ' + start_str);
 
     } else {
@@ -323,13 +321,6 @@ function draw() {
         $('.label_obj').text('Date: From ' + start_str + ' to ' + end_str);
 
     }
-
-    //$('#chart_way').empty();
-    //$('#chart_way').html('<svg></svg>');
-    //$('#chart_node').empty();
-    //$('#chart_node').html('<svg></svg>');
-    //$('#chart_relation').empty();
-    //$('#chart_relation').html('<svg></svg>');
     $('#chart_obj').empty();
     $('#chart_obj').html('<svg></svg>');
     $('#chart_line').empty();
