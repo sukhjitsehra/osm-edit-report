@@ -110,11 +110,23 @@ function draw_line(data) {
                     }
                 }
                 break;
+            case 'y':
+                // per year
+                formatter = function(d, i) {
+                    if (typeof d === 'object') {
+                        d = (d + "").split(' ');
+                        return d[3];
+                    } else {
+                        var date = new Date(d);
+                        return d3.time.format('%Y')(date);
+                    }
+                }
+                break;
         }
 
         chart.margin({
             right: 60,
-            left: 35
+            left: 30
         });
 
         chart.xAxis
@@ -347,7 +359,7 @@ function draw() {
                             var utc = new Date(Date.UTC(d[0],
                                 parseInt(d[1]) - 1,
                                 parseInt(d[2]), parseInt(d[3]), 300));
-                            console.log(utc);
+                            //console.log(utc);
                             //val.values[k].label = val.values[k].x;
                             val.values[k].x = utc;
 
@@ -371,6 +383,18 @@ function draw() {
                             var utc = new Date(Date.UTC(d[0],
                                 parseInt(d[1]) - 1, 12, 0, 0));
                             // console.log(utc);
+                            //val.values[k].label = val.values[k].x;
+                            val.values[k].x = utc;
+
+                        });
+                        break;
+                    case 'y':
+                        _.each(val.values, function(v, k) {
+                            var d = val.values[k].x.split('-');
+                            console.log(d);
+
+                            var utc = new Date(Date.UTC(d[0], 0, 2, 0, 0));
+                            console.log(utc);
                             //val.values[k].label = val.values[k].x;
                             val.values[k].x = utc;
 
