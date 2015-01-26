@@ -45,8 +45,8 @@ INSERT INTO osm_user( iduser, osmuser, color, estado) VALUES (2511706,'cesar28',
 INSERT INTO osm_user( iduser, osmuser, color, estado) VALUES (2512300,'samely','66CCCC',true);
 
 UPDATE osm_user
-SET  color='008000'
-WHERE iduser=2377377;
+SET  osmuser='calfarome'
+WHERE iduser=2511706;
 
 SELECT iduser, osmuser, color, estado FROM osm_user;
 --selecion
