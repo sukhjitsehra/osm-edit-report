@@ -64,17 +64,11 @@ function draw_line(data) {
     nv_line.addGraph(function() {
         var chart;
         chart = nv_line.models.lineChart().useInteractiveGuideline(true);
-        //chart.forceX(2001,2011);
         chart
             .x(function(d, i) {
                 return d.x;
             });
-
-        //  chart.xAxis.scale().domain([0, 1233]);
-
-
         var formatter;
-        // console.log(date);
         date = _.uniq(date);
         formatter = function(d, i) {
             if (typeof d === 'object') {
@@ -83,19 +77,16 @@ function draw_line(data) {
             } else {
                 var date = new Date(d);
                 return d3.time.format('%b %d %Y')(date);
-                //return d3.time.format('%b %d %Y')(date);
             }
         }
 
         chart.margin({
-            right: 20
+            right: 60,
+            left: 35
         });
-
-        //chart.xScale(d3.time.scale());
 
         chart.xAxis
             .axisLabel('Date')
-            //.ticks(d3.time.day)
             .tickFormat(
                 formatter
             );
@@ -105,9 +96,6 @@ function draw_line(data) {
         chart.yAxis
             .tickFormat(d3.format(',.2f'));
 
-        //chart.yAxis.orient('right');
-       // chart.yAxis.attr("transform", "translate(0," + 234 + ")")
-       
 
         d3.select('#chart_line svg')
             .datum(data)
@@ -118,8 +106,6 @@ function draw_line(data) {
     });
 
     $('#chart_line').removeClass("loading");
-
-
 }
 
 $(document).ready(function() {
@@ -322,7 +308,7 @@ function draw() {
             // draw_obj(json);
             date = [];
             json_line = [];
-            console.log(json);
+            //console.log(json);
             _.each(json, function(val, key) {
                 val.values_obj = null;
                 //console.log(val);
