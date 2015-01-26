@@ -59,7 +59,7 @@ app.get('/:date', function(req, res) {
 				}
 				break;
 			case 'd':
-				query = "SELECT u.osmuser, substring(to_timestamp(o.osmdate)::text,6,6) as osmd, sum(o.node_v1 + o.node_vx) as node , sum(o.way_v1 + o.way_vx) as way, sum(o.relation_v1+ o.relation_vx) as relation " +
+				query = "SELECT u.osmuser, substring(to_timestamp(o.osmdate)::text,0,11) as osmd, sum(o.node_v1 + o.node_vx) as node , sum(o.way_v1 + o.way_vx) as way, sum(o.relation_v1+ o.relation_vx) as relation " +
 					" FROM osm_obj as o  INNER JOIN osm_user as u on   u.iduser =  o.iduser " +
 					" WHERE osmdate>= " + date[1] + " AND osmdate<" + date[2] + " AND u.estado=true " +
 					" GROUP BY osmd,u.osmuser ORDER BY osmd;";

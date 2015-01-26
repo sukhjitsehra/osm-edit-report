@@ -313,9 +313,9 @@ function draw() {
                 val.color = val.color.replace(/\s/g, '');
                 _.each(val.values, function(v, k) {
                     var d = val.values[k].x.split('-');
-                    var utc = new Date(Date.UTC(2015,
-                        parseInt(d[0]) - 1,
-                        parseInt(d[1]) + 1, 0,
+                    var utc = new Date(Date.UTC(d[0],
+                        parseInt(d[1]) - 1,
+                        parseInt(d[2]) + 1, 0,
                         0));
                     val.values[k].label = val.values[k].x;
                     val.values[k].x = utc;
