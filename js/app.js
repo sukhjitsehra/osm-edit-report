@@ -59,7 +59,7 @@ function draw_obj(data) {
 function draw_line(data) {
     console.log(data);
     num_global_lenght = data[0].values.length;
-    console.log(num_global_lenght);
+    //console.log(num_global_lenght);
     var chart;
     var nv_line = nv;
     nv_line.addGraph(function() {
@@ -292,6 +292,8 @@ function draw() {
     //$('#chart_relation').html('<svg></svg>');
     $('#chart_obj').empty();
     $('#chart_obj').html('<svg></svg>');
+    $('#chart_line').empty();
+    $('#chart_line').html('<svg></svg>');
 
     $.ajax({
         dataType: "json",
