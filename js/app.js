@@ -7,10 +7,10 @@ var start_str = dates[1];
 var end_str = dates[2];
 var start_times = (new Date(start_str + " 00:00:00").getTime() / 1000);
 var end_times = new Date(end_str + " 00:00:00").getTime() / 1000 + 24 * 60 * 60;
+var months = [31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31];
 var json_obj = null;
 var date = [];
 var json_line = null;
-
 
 function draw_obj(data) {
     var chart;
@@ -59,7 +59,6 @@ function draw_obj(data) {
 function draw_line(data) {
     console.log(data);
     num_global_lenght = data[0].values.length;
-    //console.log(num_global_lenght);
     var chart;
     var nv_line = nv;
     nv_line.addGraph(function() {
@@ -71,14 +70,32 @@ function draw_line(data) {
             });
         var formatter;
         date = _.uniq(date);
-        formatter = function(d, i) {
-            if (typeof d === 'object') {
-                d = d + "";
-                return d.substr(4, 11);
-            } else {
-                var date = new Date(d);
-                return d3.time.format('%b %d %Y')(date);
-            }
+
+        switch (type) {
+            case 'd':
+                //per day
+                formatter = function(d, i) {
+                    if (typeof d === 'object') {
+                        d = d + "";
+                        return d.substr(4, 11);
+                    } else {
+                        var date = new Date(d);
+                        return d3.time.format('%b %d %Y')(date);
+                    }
+                }
+                break;
+            case 'm':
+                // per month
+                formatter = function(d, i) {
+                    if (typeof d === 'object') {
+                        d = (d + "").split(' ');
+                        return d[1] + ' ' + d[3];
+                    } else {
+                        var date = new Date(d);
+                        return d3.time.format('%d %Y')(date);
+                    }
+                }
+                break;
         }
 
         chart.margin({
@@ -96,8 +113,6 @@ function draw_line(data) {
 
         chart.yAxis
             .tickFormat(d3.format(',.2f'));
-
-
         d3.select('#chart_line svg')
             .datum(data)
             .transition().duration(500)
@@ -105,7 +120,6 @@ function draw_line(data) {
         nv_line.utils.windowResize(chart.update);
         return chart;
     });
-
     $('#chart_line').removeClass("loading");
 }
 
@@ -306,23 +320,40 @@ function draw() {
             //draw_way(json_way);
             //draw_relation(json_relation);
             // draw_obj(json);
+            //console.log(json);
             date = [];
             json_line = [];
             _.each(json, function(val, key) {
                 val.values_obj = null;
-                val.color = val.color.replace(/\s/g, '');
-                _.each(val.values, function(v, k) {
-                    var d = val.values[k].x.split('-');
-                    var utc = new Date(Date.UTC(d[0],
-                        parseInt(d[1]) - 1,
-                        parseInt(d[2]) + 1, 0,
-                        0));
-                    val.values[k].label = val.values[k].x;
-                    val.values[k].x = utc;
+                switch (type) {
+                    case 'd':
+                        //per day
+                        _.each(val.values, function(v, k) {
+                            var d = val.values[k].x.split('-');
+                            var utc = new Date(Date.UTC(d[0],
+                                parseInt(d[1]) - 1,
+                                parseInt(d[2]) + 1, 0, 0));
+                            val.values[k].label = val.values[k].x;
+                            val.values[k].x = utc;
 
-                });
+                        });
+                        break;
+                    case 'm':
+                        _.each(val.values, function(v, k) {
+                            var d = val.values[k].x.split('-');
+                            var utc = new Date(Date.UTC(d[0],
+                                parseInt(d[1])-1, 12, 0, 0));
+                            console.log(utc);
+
+                            val.values[k].label = val.values[k].x;
+                            val.values[k].x = utc;
+
+                        });
+                        break;
+                }
                 json_line.push(val);
             });
+            console.log(json_line);
             draw_line(json_line);
         }
     });
@@ -330,5 +361,6 @@ function draw() {
     // $('#chart_way').addClass("loading");
     // $('#chart_relation').addClass("loading");
     $('#chart_obj').addClass("loading");
+    $('#chart_line').addClass("loading");
     location.href = document.URL.split('#')[0] + '#' + type + '&' + start_str + '&' + end_str;
 }
