@@ -72,6 +72,20 @@ function draw_line(data) {
         date = _.uniq(date);
 
         switch (type) {
+            case 'h':
+                //per hour
+                formatter = function(d, i) {
+                    //console.log(d);
+                    //Mon Jan 05 2015 12:00:00 GMT-0500 (PET)
+                    if (typeof d === 'object') {
+                        d = (d + "").split(' ');
+                        return d[4].split(':')[0] + 'h' + '-' + d[2];
+                    } else {
+                        var date = new Date(d);
+                        return d3.time.format('%H %b')(date);
+                    }
+                }
+                break;
             case 'd':
                 //per day
                 formatter = function(d, i) {
@@ -320,12 +334,25 @@ function draw() {
             //draw_way(json_way);
             //draw_relation(json_relation);
             // draw_obj(json);
-            //console.log(json);
+            console.log(json);
             date = [];
             json_line = [];
             _.each(json, function(val, key) {
                 val.values_obj = null;
                 switch (type) {
+                    case 'h':
+                        //per hour
+                        _.each(val.values, function(v, k) {
+                            var d = val.values[k].x.split('-');
+                            var utc = new Date(Date.UTC(d[0],
+                                parseInt(d[1]) - 1,
+                                parseInt(d[2]), parseInt(d[3]), 300));
+                            console.log(utc);
+                            //val.values[k].label = val.values[k].x;
+                            val.values[k].x = utc;
+
+                        });
+                        break;
                     case 'd':
                         //per day
                         _.each(val.values, function(v, k) {
@@ -333,7 +360,7 @@ function draw() {
                             var utc = new Date(Date.UTC(d[0],
                                 parseInt(d[1]) - 1,
                                 parseInt(d[2]) + 1, 0, 0));
-                            val.values[k].label = val.values[k].x;
+                            //val.values[k].label = val.values[k].x;
                             val.values[k].x = utc;
 
                         });
@@ -342,10 +369,9 @@ function draw() {
                         _.each(val.values, function(v, k) {
                             var d = val.values[k].x.split('-');
                             var utc = new Date(Date.UTC(d[0],
-                                parseInt(d[1])-1, 12, 0, 0));
-                            console.log(utc);
-
-                            val.values[k].label = val.values[k].x;
+                                parseInt(d[1]) - 1, 12, 0, 0));
+                            // console.log(utc);
+                            //val.values[k].label = val.values[k].x;
                             val.values[k].x = utc;
 
                         });
