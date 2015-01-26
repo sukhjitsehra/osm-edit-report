@@ -57,6 +57,7 @@ function draw_obj(data) {
 }
 
 function draw_line(data) {
+    console.log(data);
     num_global_lenght = data[0].values.length;
     console.log(num_global_lenght);
     var chart;
@@ -302,34 +303,24 @@ function draw() {
             //draw_node(json_node);
             //draw_way(json_way);
             //draw_relation(json_relation);
-
-
-
             // draw_obj(json);
             date = [];
             json_line = [];
-            //console.log(json);
             _.each(json, function(val, key) {
                 val.values_obj = null;
-                //console.log(val);
-
+                val.color = val.color.replace(/\s/g, '');
                 _.each(val.values, function(v, k) {
-                    //console.log(k);
                     var d = val.values[k].x.split('-');
-
                     var utc = new Date(Date.UTC(2015,
                         parseInt(d[0]) - 1,
                         parseInt(d[1]) + 1, 0,
                         0));
-                    //console.log(utc);
-
                     val.values[k].label = val.values[k].x;
                     val.values[k].x = utc;
 
                 });
                 json_line.push(val);
             });
-            // console.log(json_line);
             draw_line(json_line);
         }
     });
