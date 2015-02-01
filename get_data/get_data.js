@@ -60,11 +60,9 @@ function download_file(url, localFile, callback) {
 };
 
 function proces_file_save(callback) {
-	//console.log('Process file :' + name_file);
 	var osmfile = osm_file;
 	var count = {};
 	var query_user = "SELECT iduser, osmuser, color, estado FROM osm_user";
-	//console.log(query_user)
 	var main_query = client.query(query_user, function(error, result) {
 		if (error) {
 			console.log(error);
@@ -80,10 +78,11 @@ function proces_file_save(callback) {
 				var file = new osmium.File(osmfile);
 				var reader = new osmium.Reader(file);
 				var handler = new osmium.Handler();
-
 				//WAY
 				handler.on('way', function(way) {
 					osmdate = way.timestamp;
+					osmdate = osmdate - osmdate % 1000;
+					console.log(osmdate);
 					if (count.hasOwnProperty(way.uid) && _.size(way.tags()) > 0) {
 						if (way.version === 1) {
 							++count[way.uid].osm_way.v1;
@@ -94,7 +93,6 @@ function proces_file_save(callback) {
 				});
 				//NODE
 				handler.on('node', function(node) {
-
 					if (count.hasOwnProperty(node.uid) && _.size(node.tags()) > 0) {
 						if (node.version === 1) {
 							++count[node.uid].osm_node.v1;
@@ -103,7 +101,6 @@ function proces_file_save(callback) {
 						}
 					}
 				});
-
 				//RELATION
 				handler.on('relation', function(relation) {
 					if (count.hasOwnProperty(relation.uid) && _.size(relation.tags()) > 0) {
@@ -117,7 +114,6 @@ function proces_file_save(callback) {
 				reader.apply(handler);
 				//insert date
 				var insert_osm_obj = true;
-
 				var query_data = 'INSERT INTO osm_date(idfile, osmdate)  VALUES ($1, $2);';
 				client.query(query_data, [name_directory + '-' + name_file, osmdate],
 					function(err, result) {
@@ -149,9 +145,7 @@ function proces_file_save(callback) {
 								}
 							});
 					});
-
 				}
-
 			} catch (e) {
 				console.log("entering catch block");
 			}
@@ -159,7 +153,7 @@ function proces_file_save(callback) {
 	});
 
 	main_query.on('end', function(result) {
-		//Elimia el archivo
+		//remove file
 		if (!fs.exists(osm_file)) {
 			var tempFile = fs.openSync(osm_file, 'r');
 			fs.closeSync(tempFile);
@@ -168,10 +162,6 @@ function proces_file_save(callback) {
 		} else {
 			console.log('Error in remove file');
 		}
-		//setTimeout(
-		//function() {
-		//	client.end();
-		//}, 5000);
 	});
 }
 
@@ -195,7 +185,7 @@ function get_url_file() {
 	//intitializar parameters
 var url = 'http://planet.openstreetmap.org/replication/hour/000';
 var name_file = '';
-var num_file = 513;
+var num_file = 786;
 var num_directory = 20;
 var name_directory = ''
 name_directory = '0' + num_directory;
@@ -208,7 +198,7 @@ setInterval(function() {
 			console.log(url_file);
 			download_file(url_file, osm_file, proces_file_save);
 		} else {
-			console.log('no exsiste : ' + url_file);
+			console.log('no existe : ' + url_file);
 			if (num_file === 1) {
 				num_file = 999;
 				name_directory = name_directory - 1;
@@ -217,4 +207,4 @@ setInterval(function() {
 			}
 		}
 	});
-}, 3 * 60 * 1000);
+}, 10 * 60 * 1000);
