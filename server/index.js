@@ -46,7 +46,7 @@ app.get('/:date', function(req, res) {
 		var query = '';
 		switch (date[0]) {
 			case 'h':
-				query = "SELECT u.osmuser,  replace(substring(to_timestamp(o.osmdate)::text,0,14),' ','-') as osmd, (o.node_v1 + o.node_vx) as node , (o.way_v1 + o.way_vx) as way, (o.relation_v1+ o.relation_vx) as relation" +
+				query = "SELECT u.osmuser,  replace(substring(to_timestamp(o.osmdate)::text,0,14),' ','-') as osmd, (o.node_v1 + o.node_vx + o.way_v1 + o.way_vx + o.relation_v1+ o.relation_vx) as num_objs" +
 					" FROM osm_obj as o " +
 					" INNER JOIN osm_user as u on  u.iduser =  o.iduser" +
 					" WHERE o.osmdate>=" + date[1] + " AND o.osmdate<" + date[2] + " AND u.estado=true";
@@ -55,23 +55,23 @@ app.get('/:date', function(req, res) {
 				}
 				break;
 			case 'd':
-				query = "SELECT u.osmuser, substring(to_timestamp(o.osmdate)::text,0,11) as osmd, sum(o.node_v1 + o.node_vx) as node , sum(o.way_v1 + o.way_vx) as way, sum(o.relation_v1+ o.relation_vx) as relation " +
+				query = "SELECT u.osmuser, substring(to_timestamp(o.osmdate)::text,0,11) as osmd, sum(o.node_v1 + o.node_vx + o.way_v1 + o.way_vx + o.relation_v1+ o.relation_vx) as num_objs" +
 					" FROM osm_obj as o  INNER JOIN osm_user as u on   u.iduser =  o.iduser " +
 					" WHERE osmdate>= " + date[1] + " AND osmdate<" + date[2] + " AND u.estado=true " +
 					" GROUP BY osmd,u.osmuser ORDER BY osmd;";
-				if ((parseInt(date[2]) - parseInt(date[1])) > 24 * 60 * 60 * 30 * 3) {
-					return res.send('Error 404: No quote found');
-				}
+				// if ((parseInt(date[2]) - parseInt(date[1])) > 24 * 60 * 60 * 30 * 3) {
+				// 	return res.send('Error 404: No quote found');
+				// }
 				break;
 			case 'm':
-				query = " SELECT u.osmuser, substring(to_timestamp(o.osmdate)::text,0,8) as osmd, sum(o.node_v1 + o.node_vx) as node , sum(o.way_v1 + o.way_vx) as way, sum(o.relation_v1+ o.relation_vx) as relation " +
+				query = " SELECT u.osmuser, substring(to_timestamp(o.osmdate)::text,0,8) as osmd, sum(o.node_v1 + o.node_vx + o.way_v1 + o.way_vx + o.relation_v1+ o.relation_vx) as num_objs" +
 					" FROM osm_obj as o  INNER JOIN osm_user as u on   u.iduser =  o.iduser " +
 					" WHERE osmdate>= " + date[1] + " AND osmdate<" + date[2] + " AND u.estado=true " +
 					" GROUP BY osmd,u.osmuser ORDER BY osmd;"
 
 				break;
 			case 'y':
-				query = " SELECT u.osmuser, substring(to_timestamp(o.osmdate)::text,0,5) as osmd, sum(o.node_v1 + o.node_vx) as node , sum(o.way_v1 + o.way_vx) as way, sum(o.relation_v1+ o.relation_vx) as relation  " +
+				query = " SELECT u.osmuser, substring(to_timestamp(o.osmdate)::text,0,5) as osmd, sum(o.node_v1 + o.node_vx + o.way_v1 + o.way_vx + o.relation_v1+ o.relation_vx) as num_objs" +
 					" FROM osm_obj as o  INNER JOIN osm_user as u on   u.iduser =  o.iduser " +
 					" WHERE osmdate>= " + date[1] + " AND osmdate<" + date[2] + " AND u.estado=true " +
 					" GROUP BY osmd,u.osmuser ORDER BY osmd";
@@ -88,25 +88,13 @@ app.get('/:date', function(req, res) {
 					var userss = _.find(array_objs, function(obj) {
 						return obj.key === result.rows[i].osmuser
 					});
-					// userss.values_way.push({
+					// userss.values_obj.push({
 					// 	x: result.rows[i].osmd,
-					// 	y: parseInt(result.rows[i].way)
+					// 	y: parseInt(result.rows[i].num_objs)
 					// });
-					// userss.values_node.push({
-					// 	x: result.rows[i].osmd,
-					// 	y: parseInt(result.rows[i].node)
-					// });
-					// userss.values_relation.push({
-					// 	x: result.rows[i].osmd,
-					// 	y: parseInt(result.rows[i].relation)
-					// });
-					userss.values_obj.push({
-						x: result.rows[i].osmd,
-						y: parseInt(result.rows[i].relation) + parseInt(result.rows[i].way) + parseInt(result.rows[i].node)
-					});
 					userss.values.push({
 						x: result.rows[i].osmd,
-						y: parseInt(result.rows[i].relation) + parseInt(result.rows[i].way) + parseInt(result.rows[i].node)
+						y: parseInt(result.rows[i].num_objs)
 					});
 
 

@@ -143,7 +143,7 @@ function draw_line(data) {
         }
 
         chart.xAxis.tickValues(date_xaxis);
-        
+
         chart.yAxis.tickFormat(d3.format(',.2f'));
         d3.select('#chart_line svg')
             .datum(data)
@@ -280,16 +280,18 @@ function draw() {
 
         switch (type) {
             case 'h':
+                console.log(type);
                 if ((end_times - start_times) > 24 * 60 * 60 * 5) {
                     alert('Select two 5 days at most');
                     return null;
                 }
                 break;
             case 'd':
-                if ((end_times - start_times) > 24 * 60 * 60 * 30 * 3) {
-                    alert('Select two 2 month at most');
-                    return null;
-                }
+                // if ((end_times - start_times) > 24 * 60 * 60 * 30 * 3) {
+                //     alert('Select two 2 month at most');
+                //     return null;
+                // }
+                console.log(type);
                 break;
             case 'm':
                 start_str = $('.from').val();
