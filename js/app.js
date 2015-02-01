@@ -60,7 +60,6 @@ function draw_line(data) {
     num_global_lenght = data[0].values.length;
     global_parameters.d_type = type;
     global_parameters.d_length = data[0].values.length;
-    //console.log(global_parameters);
     var chart;
     var nv_line = nv;
     nv_line.addGraph(function() {
@@ -68,11 +67,8 @@ function draw_line(data) {
         chart = nv_line.models.lineChart().useInteractiveGuideline(true);
         chart
             .x(function(d, i) {
-                //console.log(d.x);
                 return d.x;
             });
-
-        //
 
         var formatter;
 
@@ -82,10 +78,10 @@ function draw_line(data) {
                 formatter = function(d, i) {
                     if (typeof d === 'object') {
                         d = (d + "").split(' ');
-                        return d[4].split(':')[0] + 'h' + '-' + d[2];
+                        return d[4].split(':')[0] + 'h ' + d[1] + ' ' + d[2];
                     } else {
                         var date = new Date(d);
-                        return d3.time.format('%H %b')(date);
+                        return d3.time.format('%H %b %d')(date);
                     }
                 }
                 break;
@@ -94,7 +90,6 @@ function draw_line(data) {
                 formatter = function(d, i) {
                     if (typeof d === 'object') {
                         d = d + "";
-                        //console.log(d.substr(4, 11));
                         return d.substr(4, 11);
 
 
@@ -139,29 +134,14 @@ function draw_line(data) {
             .tickFormat(
                 formatter
             );
-
         //reduce el numero de labels en el xAxis
         date_xaxis = _.uniq(date_xaxis);
-        var date_xaxis2 = [];
-
-         console.log(date_xaxis);
-
         if (date_xaxis.length > 10) {
-            date_xaxis2 = _.each(date_xaxis, function(v, k) {
+            date_xaxis = _.each(date_xaxis, function(v, k) {
                 return k % 2 == 0;
             });
-            date_xaxis = date_xaxis2;
         }
-
-        console.log(date_xaxis);
         chart.xAxis.tickValues(date_xaxis);
-         console.log(date_xaxis);
-        //chart.xAxis.ticks(4);
-        //chart.xDomain();
-        //chart.xAxis.ticks(2);
-        //chart.xScale(d3.time.scale());
-        //chart.xAxis.axisLabelDistance(400);
-
         chart.yAxis.tickFormat(d3.format(',.2f'));
         d3.select('#chart_line svg')
             .datum(data)
@@ -371,29 +351,27 @@ function draw() {
                         //per hour
                         _.each(val.values, function(v, k) {
                             var d = val.values[k].x.split('-');
-                            var utc = new Date(Date.UTC(d[0],
+
+                            var date_timestamp = Date.UTC(d[0],
                                 parseInt(d[1]) - 1,
-                                parseInt(d[2]), parseInt(d[3]), 300));
-                            //console.log(utc);
-                            //val.values[k].label = val.values[k].x;
+                                parseInt(d[2]), parseInt(d[3]), 300);
+                            //console.log(date_timestamp);
+                            var utc = new Date(date_timestamp);
                             val.values[k].x = utc;
+                            date_xaxis.push(date_timestamp);
 
                         });
                         break;
                     case 'd':
                         //per day
                         _.each(val.values, function(v, k) {
-                            //console.log(v);
-                            //console.log(k);
                             var d = val.values[k].x.split('-');
-                            var utc = new Date(Date.UTC(d[0],
+                            var date_timestamp = Date.UTC(d[0],
                                 parseInt(d[1]) - 1,
-                                parseInt(d[2]) + 1, 0, 0));
-                            //val.values[k].label = val.values[k].x;
+                                parseInt(d[2]) + 1, 0, 0)
+                            var utc = new Date(date_timestamp);
                             val.values[k].x = utc;
-                            date_xaxis.push(Date.UTC(d[0],
-                                parseInt(d[1]) - 1,
-                                parseInt(d[2]) + 1, 0, 0));
+                            date_xaxis.push(date_timestamp);
 
                         });
                         break;
