@@ -107,7 +107,7 @@ function draw_line(data) {
                         return d[1] + ' ' + d[3];
                     } else {
                         var date = new Date(d);
-                        return d3.time.format('%d %Y')(date);
+                        return d3.time.format('%b %Y')(date);
                     }
                 }
                 break;
@@ -141,7 +141,9 @@ function draw_line(data) {
                 return k % 2 == 0;
             });
         }
+
         chart.xAxis.tickValues(date_xaxis);
+        
         chart.yAxis.tickFormat(d3.format(',.2f'));
         d3.select('#chart_line svg')
             .datum(data)
@@ -355,7 +357,6 @@ function draw() {
                             var date_timestamp = Date.UTC(d[0],
                                 parseInt(d[1]) - 1,
                                 parseInt(d[2]), parseInt(d[3]), 300);
-                            //console.log(date_timestamp);
                             var utc = new Date(date_timestamp);
                             val.values[k].x = utc;
                             date_xaxis.push(date_timestamp);
@@ -378,11 +379,11 @@ function draw() {
                     case 'm':
                         _.each(val.values, function(v, k) {
                             var d = val.values[k].x.split('-');
-                            var utc = new Date(Date.UTC(d[0],
-                                parseInt(d[1]) - 1, 12, 0, 0));
-                            // console.log(utc);
-                            //val.values[k].label = val.values[k].x;
+                            var date_timestamp = Date.UTC(d[0],
+                                parseInt(d[1]) - 1, 12, 0, 0);
+                            var utc = new Date(date_timestamp);
                             val.values[k].x = utc;
+                            date_xaxis.push(date_timestamp);
 
                         });
                         break;
@@ -390,18 +391,15 @@ function draw() {
                         _.each(val.values, function(v, k) {
                             var d = val.values[k].x.split('-');
                             console.log(d);
-
-                            var utc = new Date(Date.UTC(d[0], 0, 2, 0, 0));
-                            // console.log(utc);
-                            //val.values[k].label = val.values[k].x;
+                            var date_timestamp = Date.UTC(d[0], 0, 2, 0, 0);
+                            var utc = new Date(date_timestamp);
                             val.values[k].x = utc;
-
+                            date_xaxis.push(date_timestamp);
                         });
                         break;
                 }
                 json_line.push(val);
             });
-            //console.log(json_line);
             draw_line(json_line);
         }
     });
