@@ -12,7 +12,7 @@ INSERT INTO osm_user( iduser, osmuser, color, estado) VALUES (2512300,'samely','
 INSERT INTO osm_user( iduser, osmuser, color, estado) VALUES (2115749,'srividya_c','F8981D',true);
 
 UPDATE osm_user
-   SET  color='adff2f'
+   SET  color='ADFF2F'
  WHERE iduser=2115749;
 
 SELECT iduser, osmuser, color, estado FROM osm_user;
