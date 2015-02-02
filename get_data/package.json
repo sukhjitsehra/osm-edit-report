@@ -10,7 +10,6 @@
     "url": "https://github.com/Rub21/daily-report-data-team.git"
   },
   "dependencies": {
-    "moment": "^2.8.1",
     "numeral": "^1.5.3",
     "optimist": "^0.6.1",
     "osmium": "^0.1.3",

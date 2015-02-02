@@ -2,19 +2,19 @@
 <meta charset="utf-8">
 </style>
 <body>
-    <link href="src/nv.d3.css" rel="stylesheet" type="text/css">
-    <link type="text/css" rel="stylesheet" href="css/bootstrap.css">
-    <link type="text/css" rel="stylesheet" href="css/bootstrap-theme.min.css">
+    <link href="lib/nv.d3.css" rel="stylesheet" type="text/css">
+    <link type="text/css" rel="stylesheet" href="lib/bootstrap.css">
+    <link type="text/css" rel="stylesheet" href="lib/bootstrap-theme.css">
     <link rel="stylesheet" type="text/css" href="http://code.jquery.com/ui/1.11.2/themes/smoothness/jquery-ui.css">
     <link type="text/css" rel="stylesheet" href="css/style.css">
     <div class="navbar navbar-default navbar-fixed-top" role="navigation">
         <div class="container">
             <div class="navbar-header">
                 <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
-                <span class="sr-only">Toggle navigation</span>
+           <!--      <span class="sr-only">Toggle navigation</span> -->
                 <span class="icon-bar"></span>
                 </button>
-                <a class="navbar-brand" href="#">Progress Team-Data</a>
+                <a class="navbar-brand" href="#">Progress data-team</a>
             </div>
             <div class="navbar-collapse collapse">
                 <div class="btn-group nav navbar-nav btn-input clearfix col-md-2" style="margin-top: 10px">
@@ -59,53 +59,36 @@
             </div>
         </div>
     </div>
-    <div class="container container_obj" >
+    <div class="container container_line" >
         <div class="page-header">
-            <h2>OpenStreetMap Objects modified</h2><small class="label_obj"></small>
+            <h2>OpenStreetMap objects modifed</h2><small class="label_line"></small>
         </div>
-        <div id="chart_obj" class='with-3d-shadow with-transitions loading'>
+        <div id="chart_line" class='chart full with-3d-shadow with-transitions loading'>
             <svg></svg>
         </div>
     </div>
-    <!--
-    <div class="container container_way" >
+    <div class="container container_bar" >
         <div class="page-header">
-            <h2>Counter Way</h2> <small class="label_way"></small>
+            <h2>OpenStreetMap objects modifed</h2><small class="label_bar"></small>
         </div>
-        
-        <div id="chart_way" class='with-3d-shadow with-transitions loading' >
+        <div id="chart_bar" class='with-3d-shadow with-transitions loading'>
             <svg></svg>
         </div>
     </div>
-    <div class="container container_node" >
-        <div class="page-header">
-            
-            <div class="row"><h2>Counter Node</h2> <small class="label_node"></small></div>
-        </div>
-        <div id="chart_node" class='with-3d-shadow with-transitions loading' >
-            <svg></svg>
-        </div>
-    </div>
-    <div class="container container_relation" >
-        <div class="page-header">
-            <h2>Counter Relation</h2><small class="label_relation"></small>
-        </div>
-        <div id="chart_relation" class='with-3d-shadow with-transitions loading'>
-            <svg></svg>
-        </div>
-    </div>-->
     <script src="lib/jquery-2.1.1.min.js"></script>
-    <script src="js/jquery-ui-1.9.2.min.js"></script>
-    <script src="js/underscore-min.js"></script>
-    <script src="js/bootstrap.js"></script>
+    <script src="lib/jquery-ui-1.9.2.min.js"></script>
+    <script src="lib/underscore-min.js"></script>
+    <script src="lib/bootstrap.js"></script>
     <script src="lib/d3.v3.js"></script>
     <script src="lib/nv.d3.js"></script>
-    <script src="src/tooltip.js"></script>
-    <script src="src/utils.js"></script>
-    <script src="src/models/legend.js"></script>
-    <script src="src/models/axis.js"></script>
-    <script src="src/models/scatter.js"></script>
-    <script src="src/models/line.js"></script>
-    <script src="src/models/lineChart.js"></script>
-    <script src="js/app.js"></script>
+    <script src="lib/tooltip.js"></script>
+    <script src="lib/utils.js"></script>
+    <script src="lib/interactiveLayer.js"></script>
+    <script src="lib/models/legend.js"></script>
+    <script src="lib/models/axis.js"></script>
+    <script src="lib/models/scatter.js"></script>
+    <script src="lib/models/line.js"></script>
+    <script src="lib/models/lineChart.js"></script>
+    <script src="js/app.js"></script>   
 </body>
+

@@ -67,7 +67,6 @@ function proces_file_save(callback) {
 	var osmfile = osm_file;
 	var count = {};
 	var query_user = "SELECT iduser, osmuser, color, estado FROM osm_user where estado=true";
-	//console.log(query_user)
 	var main_query = client.query(query_user, function(error, result) {
 		if (error) {
 			console.log(error);
@@ -83,10 +82,10 @@ function proces_file_save(callback) {
 				var file = new osmium.File(osmfile);
 				var reader = new osmium.Reader(file);
 				var handler = new osmium.Handler();
-
 				//WAY
 				handler.on('way', function(way) {
 					osmdate = way.timestamp;
+					osmdate = osmdate - osmdate % 1000;
 					if (count.hasOwnProperty(way.uid) && _.size(way.tags()) > 0) {
 						if (way.version === 1) {
 							++count[way.uid].osm_way.v1;
@@ -105,7 +104,6 @@ function proces_file_save(callback) {
 						}
 					}
 				});
-
 				//RELATION
 				handler.on('relation', function(relation) {
 					if (count.hasOwnProperty(relation.uid) && _.size(relation.tags()) > 0) {
@@ -125,7 +123,6 @@ function proces_file_save(callback) {
 							console.log(err);
 						}
 					});
-
 				_.each(count, function(val, key) {
 					var obj_data = [];
 					obj_data.push(key);
@@ -151,7 +148,7 @@ function proces_file_save(callback) {
 	});
 
 	main_query.on('end', function(result) {
-		//Elimia el archivo
+		//remove file
 		if (!fs.exists(osm_file)) {
 			var tempFile = fs.openSync(osm_file, 'r');
 			fs.closeSync(tempFile);
@@ -160,14 +157,9 @@ function proces_file_save(callback) {
 		} else {
 			console.log('Error in remove file');
 		}
-
-		//setTimeout(
-		//function() {
-		//client.end();
 		url_file = get_url_file();
 		osm_file = name_file + '.osc'
 		download_file(url_file, osm_file, proces_file_save);
-		//}, 5000);
 	});
 }
 
@@ -206,9 +198,7 @@ if (num_directory < 10) {
 	name_directory = '00' + num_directory;
 }
 var osmdate = 0;
-//setInterval(function() {
 var url_file = get_url_file();
 osm_file = name_file + '.osc'
 download_file(url_file, osm_file, proces_file_save);
-//}, 60 * 60 * 1000);
-//node load.js --num_file=0 --num_directory=18
+//node load.js --num_file=512 --num_directory=20

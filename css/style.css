@@ -7,20 +7,13 @@ font: 12px sans-serif;
 svg {
 display: block;
 }
-.container_way, .container_obj {
+.container_way, .container_line {
 margin-top: 30px;
 }
-#chart_way{
-height: 300px;
+#chart_bar{
+height: 400px;
 }
-#chart_node{
-height: 300px;
-}
-#chart_relation{
-height: 300px;
-margin-top: 50px;
-}
-#chart_obj{
+#chart_line{
 height: 400px;
 }
 .date-form { margin: 10px; }
@@ -66,22 +59,24 @@ display:block;
     display:none !important;
 }
 
-
-
 .MonthDatePicker .ui-datepicker-year
 {
     display:none;   
 }
-
 
 .YearDatePicker .ui-datepicker-month
 {
     display:none;   
 }
 
-
-.container_relation small , .container_way small ,.container_node small,.container_obj small {
-	font-size: 16px;
+.container_line small ,.container_bar small {
+	font-size: 12px;
 	color: #9b9b9b;
 
 }
+
+/*hide x scale*/
+.nv-x .tick line {
+  display: none;
+}
+
