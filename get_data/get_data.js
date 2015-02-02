@@ -185,7 +185,7 @@ function get_url_file() {
 	//intitializar parameters
 var url = 'http://planet.openstreetmap.org/replication/hour/000';
 var name_file = '';
-var num_file = 786;
+var num_file = 961;
 var num_directory = 20;
 var name_directory = ''
 name_directory = '0' + num_directory;
