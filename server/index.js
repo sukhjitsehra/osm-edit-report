@@ -12,7 +12,7 @@ var obj = function() {
 		color: null
 	};
 };
-var conString = "postgres://postgres:1234@54.172.162.212/dbstatistic";
+var conString = "postgres://postgres:1234@localhost/dbstatistic";
 console.log("http://localhost:3021/");
 var client = new pg.Client(conString);
 client.connect(function(err) {
