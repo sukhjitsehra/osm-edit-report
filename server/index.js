@@ -7,10 +7,6 @@ var moment = require('moment');
 app.use(cors());
 var obj = function() {
 	return {
-		//values_way: [],
-		//values_node: [],
-		//values_relation: [],
-		values_obj: [],
 		values: [],
 		key: null,
 		color: null
@@ -59,9 +55,6 @@ app.get('/:date', function(req, res) {
 					" FROM osm_obj as o  INNER JOIN osm_user as u on   u.iduser =  o.iduser " +
 					" WHERE osmdate>= " + date[1] + " AND osmdate<" + date[2] + " AND u.estado=true " +
 					" GROUP BY osmd,u.osmuser ORDER BY osmd;";
-				// if ((parseInt(date[2]) - parseInt(date[1])) > 24 * 60 * 60 * 30 * 3) {
-				// 	return res.send('Error 404: No quote found');
-				// }
 				break;
 			case 'm':
 				query = " SELECT u.osmuser, substring(to_timestamp(o.osmdate)::text,0,8) as osmd, sum(o.node_v1 + o.node_vx + o.way_v1 + o.way_vx + o.relation_v1+ o.relation_vx) as num_objs" +
@@ -88,16 +81,10 @@ app.get('/:date', function(req, res) {
 					var userss = _.find(array_objs, function(obj) {
 						return obj.key === result.rows[i].osmuser
 					});
-					// userss.values_obj.push({
-					// 	x: result.rows[i].osmd,
-					// 	y: parseInt(result.rows[i].num_objs)
-					// });
 					userss.values.push({
 						x: result.rows[i].osmd,
 						y: parseInt(result.rows[i].num_objs)
 					});
-
-
 				}
 				res.json(array_objs);
 			}

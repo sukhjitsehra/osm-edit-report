@@ -12,7 +12,7 @@ var json_obj = null;
 var date_xaxis = [];
 var json_line = null;
 
-function draw_obj(data) {
+function draw_bar(data) {
     var chart;
     var nv_obj = nv;
     nv_obj.addGraph(function() {
@@ -58,8 +58,8 @@ function draw_obj(data) {
 
 function draw_line(data) {
     num_global_lenght = data[0].values.length;
-    global_parameters.d_type = type;
-    global_parameters.d_length = data[0].values.length;
+    //global_parameters.d_type = type;
+    //global_parameters.d_length = data[0].values.length;
     var chart;
     var nv_line = nv;
     nv_line.addGraph(function() {
@@ -392,7 +392,7 @@ function draw() {
                     case 'y':
                         _.each(val.values, function(v, k) {
                             var d = val.values[k].x.split('-');
-                            console.log(d);
+                            //console.log(d);
                             var date_timestamp = Date.UTC(d[0], 0, 2, 0, 0);
                             var utc = new Date(date_timestamp);
                             val.values[k].x = utc;
@@ -403,6 +403,7 @@ function draw() {
                 json_line.push(val);
             });
             draw_line(json_line);
+            //draw_bar(_.map(json, _.clone));
         }
     });
     // $('#chart_node').addClass("loading");
