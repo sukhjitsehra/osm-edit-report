@@ -90,8 +90,6 @@ function draw_line(data) {
     $('#chart_line').removeClass("loading");
 }
 
-
-
 function date_format() {
     var formatter;
     switch (type) {
@@ -223,9 +221,7 @@ $(document).ready(function() {
 
                 }
             }
-            //  setTimeout(function() {
             $(".from").datepicker("option", "maxDate", end_str);
-            // }, 10);
         },
         yearRange: '2012:2020'
     });
@@ -272,7 +268,6 @@ function draw() {
 
         switch (type) {
             case 'h':
-                console.log(type);
                 if ((end_times - start_times) > 24 * 60 * 60 * 5) {
                     alert('Select two 5 days at most');
                     return null;
@@ -283,7 +278,6 @@ function draw() {
                 //     alert('Select two 2 month at most');
                 //     return null;
                 // }
-                console.log(type);
                 break;
             case 'm':
                 start_str = $('.from').val();
@@ -299,7 +293,6 @@ function draw() {
             case 'y':
                 start_str = $('.from').val();
                 start_times = Date.UTC(parseInt(start_str.split('-')[0]), 0, 1) / 1000;
-                //console.log(start_times);
                 end_str = $('.to').val();
                 end_times = Date.UTC(parseInt(end_str.split('-')[0]), 1, 1) / 1000 + 24 * 60 * 60 * 365;
                 start_str = start_str.split('-')[0] + '-01-01';
@@ -372,7 +365,6 @@ function draw() {
                     case 'y':
                         _.each(val.values, function(v, k) {
                             var d = val.values[k].x.split('-');
-                            //console.log(d);
                             var date_timestamp = Date.UTC(d[0], 0, 2, 0, 0);
                             var utc = new Date(date_timestamp);
                             val.values[k].x = utc;
