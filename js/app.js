@@ -375,7 +375,7 @@ function draw() {
                 json_obj.push(val);
             });
             draw_line(json_obj);
-            draw_bar(_.map(json, _.clone));
+            //draw_bar(_.map(json, _.clone));
         }
     });
     $('#chart_bar').addClass("loading");
