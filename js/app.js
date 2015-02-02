@@ -8,9 +8,8 @@ var end_str = dates[2];
 var start_times = (new Date(start_str + " 00:00:00").getTime() / 1000);
 var end_times = new Date(end_str + " 00:00:00").getTime() / 1000 + 24 * 60 * 60;
 var months = [31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31];
-var json_obj = null;
 var date_xaxis = [];
-var json_line = null;
+var json_obj = null;
 
 function draw_bar(data) {
     var chart;
@@ -28,38 +27,30 @@ function draw_bar(data) {
             .rotateLabels(0)
             .groupSpacing(0.1);
 
+        chart.x(function(d, i) {
+            return d.x;
+        });
+
         chart.multibar
             .hideable(true);
-
-        chart.reduceXTicks(false).staggerLabels(true);
-        chart.xAxis.tickFormat(function(d) {
-            return d;
-        });
+        chart.reduceXTicks(true).staggerLabels(false);
+        chart.xAxis
+            .axisLabel('Date')
+            .tickFormat(
+                date_format()
+            );
         chart.yAxis
             .tickFormat(d3.format(',.H'));
-        d3.select('#chart_obj svg')
-            .datum(function() {
-                var json_obj = [];
-                _.each(data, function(val, key) {
-                    val.values = val.values_obj;
-                    val.values_node = null;
-                    val.values_way = null;
-                    val.values_obj = null;
-                    json_obj.push(val);
-                });
-                return json_obj;
-            })
+        d3.select('#chart_bar svg')
+            .datum(data)
             .call(chart);
         nv.utils.windowResize(chart.update);
         return chart;
     });
-    $('#chart_obj').removeClass("loading");
+    $('#chart_bar').removeClass("loading");
 }
 
 function draw_line(data) {
-    num_global_lenght = data[0].values.length;
-    //global_parameters.d_type = type;
-    //global_parameters.d_length = data[0].values.length;
     var chart;
     var nv_line = nv;
     nv_line.addGraph(function() {
@@ -69,62 +60,6 @@ function draw_line(data) {
             .x(function(d, i) {
                 return d.x;
             });
-
-        var formatter;
-
-        switch (type) {
-            case 'h':
-                //per hour
-                formatter = function(d, i) {
-                    if (typeof d === 'object') {
-                        d = (d + "").split(' ');
-                        return d[4].split(':')[0] + 'h ' + d[1] + ' ' + d[2];
-                    } else {
-                        var date = new Date(d);
-                        return d3.time.format('%H %b %d')(date);
-                    }
-                }
-                break;
-            case 'd':
-                //per day
-                formatter = function(d, i) {
-                    if (typeof d === 'object') {
-                        d = d + "";
-                        return d.substr(4, 11);
-
-
-                    } else {
-                        var date = new Date(d);
-                        return d3.time.format('%b %d %Y')(date);
-                    }
-                }
-                break;
-            case 'm':
-                // per month
-                formatter = function(d, i) {
-                    if (typeof d === 'object') {
-                        d = (d + "").split(' ');
-                        return d[1] + ' ' + d[3];
-                    } else {
-                        var date = new Date(d);
-                        return d3.time.format('%b %Y')(date);
-                    }
-                }
-                break;
-            case 'y':
-                // per year
-                formatter = function(d, i) {
-                    if (typeof d === 'object') {
-                        d = (d + "").split(' ');
-                        return d[3];
-                    } else {
-                        var date = new Date(d);
-                        return d3.time.format('%Y')(date);
-                    }
-                }
-                break;
-        }
-
         chart.margin({
             right: 63,
             left: 35
@@ -132,7 +67,7 @@ function draw_line(data) {
         chart.xAxis
             .axisLabel('Date')
             .tickFormat(
-                formatter
+                date_format()
             );
         //reduce el numero de labels en el xAxis
         date_xaxis = _.uniq(date_xaxis);
@@ -144,7 +79,7 @@ function draw_line(data) {
 
         chart.xAxis.tickValues(date_xaxis);
 
-        chart.yAxis.tickFormat(d3.format(',.2f'));
+        chart.yAxis.tickFormat(d3.format(',.H'));
         d3.select('#chart_line svg')
             .datum(data)
             .transition().duration(500)
@@ -153,6 +88,65 @@ function draw_line(data) {
         return chart;
     });
     $('#chart_line').removeClass("loading");
+}
+
+
+
+function date_format() {
+    var formatter;
+    switch (type) {
+        case 'h':
+            //per hour
+            formatter = function(d, i) {
+                if (typeof d === 'object') {
+                    d = (d + "").split(' ');
+                    return d[4].split(':')[0] + 'h ' + d[1] + ' ' + d[2];
+                } else {
+                    var date = new Date(d);
+                    return d3.time.format('%H %b %d')(date);
+                }
+            }
+            break;
+        case 'd':
+            //per day
+            formatter = function(d, i) {
+                if (typeof d === 'object') {
+                    d = d + "";
+                    return d.substr(4, 11);
+
+
+                } else {
+                    var date = new Date(d);
+                    return d3.time.format('%b %d %Y')(date);
+                }
+            }
+            break;
+        case 'm':
+            // per month
+            formatter = function(d, i) {
+                if (typeof d === 'object') {
+                    d = (d + "").split(' ');
+                    return d[1] + ' ' + d[3];
+                } else {
+                    var date = new Date(d);
+                    return d3.time.format('%b %Y')(date);
+                }
+            }
+            break;
+        case 'y':
+            // per year
+            formatter = function(d, i) {
+                if (typeof d === 'object') {
+                    d = (d + "").split(' ');
+                    return d[3];
+                } else {
+                    var date = new Date(d);
+                    return d3.time.format('%Y')(date);
+                }
+            }
+            break;
+    }
+    return formatter;
 }
 
 $(document).ready(function() {
@@ -191,9 +185,7 @@ $(document).ready(function() {
 
                 }
             }
-            //  setTimeout(function() {
             $(".to").datepicker("option", "minDate", start_str);
-            //  }, 10);
         },
         yearRange: '2012:2020'
     });
@@ -319,18 +311,14 @@ function draw() {
         }
     }
     if (start_str === end_str) {
-        $('.label_obj').text('Date ' + start_str);
-
+        $('.label_bar').text('Date ' + start_str);
+        $('.label_line').text('Date ' + start_str);
     } else {
-
-        // $('.label_way').text('Number of ways  by ' + $('#' + type).text().split(' ')[1] + ' from ' + start_str + ' to ' + end_str);
-        // $('.label_node').text('Number of nodes by ' + $('#' + type).text().split(' ')[1] + ' from ' + start_str + ' to ' + end_str);
-        // $('.label_relation').text('Number of relations by ' + $('#' + type).text().split(' ')[1] + ' from ' + start_str + ' to ' + end_str);
-        $('.label_obj').text('Date: From ' + start_str + ' to ' + end_str);
-
+        $('.label_bar').text('Date: From ' + start_str + ' to ' + end_str);
+        $('.label_line').text('Date: From ' + start_str + ' to ' + end_str);
     }
-    $('#chart_obj').empty();
-    $('#chart_obj').html('<svg></svg>');
+    $('#chart_bar').empty();
+    $('#chart_bar').html('<svg></svg>');
     $('#chart_line').empty();
     $('#chart_line').html('<svg></svg>');
 
@@ -338,16 +326,8 @@ function draw() {
         dataType: "json",
         url: host + type + '&' + start_times + '&' + end_times,
         success: function(json) {
-            //json_way = _.map(json, _.clone);
-            //json_node = _.map(json, _.clone);
-            //json_relation = _.map(json, _.clone);
-            //draw_node(json_node);
-            //draw_way(json_way);
-            //draw_relation(json_relation);
-            // draw_obj(json);
-            //console.log(json);
             date_xaxis = [];
-            json_line = [];
+            json_obj = [];
             _.each(json, function(val, key) {
                 val.values_obj = null;
                 switch (type) {
@@ -400,16 +380,13 @@ function draw() {
                         });
                         break;
                 }
-                json_line.push(val);
+                json_obj.push(val);
             });
-            draw_line(json_line);
-            //draw_bar(_.map(json, _.clone));
+            draw_line(json_obj);
+            draw_bar(_.map(json, _.clone));
         }
     });
-    // $('#chart_node').addClass("loading");
-    // $('#chart_way').addClass("loading");
-    // $('#chart_relation').addClass("loading");
-    $('#chart_obj').addClass("loading");
+    $('#chart_bar').addClass("loading");
     $('#chart_line').addClass("loading");
     location.href = document.URL.split('#')[0] + '#' + type + '&' + start_str + '&' + end_str;
 }
