@@ -65,7 +65,7 @@ Or to start loading with [2015-01-01 00:02](http://planet.openstreetmap.org/repl
 ### 4. Run data server
 
     cd server/
-    node index.js
+    node index.js --user=<dbuser> --password=<dbpassword> --database=dbstatistic
 
 Use [forever](http://labs.telasocial.com/nodejs-forever-daemon/) to run as a daemon.
 
