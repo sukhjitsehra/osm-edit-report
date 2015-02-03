@@ -67,7 +67,7 @@ Or to start loading with [2015-01-01 00:02](http://planet.openstreetmap.org/repl
     cd server/
     node index.js --user=<dbuser> --password=<dbpassword> --database=dbstatistic
 
-Use [forever](http://labs.telasocial.com/nodejs-forever-daemon/) to run as a daemon.
+This will run the server at port 3021. Use [forever](http://labs.telasocial.com/nodejs-forever-daemon/) to run as a daemon.
 
 ### 5. Configure and serve web UI
 
