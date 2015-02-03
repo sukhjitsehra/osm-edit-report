@@ -39,7 +39,7 @@ If you want to add on future much users just you have to add a line of code in y
 
 - **true** : state of user: if you don’t want to show one user on line graph , just update the user using state as false
 
-### 4. Start loading data into the database
+#### 4. Start loading data into the database
 
 Go to `report-dt/get_data` 
 
@@ -56,7 +56,7 @@ Example:  From ` 2015-01-01 00:02`
 `node load.js --num_file=177 --num_directory=20`
 
 
-### 5. Run REST service
+#### 5. Run REST service
 
 Go to `report-dt/server`
 
@@ -65,3 +65,10 @@ And run
 `node indes.js`
 
 Or if you what to make a server, you can user forever.
+
+#### 6. Change IP on your `js/app.js` file
+
+you can switch to localhost or ip of server you're using to store data
+
+https://github.com/mapbox/report-dt/blob/mb-pages/js/app.js#L1-L2
+
