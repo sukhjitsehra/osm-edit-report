@@ -3,7 +3,6 @@ var cors = require('cors');
 var app = express();
 var pg = require('pg');
 var _ = require('underscore');
-var moment = require('moment');
 app.use(cors());
 var obj = function() {
 	return {
