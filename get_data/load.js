@@ -7,12 +7,6 @@ var _ = require('underscore');
 var argv = require('optimist').argv;
 var pg = require('pg');
 var osm_file = '';
-var conString = function (argv) {
-    return "postgres://" + (argv.user || 'postgres') +
-        ":" + (argv.password || '1234') +
-        "@" + (argv.dbhost || 'localhost') +
-        "/" + (argv.database || 'dbstatistic');
-};
 var obj = function() {
 	return {
 		osm_user: {
@@ -38,7 +32,12 @@ var obj = function() {
 	};
 };
 
-var client = new pg.Client(conString(argv));
+var client = new pg.Client(
+    "postgres://" + (argv.user || 'postgres') +
+    ":" + (argv.password || '1234') +
+    "@" + (argv.dbhost || 'localhost') +
+    "/" + (argv.database || 'dbstatistic')
+);
 client.connect(function(err) {
 	if (err) {
 		return console.error('could not connect to postgres', err);
