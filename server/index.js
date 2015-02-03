@@ -3,6 +3,7 @@ var cors = require('cors');
 var app = express();
 var pg = require('pg');
 var _ = require('underscore');
+var argv = require('optimist').argv;
 app.use(cors());
 var obj = function() {
 	return {
@@ -11,9 +12,14 @@ var obj = function() {
 		color: null
 	};
 };
-var conString = "postgres://postgres:1234@localhost/dbstatistic";
+
 console.log("http://localhost:3021/");
-var client = new pg.Client(conString);
+var client = new pg.Client(
+    "postgres://" + (argv.user || 'postgres') +
+    ":" + (argv.password || '1234') +
+    "@" + (argv.dbhost || 'localhost') +
+    "/" + (argv.database || 'dbstatistic')
+);
 client.connect(function(err) {
 	if (err) {
 		return console.error('could not connect to postgres', err);
