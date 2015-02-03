@@ -31,10 +31,13 @@ If you want to add on future much users just you have to add a line of code in y
 
 ###### Where:
 
-**2115749** : id user on OpenstreetMap
-**srividya_c** : name of user
-**F8981D**: color of user for to show in line graph
-**true** : state of user: if you don’t want to show one user on line graph , just update the user using state as false
+- **589596** : id user on OpenstreetMap
+
+- **lxbarth** : name of user
+
+- **FFFF00**: color of user for to show in line graph
+
+- **true** : state of user: if you don’t want to show one user on line graph , just update the user using state as false
 
 ### 4. Start loading data into the database
 
