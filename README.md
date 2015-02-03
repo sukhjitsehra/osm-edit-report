@@ -55,12 +55,12 @@ You can start loading data starting with any replication file found in http://pl
 For instance, to start loading with [2012-10-23 23:02](http://planet.openstreetmap.org/replication/hour/000/001/) run:
 
     cd get_data/
-    node load.js --num_file=1 --num_directory=0
+    node load.js --num_file=1 --num_directory=0 --user=<dbuser> --password=<dbpassword> --database=dbstatistic
 
 Or to start loading with [2015-01-01 00:02](http://planet.openstreetmap.org/replication/hour/000/020/) run:
 
     cd get_data/
-    node load.js --num_file=177 --num_directory=20
+    node load.js --num_file=177 --num_directory=20 --user=<dbuser> --password=<dbpassword> --database=dbstatistic
 
 ### 4. Run data server
 

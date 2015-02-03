@@ -6,8 +6,13 @@ var zlib = require('zlib');
 var _ = require('underscore');
 var argv = require('optimist').argv;
 var pg = require('pg');
-var conString = "postgres://postgres:1234@localhost/dbstatistic";
 var osm_file = '';
+var conString = function (argv) {
+    return "postgres://" + (argv.user || 'postgres') +
+        ":" + (argv.password || '1234') +
+        "@" + (argv.dbhost || 'localhost') +
+        "/" + (argv.database || 'dbstatistic');
+};
 var obj = function() {
 	return {
 		osm_user: {
@@ -33,7 +38,7 @@ var obj = function() {
 	};
 };
 
-var client = new pg.Client(conString);
+var client = new pg.Client(conString(argv));
 client.connect(function(err) {
 	if (err) {
 		return console.error('could not connect to postgres', err);
