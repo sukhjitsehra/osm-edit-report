@@ -69,7 +69,7 @@ Or to start loading with [2015-01-01 00:02](http://planet.openstreetmap.org/repl
 
 Use [forever](http://labs.telasocial.com/nodejs-forever-daemon/) to run as a daemon.
 
-## 5. Configure and serve web UI
+### 5. Configure and serve web UI
 
 Copy `settings-example.js` to `settings.js` and enter the host information under which you started the data server.
 
