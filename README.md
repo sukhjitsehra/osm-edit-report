@@ -22,7 +22,12 @@ You can add many users, for example in our case we add the next user:
 https://github.com/mapbox/report-dt/blob/mb-pages/get_data/add_user.sql
 
 If you want to add on future much users just you have to add a line of code in your database:
-` INSERT INTO osm_user( iduser, osmuser, color, estado) VALUES (2115749,'srividya_c','F8981D',true);`
+
+
+``` sql 
+	INSERT INTO osm_user( iduser, osmuser, color, estado) VALUES (589596,'lxbarth','FFFF00',true);
+```
+
 
 ###### Where:
 
