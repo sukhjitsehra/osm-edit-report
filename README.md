@@ -36,7 +36,7 @@ System requirements:
 Add each user whose OpenStreetMap edits you'd like to track to the `osm_user` table like so:
 
 ``` sql 
-	INSERT INTO osm_user( iduser, osmuser, color, estado) VALUES (589596,'lxbarth','FFFF00',true);
+INSERT INTO osm_user( iduser, osmuser, color, estado) VALUES (589596,'lxbarth','FFFF00',true);
 ```
 
 - **589596** : user id on OpenStreetMap
