@@ -164,30 +164,31 @@ function proces_file_save(callback) {
 }
 
 function get_url_file() {
-		if (num_file < 10) {
-			name_file = '00' + num_file;
-			num_file++;
-		} else if (num_file >= 10 && num_file < 100) {
-			name_file = '0' + num_file;
-			num_file++;
-		} else if (num_file >= 100 && num_file < 1000) {
-			name_file = '' + num_file;
-			num_file++;
-		} else {
-			num_file = 1;
-			name_file = '00' + num_file;
-			num_file++;
-			if (num_directory < 10) {
-				num_directory++;
-				name_directory = '00' + num_directory;
-			} else if (num_directory >= 10 && num_directory < 100) {
-				num_directory++;
-				name_directory = '0' + num_directory;
-			}
+	if (num_file < 10) {
+		name_file = '00' + num_file;
+		num_file++;
+	} else if (num_file >= 10 && num_file < 100) {
+		name_file = '0' + num_file;
+		num_file++;
+	} else if (num_file >= 100 && num_file < 1000) {
+		name_file = '' + num_file;
+		num_file++;
+	} else {
+		num_file = 1;
+		name_file = '00' + num_file;
+		num_file++;
+		if (num_directory < 10) {
+			num_directory++;
+			name_directory = '00' + num_directory;
+		} else if (num_directory >= 10 && num_directory < 100) {
+			num_directory++;
+			name_directory = '0' + num_directory;
 		}
-		return url + '/' + name_directory + '/' + name_file + '.osc.gz';
 	}
-	//intitializar parameters
+	return url + '/' + name_directory + '/' + name_file + '.osc.gz';
+}
+
+// Initialize parameters
 var url = 'http://planet.openstreetmap.org/replication/hour/000';
 var name_file = '';
 var num_file = argv.num_file;
