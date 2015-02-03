@@ -22,6 +22,7 @@ way_vx INTEGER,
 relation_v1 INTEGER,
 relation_vx INTEGER
 );
+ALTER TABLE osm_date ADD CONSTRAINT unique_osmdate UNIQUE (osmdate);
 alter table osm_obj
 add constraint fk_iduser_osm_obj
 Foreign key (iduser)
@@ -30,4 +31,3 @@ alter table osm_obj
 add constraint fk_idfile_osm_obj
 Foreign key (osmdate )
 references osm_date(osmdate);
-ALTER TABLE osm_date ADD CONSTRAINT unique_osmdate UNIQUE (osmdate);
