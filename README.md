@@ -1,4 +1,4 @@
-# Data team report
+# Data Team Report
 
 Reports editing activity for a number of users on OpenStreetMap.
 
@@ -6,26 +6,32 @@ Reports editing activity for a number of users on OpenStreetMap.
 
 ## Installation
 
+For installing and running the Data Team Report, you need to:
+
+1. Install data server
+2. Configure users
+3. Load data
+4. Run data server
+5. Configure and serve web UI
+
 System requirements:
 
 - Node 0.10.x
 - PostGreSQL
 
-### 1. Clone and build project
+### 1. Set up data server
 
-    git clone https://github.com/mapbox/report-dt.git
-    cd report-dt/server && npm install
+    ## Install data server
+    cd server/ && npm install
+
+    ## Install load scripts
     cd ../get_data && npm install
 
-### 2. Create and set up the database
-
-I Assume that postgres was installed in your machine.
-Create ate you data base `dbstatistic` and create the tables
-
+    # Set up database
     postgres createdb dbstatistic
     psql dbstatistic -f get_data/tables.sql
 
-### 3. Add users to database
+### 2. Configure users
 
 Add each user whose OpenStreetMap edits you'd like to track to the `osm_user` table like so:
 
@@ -38,33 +44,35 @@ Add each user whose OpenStreetMap edits you'd like to track to the `osm_user` ta
 - **FFFF00**: color of user for to show in line graph
 - **true** : state of user: if you don’t want to show one user on line graph , just update the user using state as false
 
-Example:
+For an example take a look at:
 
 https://github.com/mapbox/report-dt/blob/mb-pages/get_data/add_user.sql
 
-### 4. Configure IP
+### 3. Load data
 
-Configure the IP of server in app.js:
+You can start loading data starting with any replication file found in http://planet.openstreetmap.org/replication/hour/
 
-https://github.com/mapbox/report-dt/blob/mb-pages/js/app.js#L1-L2
-
-## Load data
-
-To load starting with [2012-10-23 23:02](http://planet.openstreetmap.org/replication/hour/000/001/) run:
+For instance, to start loading with [2012-10-23 23:02](http://planet.openstreetmap.org/replication/hour/000/001/) run:
 
     cd get_data/
     node load.js --num_file=1 --num_directory=0
 
-Or if you what to load front exact date, just look this files and set up the `num_file` and `num_directory` 
-
-Example:  From [2015-01-01 00:02](http://planet.openstreetmap.org/replication/hour/000/020/) run:
+Or to start loading with [2015-01-01 00:02](http://planet.openstreetmap.org/replication/hour/000/020/) run:
 
     cd get_data/
     node load.js --num_file=177 --num_directory=20
 
-## Run server
+### 4. Run data server
 
     cd server/
     node index.js
 
 Use [forever](http://labs.telasocial.com/nodejs-forever-daemon/) to run as a daemon.
+
+## 5. Configure and serve web UI
+
+Copy `settings-example.js` to `settings.js` and enter the host information under which you started the data server.
+
+For instance run [serve](https://www.npmjs.com/package/serve) from project root:
+
+    serve

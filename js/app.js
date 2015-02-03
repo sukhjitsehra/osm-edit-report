@@ -1,8 +1,7 @@
-//var host = 'http://localhost:3021/';
-var host = 'http://54.172.162.212:3021/'
-var type = 'd';
+(function(settings) {
+
 var dates = document.URL.split('#')[1].split('&');
-type = dates[0];
+var type = dates[0];
 var start_str = dates[1];
 var end_str = dates[2];
 var start_times = (new Date(start_str + " 00:00:00").getTime() / 1000);
@@ -317,7 +316,7 @@ function draw() {
 
     $.ajax({
         dataType: "json",
-        url: host + type + '&' + start_times + '&' + end_times,
+        url: settings.host + type + '&' + start_times + '&' + end_times,
         success: function(json) {
             date_xaxis = [];
             json_obj = [];
@@ -382,3 +381,5 @@ function draw() {
     $('#chart_line').addClass("loading");
     location.href = document.URL.split('#')[0] + '#' + type + '&' + start_str + '&' + end_str;
 }
+
+})(settings);
