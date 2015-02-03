@@ -44,9 +44,9 @@ INSERT INTO osm_user( iduser, osmuser, color, estado) VALUES (589596,'lxbarth','
 - **FFFF00**: color of user for to show in line graph
 - **true** : state of user: if you don’t want to show one user on line graph , just update the user using state as false
 
-For an example take a look at:
+Or use Mapbox data team users included in the project:
 
-https://github.com/mapbox/report-dt/blob/mb-pages/get_data/add_user.sql
+    psql dbstatistic -f get_data/add_user.sql
 
 ### 3. Load data
 
