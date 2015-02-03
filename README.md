@@ -39,7 +39,7 @@ Add each user whose OpenStreetMap edits you'd like to track to the `osm_user` ta
 	INSERT INTO osm_user( iduser, osmuser, color, estado) VALUES (589596,'lxbarth','FFFF00',true);
 ```
 
-- **589596** : id user on OpenstreetMap
+- **589596** : user id on OpenstreetMap
 - **lxbarth** : name of user
 - **FFFF00**: color of user for to show in line graph
 - **true** : state of user: if you don’t want to show one user on line graph , just update the user using state as false
