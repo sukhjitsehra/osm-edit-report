@@ -72,3 +72,5 @@ you can switch to localhost or ip of server you're using to store data
 
 https://github.com/mapbox/report-dt/blob/mb-pages/js/app.js#L1-L2
 
+and finally, open the index.html file on your web browser, using any web server or just the file on web browser
+
