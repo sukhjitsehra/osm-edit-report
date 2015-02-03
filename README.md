@@ -42,7 +42,7 @@ Example:
 
 https://github.com/mapbox/report-dt/blob/mb-pages/get_data/add_user.sql
 
-### 4. Configure IP on your `js/app.js` file
+### 4. Configure IP
 
 Configure the IP of server in app.js:
 
