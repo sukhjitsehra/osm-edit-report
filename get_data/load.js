@@ -94,24 +94,24 @@ function proces_file_save(callback) {
 					}
 				});
 				reader.apply(handler);
-
-				var flag = null;
-				client.query("SELECT EXISTS(SELECT osmdate FROM osm_obj where osmdate=" + osmdate + ")", function(err, result) {
+				var flag = true;
+				var query_exists = "SELECT EXISTS(SELECT osmdate FROM osm_obj where osmdate=" + osmdate + ");";
+				client.query(query_exists, function(err, result) {
 					flag = result.rows[0].exists;
-				});
-				console.log(flag);
-				_.each(count, function(val, key) {
-					var num_obj = (val.osm_node + val.osm_way + val.osm_relation);
-					var query_insert = "";
-					if (!flag) {
-						query_insert = "INSERT INTO osm_obj(osmdate, u_" + key + ") VALUES (" + osmdate + ", " + num_obj + ");";
-					} else {
-						query_insert = "UPDATE osm_obj SET u_" + key + " = " + num_obj + " WHERE osmdate = " + osmdate + ";"
-					}
-					client.query(query_insert, function(err, result) {
-						if (err) {
-							console.log("error en insertar");
+					_.each(count, function(val, key) {
+						var num_obj = (val.osm_node + val.osm_way + val.osm_relation);
+						var query_insert = "";
+						if (flag) {
+							query_insert = "UPDATE osm_obj SET u_" + key + " = " + num_obj + " WHERE osmdate = " + osmdate + ";"
+						} else {
+							query_insert = "INSERT INTO osm_obj(osmdate, u_" + key + ") VALUES (" + osmdate + ", " + num_obj + ");";
+							flag = true;
 						}
+						client.query(query_insert, function(err, result) {
+							if (err) {
+								console.log("error en insertar");
+							}
+						});
 					});
 				});
 			} catch (e) {
