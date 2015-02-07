@@ -7,9 +7,17 @@ select add_user(94578,'andygol','3E8380',true);
 select add_user(1051550,'shravan91','FF8A00',true);
 select add_user(2554698,'Ruth Maben','FA58F4',true);
 select add_user(2377377,'abel801','008000',true);
-select add_user(2511706,'cesar28','800000',true);
+select add_user(2511706,'calfarome','800000',true);
 select add_user(2512300,'samely','66CCCC',true);
-select add_user(2115749,'srividya_c','F8981D',true);
+select add_user(2115749,'srividya_c','7B68EE',true);
+select add_user(1306,'PlaneMad','B22222',true);
+
+
+UPDATE osm_user
+   SET color='B22222'
+ WHERE iduser=1306;
+
+ 
 select * from osm_user;
 select * from osm_obj;
 

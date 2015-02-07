@@ -100,7 +100,7 @@ function date_format() {
                     return d[4].split(':')[0] + 'h ' + d[1] + ' ' + d[2];
                 } else {
                     var date = new Date(d);
-                    return d3.time.format('%H %b %d')(date);
+                    return d3.time.format('%H %p')(date);
                 }
             }
             break;
@@ -267,10 +267,10 @@ function draw() {
 
         switch (type) {
             case 'h':
-                if ((end_times - start_times) > 24 * 60 * 60 * 5) {
-                    alert('Select two 5 days at most');
-                    return null;
-                }
+                // if ((end_times - start_times) > 24 * 60 * 60 * 5) {
+                //     alert('Select two 5 days at most');
+                //     return null;
+                // }
                 break;
             case 'd':
                 // if ((end_times - start_times) > 24 * 60 * 60 * 30 * 3) {
@@ -313,7 +313,7 @@ function draw() {
     $('#chart_bar').html('<svg></svg>');
     $('#chart_line').empty();
     $('#chart_line').html('<svg></svg>');
-
+    console.log(settings.host + type + '&' + start_times + '&' + end_times);
     $.ajax({
         dataType: "json",
         url: settings.host + type + '&' + start_times + '&' + end_times,

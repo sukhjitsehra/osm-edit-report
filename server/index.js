@@ -13,13 +13,14 @@ var obj = function() {
 		iduser: 0
 	};
 };
-console.log("http://localhost:3022/");
 var client = new pg.Client(
 	"postgres://" + (argv.user || 'postgres') +
 	":" + (argv.password || '1234') +
 	"@" + (argv.dbhost || 'localhost') +
 	"/" + (argv.database || 'dbstatistic')
 );
+console.log("http://" + argv.dbhost + ":3022/");
+
 var type = {
 	'h': 14,
 	'd': 11,
@@ -68,11 +69,10 @@ app.get('/:date', function(req, res) {
 				} else {
 					//console.log(array_objs);
 					for (var i = 0; i < result.rows.length; i++) {
-
 						_.each(array_objs, function(v, k) {
 							array_objs[k].values.push({
-									x: result.rows[i].osm_date,
-									y: result.rows[i]["u_" + v.iduser]
+									x: result.rows[i].osm_date.replace(' ', '-'),
+									y: parseInt(result.rows[i]["u_" + v.iduser])
 								}
 
 							)
