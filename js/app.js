@@ -1,14 +1,31 @@
 (function(settings) {
-
-var dates = document.URL.split('#')[1].split('&');
-var type = dates[0];
-var start_str = dates[1];
-var end_str = dates[2];
-var start_times = (new Date(start_str + " 00:00:00").getTime() / 1000);
-var end_times = new Date(end_str + " 00:00:00").getTime() / 1000 + 24 * 60 * 60;
+var start_str = '';
+var end_str = '';
+var start_times = 0
+var end_times = 0
 var months = [31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31];
 var date_xaxis = [];
 var json_obj = null;
+var url = document.URL;
+var type = null;
+var dates=[];
+if(url.indexOf("#") != -1 && url.indexOf("&") != -1 ){
+    dates=url.split('#')[1].split('&');
+    type = dates[0];
+    start_str = dates[1];
+    end_str = dates[2];
+}else{
+    type='d';
+    var today = new Date();
+    end_str = today.getFullYear() + '-' + today.getMonth() + 1 + '-' + today.getDate();
+    today.setDate(today.getDate() - 8);
+    start_str = today.getFullYear() + '-' + today.getMonth() + 1 + '-' + today.getDate();
+    dates.push(type);
+    dates.push(start_str);
+    dates.push(end_str);
+}
+start_times = (new Date(start_str + " 00:00:00").getTime() / 1000);
+end_times = new Date(end_str + " 00:00:00").getTime() / 1000 + 24 * 60 * 60;
 
 function draw_bar(data) {
     var chart;
