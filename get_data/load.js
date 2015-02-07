@@ -99,10 +99,11 @@ function proces_file_save(callback) {
 				client.query("SELECT EXISTS(SELECT osmdate FROM osm_obj where osmdate=" + osmdate + ")", function(err, result) {
 					flag = result.rows[0].exists;
 				});
+				console.log(!flag);
 				_.each(count, function(val, key) {
 					var num_obj = (val.osm_node + val.osm_way + val.osm_relation);
 					var query_insert = "";
-					if (flag) {
+					if (!flag) {
 						query_insert = "INSERT INTO osm_obj(osmdate, u_" + key + ") VALUES (" + osmdate + ", " + num_obj + ");";
 					} else {
 						query_insert = "UPDATE osm_obj SET u_" + key + " = " + num_obj + " WHERE osmdate = " + osmdate + ";"
