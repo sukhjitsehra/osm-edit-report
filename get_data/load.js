@@ -99,7 +99,7 @@ function proces_file_save(callback) {
 				client.query("SELECT EXISTS(SELECT osmdate FROM osm_obj where osmdate=" + osmdate + ")", function(err, result) {
 					flag = result.rows[0].exists;
 				});
-				console.log(!flag);
+				console.log(flag);
 				_.each(count, function(val, key) {
 					var num_obj = (val.osm_node + val.osm_way + val.osm_relation);
 					var query_insert = "";
