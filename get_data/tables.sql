@@ -1,33 +1,50 @@
-﻿--DROP TABLE osm_obj;
---DROP TABLE osm_user
---DROP TABLE osm_date;
---SELECT pg_size_pretty(pg_database_size('dbstatistic'));
+﻿--DROP TABLE osm_user
+--DROP TABLE osm_obj
 CREATE TABLE osm_user(
-iduser INTEGER NOT NULL  PRIMARY KEY,
-osmuser character(100),
-color character(7),
-estado boolean not null
+	iduser INTEGER NOT NULL PRIMARY KEY,
+	osmuser varchar(50),
+	color varchar(6),
+	estado boolean not null
 );
-CREATE TABLE osm_date(
-idfile character(10) NOT NULL  PRIMARY KEY ,
-osmdate INTEGER
-);
+
 CREATE TABLE osm_obj(
-iduser INTEGER ,
-osmdate INTEGER,
-node_v1 INTEGER,
-node_vx INTEGER,
-way_v1 INTEGER,
-way_vx INTEGER,
-relation_v1 INTEGER,
-relation_vx INTEGER
+	osmdate INTEGER NOT NULL PRIMARY KEY
 );
-ALTER TABLE osm_date ADD CONSTRAINT unique_osmdate UNIQUE (osmdate);
-alter table osm_obj
-add constraint fk_iduser_osm_obj
-Foreign key (iduser)
-references osm_user(iduser);
-alter table osm_obj
-add constraint fk_idfile_osm_obj
-Foreign key (osmdate )
-references osm_date(osmdate);
+
+CREATE OR REPLACE FUNCTION addcol_user(_columname varchar)
+RETURNS VOID
+AS $$
+declare 
+    _flag varchar ;
+begin 
+	_columname = 'u_'||_columname;	
+	_flag = (SELECT attname FROM pg_attribute WHERE attrelid = (SELECT oid FROM pg_class WHERE relname = 'osm_obj') AND attname = _columname);
+	if(_flag is null ) then 
+		EXECUTE 'ALTER TABLE osm_obj ADD COLUMN ' || _columname || ' SMALLINT;';
+		_flag = _columname ||' Was created';
+	else
+		_flag = _columname ||' Already exist';
+	end if;
+
+end;
+$$ LANGUAGE plpgsql;
+
+
+CREATE OR REPLACE FUNCTION add_user( _iduser integer, _osmuser varchar, _color varchar, _estado boolean)
+returns varchar 
+AS $$
+declare 
+    _user varchar ;
+    _flag varchar; 
+begin 
+	_user = (SELECT _osmuser FROM osm_user WHERE iduser = _iduser);
+	if(_user is null ) then 
+		INSERT INTO osm_user(iduser, osmuser, color, estado) VALUES (_iduser, _osmuser, _color, _estado);
+		PERFORM addcol_user(_iduser::text);
+		_flag = 'User ' || _osmuser ||' Was created';
+	else
+		_flag = 'User ' || _user ||' Already exist';
+	end if;
+return _flag;
+end;
+$$ LANGUAGE plpgsql;

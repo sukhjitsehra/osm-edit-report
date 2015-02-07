@@ -9,17 +9,23 @@ var obj = function() {
 	return {
 		values: [],
 		key: null,
-		color: null
+		color: null,
+		iduser: 0
 	};
 };
-
-console.log("http://localhost:3021/");
+console.log("http://localhost:3022/");
 var client = new pg.Client(
-    "postgres://" + (argv.user || 'postgres') +
-    ":" + (argv.password || '1234') +
-    "@" + (argv.dbhost || 'localhost') +
-    "/" + (argv.database || 'dbstatistic')
+	"postgres://" + (argv.user || 'postgres') +
+	":" + (argv.password || '1234') +
+	"@" + (argv.dbhost || 'localhost') +
+	"/" + (argv.database || 'dbstatistic')
 );
+var type = {
+	'h': 14,
+	'd': 11,
+	'm': 8,
+	'y': 5
+};
 client.connect(function(err) {
 	if (err) {
 		return console.error('could not connect to postgres', err);
@@ -29,7 +35,9 @@ app.get('/:date', function(req, res) {
 	try {
 		var date = (req.params.date + '').split('&');
 		var array_objs = [];
-		var query_user = "SELECT iduser, osmuser, color, estado FROM osm_user";
+		var query_obj = "SELECT substring(to_timestamp(osmdate)::text,0," + type[date[0]] + ") as osm_date";
+		var query_user = "SELECT iduser, osmuser, color, estado FROM osm_user WHERE estado=true;";
+
 		var main_query = client.query(query_user, function(error, result) {
 			if (error) {
 				console.log(error);
@@ -38,65 +46,45 @@ app.get('/:date', function(req, res) {
 			} else {
 				for (var i = 0; i < result.rows.length; i++) {
 					user = new obj();
+					var iduser = result.rows[i].iduser;
+					query_obj += ", SUM(u_" + iduser + ") as u_" + iduser;
+					user.iduser = iduser;
 					user.key = result.rows[i].osmuser;
-					user.color = '#' + result.rows[i].color.replace(/\s/g, '');;
+					user.color = '#' + result.rows[i].color;
 					array_objs.push(user);
 				}
 			}
 		});
-		var query = '';
-		switch (date[0]) {
-			case 'h':
-				query = "SELECT u.osmuser,  replace(substring(to_timestamp(o.osmdate)::text,0,14),' ','-') as osmd, (o.node_v1 + o.node_vx + o.way_v1 + o.way_vx + o.relation_v1+ o.relation_vx) as num_objs" +
-					" FROM osm_obj as o " +
-					" INNER JOIN osm_user as u on  u.iduser =  o.iduser" +
-					" WHERE o.osmdate>=" + date[1] + " AND o.osmdate<" + date[2] + " AND u.estado=true";
-				if ((parseInt(date[2]) - parseInt(date[1])) > 24 * 60 * 60 * 5) {
-					return res.send('Error 404: No quote found');
-				}
-				break;
-			case 'd':
-				query = "SELECT u.osmuser, substring(to_timestamp(o.osmdate)::text,0,11) as osmd, sum(o.node_v1 + o.node_vx + o.way_v1 + o.way_vx + o.relation_v1+ o.relation_vx) as num_objs" +
-					" FROM osm_obj as o  INNER JOIN osm_user as u on   u.iduser =  o.iduser " +
-					" WHERE osmdate>= " + date[1] + " AND osmdate<" + date[2] + " AND u.estado=true " +
-					" GROUP BY osmd,u.osmuser ORDER BY osmd;";
-				break;
-			case 'm':
-				query = " SELECT u.osmuser, substring(to_timestamp(o.osmdate)::text,0,8) as osmd, sum(o.node_v1 + o.node_vx + o.way_v1 + o.way_vx + o.relation_v1+ o.relation_vx) as num_objs" +
-					" FROM osm_obj as o  INNER JOIN osm_user as u on   u.iduser =  o.iduser " +
-					" WHERE osmdate>= " + date[1] + " AND osmdate<" + date[2] + " AND u.estado=true " +
-					" GROUP BY osmd,u.osmuser ORDER BY osmd;"
 
-				break;
-			case 'y':
-				query = " SELECT u.osmuser, substring(to_timestamp(o.osmdate)::text,0,5) as osmd, sum(o.node_v1 + o.node_vx + o.way_v1 + o.way_vx + o.relation_v1+ o.relation_vx) as num_objs" +
-					" FROM osm_obj as o  INNER JOIN osm_user as u on   u.iduser =  o.iduser " +
-					" WHERE osmdate>= " + date[1] + " AND osmdate<" + date[2] + " AND u.estado=true " +
-					" GROUP BY osmd,u.osmuser ORDER BY osmd";
-				break;
-		}
-		console.log(query);
-		client.query(query, function(error, result) {
-			if (error) {
-				console.log(error);
-				res.statusCode = 404;
-				return res.send('Error 404: No quote found');
-			} else {
-				for (var i = 0; i < result.rows.length; i++) {
-					var userss = _.find(array_objs, function(obj) {
-						return obj.key === result.rows[i].osmuser
-					});
-					userss.values.push({
-						x: result.rows[i].osmd,
-						y: parseInt(result.rows[i].num_objs)
-					});
+		main_query.on('end', function(result) {
+			query_obj += " FROM osm_obj WHERE osmdate>= " + date[1] + " AND osmdate<" + date[2] + " GROUP BY osm_date ORDER BY osm_date;";
+			console.log(query_obj);
+
+			client.query(query_obj, function(error, result) {
+				if (error) {
+					console.log(error);
+					res.statusCode = 404;
+					return res.send('Error 404: No quote found');
+				} else {
+					//console.log(array_objs);
+					for (var i = 0; i < result.rows.length; i++) {
+
+						_.each(array_objs, function(v, k) {
+							array_objs[k].values.push({
+									x: result.rows[i].osm_date,
+									y: result.rows[i]["u_" + v.iduser]
+								}
+
+							)
+						});
+					}
+					res.json(array_objs);
 				}
-				res.json(array_objs);
-			}
+			});
 		});
 	} catch (e) {
 		res.statusCode = 404;
 		return res.send('Error 404: No quote found');
 	}
 });
-app.listen(process.env.PORT || 3021);
+app.listen(process.env.PORT || 3022);
