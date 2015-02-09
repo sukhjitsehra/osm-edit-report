@@ -9,14 +9,15 @@ var json_obj = null;
 var url = document.URL;
 var type = null;
 var dates=[];
+var today = new Date();
+
 if(url.indexOf("#") != -1 && url.indexOf("&") != -1 ){
     dates=url.split('#')[1].split('&');
     type = dates[0];
     start_str = dates[1];
     end_str = dates[2];
 }else{
-    type='d';
-    var today = new Date();
+    type='d';    
     end_str = today.getFullYear() + '-' + today.getMonth() + 1 + '-' + today.getDate();
     today.setDate(today.getDate() - 8);
     start_str = today.getFullYear() + '-' + today.getMonth() + 1 + '-' + today.getDate();
@@ -201,7 +202,7 @@ $(document).ready(function() {
             }
             $(".to").datepicker("option", "minDate", start_str);
         },
-        yearRange: '2012:2020'
+        yearRange: '2012:'+today.getFullYear()
     });
     $(".to").datepicker({
         weekStart: 1,
@@ -239,7 +240,7 @@ $(document).ready(function() {
             }
             $(".from").datepicker("option", "maxDate", end_str);
         },
-        yearRange: '2012:2020'
+        yearRange: '2012:'+today.getFullYear()
     });
 
     $(".from").datepicker("option", "maxDate", end_str);
