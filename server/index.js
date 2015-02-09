@@ -19,7 +19,7 @@ var client = new pg.Client(
 	"@" + (argv.dbhost || 'localhost') +
 	"/" + (argv.database || 'dbstatistic')
 );
-console.log("http://" + argv.dbhost + ":3022/");
+console.log("http://" + argv.dbhost + ":3021/");
 
 var type = {
 	'h': 14,
@@ -87,4 +87,4 @@ app.get('/:date', function(req, res) {
 		return res.send('Error 404: No quote found');
 	}
 });
-app.listen(process.env.PORT || 3022);
+app.listen(process.env.PORT || 3021);
