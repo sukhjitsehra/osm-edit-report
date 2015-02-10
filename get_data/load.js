@@ -172,14 +172,6 @@ function inicio() {
 		osm_file = name_file + '.osc';
 		download_file(url_file, osm_file, proces_file_save);
 	}else{
-		var date=new Date()
-		console.log('Despues : ' + date);
-		if (num_file === 1) {
-			num_file = 999;
-			name_directory = name_directory - 1;
-		} else {
-			num_file = num_file - 1;
-		}
 		setTimeout(function() {		
 			url_file = get_url_file();
 			osm_file = name_file + '.osc'
@@ -187,8 +179,16 @@ function inicio() {
 				console.log('try to request:'+url_file);
 				if (!err && resp.statusCode == 200) {
 					download_file(url_file, osm_file, proces_file_save);
-				 }else{
-				inicio();
+				 }else{		
+				 	var date=new Date()
+					console.log('Despues : ' + date);
+					if (num_file === 1) {
+						num_file = 999;
+						name_directory = name_directory - 1;
+					} else {
+						num_file = num_file - 1;
+					}
+					inicio();
 				}
 			});
 		}, 10 * 60 * 1000);
