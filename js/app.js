@@ -132,7 +132,7 @@ function date_format() {
 
                 } else {
                     var date = new Date(d);
-                    return d3.time.format('%b %d %Y')(date);
+                    return d3.time.format('%d %b %Y')(date);
                 }
             }
             break;
