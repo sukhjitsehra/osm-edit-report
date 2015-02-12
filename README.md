@@ -28,15 +28,15 @@ System requirements:
     cd ../get_data && npm install
 
     # Set up database
-    postgres createdb dbstatistic
+    createdb dbstatistic
     psql dbstatistic -f get_data/tables.sql
 
 ### 2. Configure users
 
 Add each user whose OpenStreetMap edits you'd like to track to the `osm_user` table like so:
 
-``` sql 
-INSERT INTO osm_user( iduser, osmuser, color, estado) VALUES (589596,'lxbarth','FFFF00',true);
+```bash
+psql dbstatistic -c "INSERT INTO osm_user( iduser, osmuser, color, estado) VALUES (589596,'lxbarth','FFFF00',true);"
 ```
 
 - **589596** : user id on OpenStreetMap
