@@ -1,3 +1,4 @@
+#!/usr/bin/env node
 var osmium = require('osmium');
 var numeral = require('numeral');
 var request = require('request');
