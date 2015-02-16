@@ -19,7 +19,7 @@ var client = new pg.Client(
 	"@" + (argv.dbhost || 'localhost') +
 	"/" + (argv.database || 'dbstatistic')
 );
-console.log("http://" + argv.dbhost + ":3021/");
+console.log("http://" + (argv.dbhost || 'localhost') + ":3021/");
 
 var type = {
 	'h': 14,
@@ -38,7 +38,6 @@ app.get('/:date', function(req, res) {
 		var array_objs = [];
 		var query_obj = "SELECT substring(to_timestamp(osmdate)::text,0," + type[date[0]] + ") as osm_date";
 		var query_user = "SELECT iduser, osmuser, color, estado FROM osm_user WHERE estado=true;";
-
 		var main_query = client.query(query_user, function(error, result) {
 			if (error) {
 				console.log(error);
@@ -59,15 +58,12 @@ app.get('/:date', function(req, res) {
 
 		main_query.on('end', function(result) {
 			query_obj += " FROM osm_obj WHERE osmdate>= " + date[1] + " AND osmdate<" + date[2] + " GROUP BY osm_date ORDER BY osm_date;";
-			console.log(query_obj);
-
 			client.query(query_obj, function(error, result) {
 				if (error) {
 					console.log(error);
 					res.statusCode = 404;
 					return res.send('Error 404: No quote found');
 				} else {
-					//console.log(array_objs);
 					for (var i = 0; i < result.rows.length; i++) {
 						_.each(array_objs, function(v, k) {
 							array_objs[k].values.push({
@@ -78,7 +74,7 @@ app.get('/:date', function(req, res) {
 							)
 						});
 					}
-					res.json(array_objs);
+					res.json(array_objs);				
 				}
 			});
 		});

@@ -57,7 +57,7 @@ function download_file(url, localFile, callback) {
 
 function proces_file_save(value) {
 	if(!value){
-		inicio();
+		init();
 	}else{
 		//proces file
 		console.log('Process file :' + name_file);
@@ -136,7 +136,7 @@ function proces_file_save(value) {
 			} else {
 				console.log('Error in remove file');
 			}
-			inicio();
+			init();
 		});
 	}
 }
@@ -166,7 +166,7 @@ function get_url_file() {
 	return 'http://planet.openstreetmap.org/replication/hour/000' + '/' + name_directory + '/' + name_file + '.osc.gz';
 }
 
-function inicio() {
+function init() {
 	if(flag){
 		url_file = get_url_file();
 		osm_file = name_file + '.osc';
@@ -176,25 +176,22 @@ function inicio() {
 			url_file = get_url_file();
 			osm_file = name_file + '.osc'
 			request(url_file, function(err, resp, body) {
-				console.log('try to request:'+url_file);
 				if (!err && resp.statusCode == 200) {
 					download_file(url_file, osm_file, proces_file_save);
 				 }else{		
 				 	var date=new Date()
-					console.log('Despues : ' + date);
 					if (num_file === 1) {
 						num_file = 999;
 						name_directory = name_directory - 1;
 					} else {
 						num_file = num_file - 1;
 					}
-					inicio();
+					init();
 				}
 			});
 		}, 5 * 60 * 1000);
 	}
 }
-
 
 // Initialize parameters
 var name_file = '';
@@ -208,4 +205,4 @@ name_directory = '0' + num_directory;
 if (num_directory < 10) {
 	name_directory = '00' + num_directory;
 }
-inicio();
+init();
