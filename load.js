@@ -49,17 +49,17 @@ function download_file(url, localFile, callback) {
 				callback(true, localFile);
 			});
 		} else {
-			console.log('No file found url:'+url);
-			flag=false;
+			console.log('No file found url:' + url);
+			flag = false;
 			callback(false, null);
 		}
 	});
 };
 
 function proces_file_save(value) {
-	if(!value){
+	if (!value) {
 		init();
-	}else{
+	} else {
 		//proces file
 		console.log('Process file :' + name_file);
 		var osmfile = osm_file;
@@ -168,19 +168,19 @@ function get_url_file() {
 }
 
 function init() {
-	if(flag){
+	if (flag) {
 		url_file = get_url_file();
 		osm_file = name_file + '.osc';
 		download_file(url_file, osm_file, proces_file_save);
-	}else{
-		setTimeout(function() {		
+	} else {
+		setTimeout(function() {
 			url_file = get_url_file();
 			osm_file = name_file + '.osc'
 			request(url_file, function(err, resp, body) {
 				if (!err && resp.statusCode == 200) {
 					download_file(url_file, osm_file, proces_file_save);
-				 }else{		
-				 	var date=new Date()
+				} else {
+					var date = new Date()
 					if (num_file === 1) {
 						num_file = 999;
 						name_directory = name_directory - 1;
@@ -189,7 +189,7 @@ function init() {
 					}
 					init();
 				}
-			});
+			}).end();
 		}, 5 * 60 * 1000);
 	}
 }
@@ -201,7 +201,7 @@ var num_file = argv.num_file;
 var num_directory = argv.num_directory;
 var url_file = '';
 var osmdate = 0;
-var flag=true;
+var flag = true;
 name_directory = '0' + num_directory;
 if (num_directory < 10) {
 	name_directory = '00' + num_directory;
