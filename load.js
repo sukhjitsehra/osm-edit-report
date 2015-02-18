@@ -173,6 +173,7 @@ function init() {
 		osm_file = name_file + '.osc';
 		download_file(url_file, osm_file, proces_file_save);
 	} else {
+		console.log('Wait 5 minutes');
 		setTimeout(function() {
 			url_file = get_url_file();
 			osm_file = name_file + '.osc'
