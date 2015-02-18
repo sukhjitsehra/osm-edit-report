@@ -10,7 +10,7 @@ var url = document.URL;
 var type = null;
 var dates=[];
 var today = new Date();
-
+console.log(today);
 if(url.indexOf("#") != -1 && url.indexOf("&") != -1 ){
     dates=url.split('#')[1].split('&');
     type = dates[0];
@@ -18,15 +18,18 @@ if(url.indexOf("#") != -1 && url.indexOf("&") != -1 ){
     end_str = dates[2];
 }else{
     type='d';    
-    end_str = today.getFullYear() + '-' + today.getMonth() + 1 + '-' + today.getDate();
+    end_str = today.getFullYear() + '-' + (today.getMonth() + 1 )+ '-' + today.getDate();
     today.setDate(today.getDate() - 8);
-    start_str = today.getFullYear() + '-' + today.getMonth() + 1 + '-' + today.getDate();
+    start_str = today.getFullYear() + '-' + (today.getMonth() + 1) + '-' + today.getDate();
     dates.push(type);
     dates.push(start_str);
     dates.push(end_str);
 }
 start_times = (new Date(start_str + " 00:00:00").getTime() / 1000);
-end_times = new Date(end_str + " 00:00:00").getTime() / 1000 + 24 * 60 * 60;
+end_times = new Date(end_str + " 00:00:00").getTime() / 1000 + 24 * 60 * 60-1;
+
+console.log(start_times);
+console.log(end_times);
 
 function draw_bar(data) {
     var chart;
@@ -345,7 +348,6 @@ function draw() {
                         //per hour
                         _.each(val.values, function(v, k) {
                             var d = val.values[k].x.split('-');
-
                             var date_timestamp = Date.UTC(d[0],
                                 parseInt(d[1]) - 1,
                                 parseInt(d[2]), parseInt(d[3]), 300);
@@ -358,11 +360,14 @@ function draw() {
                     case 'd':
                         //per day
                         _.each(val.values, function(v, k) {
-                            var d = val.values[k].x.split('-');
+                            var d = val.values[k].x.split('-');                            
                             var date_timestamp = Date.UTC(d[0],
                                 parseInt(d[1]) - 1,
-                                parseInt(d[2]) + 1, 0, 0)
-                            var utc = new Date(date_timestamp);
+                                parseInt(d[2]) + 1, 0, 0);
+
+                            var utc = new Date(date_timestamp);//.toUTCString();
+                            console.log(val.values[k].x);
+                            console.log(utc);
                             val.values[k].x = utc;
                             date_xaxis.push(date_timestamp);
 
@@ -392,6 +397,7 @@ function draw() {
                 json_obj.push(val);
             });
             draw_line(json_obj);
+            console.log(json_obj);
             //draw_bar(_.map(json, _.clone));
         }
     });

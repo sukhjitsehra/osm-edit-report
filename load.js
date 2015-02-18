@@ -50,6 +50,12 @@ function download_file(url, localFile, callback) {
 			});
 		} else {
 			console.log('No file found url:' + url);
+			if (num_file === 1) {
+				num_file = 999;
+				name_directory = name_directory - 1;
+			} else {
+				num_file = num_file - 1;
+			}
 			flag = false;
 			callback(false, null);
 		}
@@ -181,7 +187,7 @@ function init() {
 				if (!err && resp.statusCode == 200) {
 					download_file(url_file, osm_file, proces_file_save);
 				} else {
-					var date = new Date()
+					console.log('URL is not available yet: '+ url_file);					
 					if (num_file === 1) {
 						num_file = 999;
 						name_directory = name_directory - 1;
