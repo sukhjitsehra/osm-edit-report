@@ -10,7 +10,6 @@ var url = document.URL;
 var type = null;
 var dates=[];
 var today = new Date();
-console.log(today);
 if(url.indexOf("#") != -1 && url.indexOf("&") != -1 ){
     dates=url.split('#')[1].split('&');
     type = dates[0];
@@ -27,10 +26,6 @@ if(url.indexOf("#") != -1 && url.indexOf("&") != -1 ){
 }
 start_times = (new Date(start_str + " 00:00:00").getTime() / 1000);
 end_times = new Date(end_str + " 00:00:00").getTime() / 1000 + 24 * 60 * 60-1;
-
-console.log(start_times);
-console.log(end_times);
-
 function draw_bar(data) {
     var chart;
     var nv_obj = nv;
@@ -50,7 +45,6 @@ function draw_bar(data) {
         chart.x(function(d, i) {
             return d.x;
         });
-
         chart.multibar
             .hideable(true);
         chart.reduceXTicks(true).staggerLabels(false);
@@ -96,9 +90,7 @@ function draw_line(data) {
                 return k % 2 == 0;
             });
         }
-
         chart.xAxis.tickValues(date_xaxis);
-
         chart.yAxis.tickFormat(d3.format(',.H'));
         d3.select('#chart_line svg')
             .datum(data)
@@ -117,11 +109,11 @@ function date_format() {
             //per hour
             formatter = function(d, i) {
                 if (typeof d === 'object') {
-                    d = (d + "").split(' ');
-                    return d[4].split(':')[0] + 'h ' + d[1] + ' ' + d[2];
+                    var date = new Date(d);
+                    return d3.time.format.utc('%a-%d:%H%p')(date);
                 } else {
                     var date = new Date(d);
-                    return d3.time.format('%H %p')(date);
+                    return d3.time.format.utc('%a-%d:%H%p')(date);
                 }
             }
             break;
@@ -129,13 +121,11 @@ function date_format() {
             //per day
             formatter = function(d, i) {
                 if (typeof d === 'object') {
-                    d = d + "";
-                    return d.substr(4, 11);
-
-
+                    var date = new Date(d);
+                    return d3.time.format.utc('%a:%d %b')(date);
                 } else {
                     var date = new Date(d);
-                    return d3.time.format('%d %b %Y')(date);
+                    return d3.time.format.utc('%a:%d-%b')(date);
                 }
             }
             break;
@@ -143,11 +133,11 @@ function date_format() {
             // per month
             formatter = function(d, i) {
                 if (typeof d === 'object') {
-                    d = (d + "").split(' ');
-                    return d[1] + ' ' + d[3];
+                    var date = new Date(d);
+                    return d3.time.format.utc('%b %Y')(date);
                 } else {
                     var date = new Date(d);
-                    return d3.time.format('%b %Y')(date);
+                    return d3.time.format.utc('%b %Y')(date);
                 }
             }
             break;
@@ -155,11 +145,11 @@ function date_format() {
             // per year
             formatter = function(d, i) {
                 if (typeof d === 'object') {
-                    d = (d + "").split(' ');
-                    return d[3];
+                    var date = new Date(d);
+                    return d3.time.format.utc('%Y')(date);
                 } else {
                     var date = new Date(d);
-                    return d3.time.format('%Y')(date);
+                    return d3.time.format.utc('%Y')(date);
                 }
             }
             break;
@@ -263,7 +253,6 @@ $(document).ready(function() {
             location.href = document.URL.split('#')[0] + '#' + type + '&' + start_str + '&' + end_str;
         }, 200);
     });
-
     $('.type_label').text($('#' + type).text());
     draw();
 });
@@ -285,7 +274,6 @@ function draw() {
         alert('Select a range of correct dates');
         return null;
     } else {
-
         switch (type) {
             case 'h':
                 // if ((end_times - start_times) > 24 * 60 * 60 * 5) {
@@ -308,7 +296,6 @@ function draw() {
                 end_str = end_str.split('-')[0] + '-' + end_str.split('-')[1] + '-' + months[parseInt(end_str.substring(5, 7)) - 1];
                 $('.from').val(start_str);
                 $('.to').val(end_str);
-
                 break;
             case 'y':
                 start_str = $('.from').val();
@@ -319,7 +306,6 @@ function draw() {
                 end_str = end_str.split('-')[0] + '-12-31'
                 $('.from').val(start_str);
                 $('.to').val(end_str);
-
                 break;
         }
     }
@@ -360,17 +346,13 @@ function draw() {
                     case 'd':
                         //per day
                         _.each(val.values, function(v, k) {
-                            var d = val.values[k].x.split('-');                            
-                            var date_timestamp = Date.UTC(d[0],
+                            var d = val.values[k].x.split('-');
+                            var date_timestamp = Date.UTC(parseInt(d[0]),
                                 parseInt(d[1]) - 1,
-                                parseInt(d[2]) + 1, 0, 0);
-
-                            var utc = new Date(date_timestamp);//.toUTCString();
-                            console.log(val.values[k].x);
-                            console.log(utc);
+                                parseInt(d[2]));
+                            var utc = new Date(date_timestamp);
                             val.values[k].x = utc;
                             date_xaxis.push(date_timestamp);
-
                         });
                         break;
                     case 'm':
@@ -381,7 +363,6 @@ function draw() {
                             var utc = new Date(date_timestamp);
                             val.values[k].x = utc;
                             date_xaxis.push(date_timestamp);
-
                         });
                         break;
                     case 'y':
@@ -397,7 +378,6 @@ function draw() {
                 json_obj.push(val);
             });
             draw_line(json_obj);
-            console.log(json_obj);
             //draw_bar(_.map(json, _.clone));
         }
     });
@@ -405,5 +385,4 @@ function draw() {
     $('#chart_line').addClass("loading");
     location.href = document.URL.split('#')[0] + '#' + type + '&' + start_str + '&' + end_str;
 }
-
 })(settings);
