@@ -1,6 +1,5 @@
 #!/usr/bin/env node
 var osmium = require('osmium');
-var numeral = require('numeral');
 var request = require('request');
 var fs = require('fs');
 var zlib = require('zlib');
@@ -31,10 +30,6 @@ client.connect(function(err) {
 		return console.error('could not connect to postgres', err);
 	}
 });
-
-function format_num(n) {
-	return numeral(n).format('0,0');
-}
 
 function download_file(url, localFile, callback) {
 	var localStream = fs.createWriteStream(localFile);
