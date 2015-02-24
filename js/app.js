@@ -110,10 +110,10 @@ function date_format() {
             formatter = function(d, i) {
                 if (typeof d === 'object') {
                     var date = new Date(d);
-                    return d3.time.format.utc('%a-%d:%H%p')(date);
+                    return d3.time.format.utc('%a %d %H%p')(date);
                 } else {
                     var date = new Date(d);
-                    return d3.time.format.utc('%a-%d:%H%p')(date);
+                    return d3.time.format.utc('%a-%d %H%p')(date);
                 }
             }
             break;

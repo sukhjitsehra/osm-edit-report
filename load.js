@@ -70,7 +70,10 @@ function proces_file_save(value) {
 		console.log('Process file :' + name_file);
 		var osmfile = osm_file;
 		var count = {};
-		var query_user = "SELECT iduser, osmuser, color, estado FROM osm_user WHERE estado=true";
+		var query_user = {
+      		text: 'SELECT iduser, osmuser, color, estado FROM osm_user WHERE estado=$1;',
+      		values: [true]
+    	};
 		var main_query = client.query(query_user, function(error, result) {
 			if (error) {
 				console.log(error);
@@ -108,21 +111,26 @@ function proces_file_save(value) {
 					});
 					reader.apply(handler);
 					var flag = true;
-					var query_exists = "SELECT EXISTS(SELECT osmdate FROM osm_obj where osmdate=" + osmdate + ");";
+					var query_exists = {
+      					text: 'SELECT EXISTS(SELECT osmdate FROM osm_obj where osmdate=$1);',
+      					values: [osmdate]
+    				};
 					client.query(query_exists, function(err, result) {
 						flag = result.rows[0].exists;
 						_.each(count, function(val, key) {
 							var num_obj = (val.osm_node + val.osm_way + val.osm_relation);
-							var query_insert = "";
+							var query_insert = {text:"", values:[]};
 							if (flag) {
-								query_insert = "UPDATE osm_obj SET u_" + key + " = " + num_obj + " WHERE osmdate = " + osmdate + ";"
+								query_insert.text= "UPDATE osm_obj SET u_" + key + " = $1 WHERE osmdate = $2",
+								query_insert.values.push(num_obj,osmdate);
 							} else {
-								query_insert = "INSERT INTO osm_obj(osmdate, u_" + key + ") VALUES (" + osmdate + ", " + num_obj + ");";
+								query_insert.text= "INSERT INTO osm_obj(osmdate, u_" + key + ") VALUES ($1,$2)",
+								query_insert.values.push(osmdate,num_obj);
 								flag = true;
 							}
 							client.query(query_insert, function(err, result) {
 								if (err) {
-									console.log("error en insertar");
+									console.log("error en insertar" + err);
 								}
 							});
 						});
