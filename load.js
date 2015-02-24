@@ -20,10 +20,10 @@ var obj = function() {
 	};
 };
 var client = new pg.Client(
-	"postgres://" + (argv.user || 'postgres') +
-	":" + (argv.password || '1234') +
-	"@" + (argv.dbhost || 'localhost') +
-	"/" + (argv.database || 'dbstatistic')
+	"postgres://" + (argv.pguser || 'postgres') +
+	":" + (argv.pgpassword || '1234') +
+	"@" + (argv.pghost || 'localhost') +
+	"/" + (argv.pgdatabase || 'dbstatistic')
 );
 client.connect(function(err) {
 	if (err) {

@@ -15,12 +15,12 @@ var obj = function() {
 	};
 };
 var client = new pg.Client(
-	"postgres://" + (argv.user || 'postgres') +
-	":" + (argv.password || '1234') +
-	"@" + (argv.dbhost || 'localhost') +
-	"/" + (argv.database || 'dbstatistic')
+	"postgres://" + (argv.pguser || 'postgres') +
+	":" + (argv.pgpassword || '1234') +
+	"@" + (argv.pghost || 'localhost') +
+	"/" + (argv.pgdatabase || 'dbstatistic')
 );
-console.log("http://" + (argv.dbhost || 'localhost') + ":3021/");
+console.log("http://" + (argv.pghost || 'localhost') + ":3021/");
 var type = {
 	'h': 14,
 	'd': 11,
