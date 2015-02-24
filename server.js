@@ -37,8 +37,14 @@ app.get('/:date', function(req, res) {
 	try {
 		var date = (req.params.date + '').split('&');
 		var array_objs = [];
-		var query_obj = "SELECT substring(to_timestamp(osmdate)::text,0," + type[date[0]] + ") as osm_date";
-		var query_user = "SELECT iduser, osmuser, color, estado FROM osm_user WHERE estado=true;";
+		var query_obj = {
+      		text: 'SELECT substring(to_timestamp(osmdate)::text,0,$1) as osm_date',
+      		values: [type[date[0]]]
+    	};
+		var query_user = {
+      		text: 'SELECT iduser, osmuser, color, estado FROM osm_user WHERE estado=$1',
+      		values: [true]
+    	};
 		var main_query = client.query(query_user, function(error, result) {
 			if (error) {
 				console.log(error);
@@ -48,7 +54,7 @@ app.get('/:date', function(req, res) {
 				for (var i = 0; i < result.rows.length; i++) {
 					user = new obj();
 					var iduser = result.rows[i].iduser;
-					query_obj += ", SUM(u_" + iduser + ") as u_" + iduser;
+					query_obj.text += ", SUM(u_" + iduser + ") as u_" + iduser;
 					user.iduser = iduser;
 					user.key = result.rows[i].osmuser;
 					user.color = '#' + result.rows[i].color;
@@ -58,7 +64,9 @@ app.get('/:date', function(req, res) {
 		});
 
 		main_query.on('end', function(result) {
-			query_obj += " FROM osm_obj WHERE osmdate>= " + date[1] + " AND osmdate<" + date[2] + " GROUP BY osm_date ORDER BY osm_date;";
+			query_obj.text += " FROM osm_obj WHERE osmdate>= $2 AND osmdate < $3 GROUP BY osm_date ORDER BY osm_date";
+			query_obj.values.push(parseInt(date[1]),parseInt(date[2]));
+			console.log('Request Date : ' + new Date() + ' Query values: '+ query_obj.values );
 			client.query(query_obj, function(error, result) {
 				if (error) {
 					console.log(error);
