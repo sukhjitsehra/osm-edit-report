@@ -187,7 +187,7 @@ function init() {
 		osm_file = name_file + '.osc';
 		download_file(url_file, osm_file, proces_file_save);
 	} else {
-		console.log('Wait 5 minutes');
+		console.log('Wait 10 minutes');
 		setTimeout(function() {
 			url_file = get_url_file();
 			osm_file = name_file + '.osc'
@@ -205,7 +205,7 @@ function init() {
 					init();
 				}
 			}).end();
-		}, 5 * 60 * 1000);
+		}, 10 * 60 * 1000);
 	}
 }
 
