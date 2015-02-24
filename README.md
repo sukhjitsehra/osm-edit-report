@@ -22,14 +22,11 @@ System requirements:
 ### 1. Set up data server
 
     ## Install data server
-    cd server/ && npm install
-
-    ## Install load scripts
-    cd ../get_data && npm install
+    npm install
 
     # Set up database
     postgres createdb dbstatistic
-    psql dbstatistic -f get_data/tables.sql
+    psql dbstatistic -f query/tables.sql
 
 ### 2. Configure users
 

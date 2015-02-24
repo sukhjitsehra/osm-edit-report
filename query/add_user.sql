@@ -11,6 +11,4 @@ select add_user(2511706,'calfarome','800000',true);
 select add_user(2512300,'samely','66CCCC',true);
 select add_user(2115749,'srividya_c','7B68EE',true);
 select add_user(1306,'PlaneMad','B22222',true);
-select * from osm_user;
-select * from osm_obj;
 
