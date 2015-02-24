@@ -25,6 +25,7 @@ System requirements:
     npm install
 
     # Set up database
+
     postgres createdb dbstatistic
     psql dbstatistic -f query/tables.sql
 
@@ -32,8 +33,10 @@ System requirements:
 
 Add each user whose OpenStreetMap edits you'd like to track to the `osm_user` table like so:
 
+
 ``` sql 
 SELECT add_user(589596,'lxbarth','FFFF00',true);
+
 ```
 
 - **589596** : user id on OpenStreetMap
