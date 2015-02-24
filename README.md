@@ -33,7 +33,7 @@ System requirements:
 Add each user whose OpenStreetMap edits you'd like to track to the `osm_user` table like so:
 
 ``` sql 
-INSERT INTO osm_user( iduser, osmuser, color, estado) VALUES (589596,'lxbarth','FFFF00',true);
+SELECT add_user(589596,'lxbarth','FFFF00',true);
 ```
 
 - **589596** : user id on OpenStreetMap
@@ -56,12 +56,10 @@ For instance, to start loading with [2012-10-23 23:02](http://planet.openstreetm
 
 Or to start loading with [2015-01-01 00:02](http://planet.openstreetmap.org/replication/hour/000/020/) run:
 
-    cd get_data/
     node load.js --num_file=177 --num_directory=20 --user=<dbuser> --password=<dbpassword> --database=dbstatistic
 
 ### 4. Run data server
 
-    cd server/
     node index.js --user=<dbuser> --password=<dbpassword> --database=dbstatistic
 
 This will run the server at port 3021. Use [forever](http://labs.telasocial.com/nodejs-forever-daemon/) to run as a daemon.
