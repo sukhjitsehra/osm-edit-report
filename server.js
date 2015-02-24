@@ -21,7 +21,6 @@ var client = new pg.Client(
 	"/" + (argv.database || 'dbstatistic')
 );
 console.log("http://" + (argv.dbhost || 'localhost') + ":3021/");
-
 var type = {
 	'h': 14,
 	'd': 11,
@@ -42,7 +41,7 @@ app.get('/:date', function(req, res) {
       		values: [type[date[0]]]
     	};
 		var query_user = {
-      		text: 'SELECT iduser, osmuser, color, estado FROM osm_user WHERE estado=$1',
+      		text: 'SELECT iduser, osmuser, color, estado FROM osm_user WHERE estado = $1',
       		values: [true]
     	};
 		var main_query = client.query(query_user, function(error, result) {
@@ -62,9 +61,8 @@ app.get('/:date', function(req, res) {
 				}
 			}
 		});
-
 		main_query.on('end', function(result) {
-			query_obj.text += " FROM osm_obj WHERE osmdate>= $2 AND osmdate < $3 GROUP BY osm_date ORDER BY osm_date";
+			query_obj.text += " FROM osm_obj WHERE osmdate >= $2 AND osmdate < $3 GROUP BY osm_date ORDER BY osm_date";
 			query_obj.values.push(parseInt(date[1]),parseInt(date[2]));
 			console.log('Request Date : ' + new Date() + ' Query values: '+ query_obj.values );
 			client.query(query_obj, function(error, result) {

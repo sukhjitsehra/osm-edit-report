@@ -71,7 +71,7 @@ function proces_file_save(value) {
 		var osmfile = osm_file;
 		var count = {};
 		var query_user = {
-      		text: 'SELECT iduser, osmuser, color, estado FROM osm_user WHERE estado=$1;',
+      		text: 'SELECT iduser, osmuser, color, estado FROM osm_user WHERE estado = $1;',
       		values: [true]
     	};
 		var main_query = client.query(query_user, function(error, result) {
@@ -112,7 +112,7 @@ function proces_file_save(value) {
 					reader.apply(handler);
 					var flag = true;
 					var query_exists = {
-      					text: 'SELECT EXISTS(SELECT osmdate FROM osm_obj where osmdate=$1);',
+      					text: 'SELECT EXISTS(SELECT osmdate FROM osm_obj where osmdate = $1);',
       					values: [osmdate]
     				};
 					client.query(query_exists, function(err, result) {
