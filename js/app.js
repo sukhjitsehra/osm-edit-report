@@ -83,7 +83,6 @@ function draw_line(data) {
             .tickFormat(
                 date_format()
             );
-        //reduce el numero de labels en el xAxis
         date_xaxis = _.uniq(date_xaxis);
         if (date_xaxis.length > 10) {
             date_xaxis = _.each(date_xaxis, function(v, k) {
@@ -277,13 +276,11 @@ function draw() {
         switch (type) {
             case 'h':
                 // if ((end_times - start_times) > 24 * 60 * 60 * 5) {
-                //     alert('Select two 5 days at most');
                 //     return null;
                 // }
                 break;
             case 'd':
                 // if ((end_times - start_times) > 24 * 60 * 60 * 30 * 3) {
-                //     alert('Select two 2 month at most');
                 //     return null;
                 // }
                 break;
