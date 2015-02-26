@@ -94,26 +94,26 @@ app.get('/:date', function(req, res) {
 });
 app.listen(process.env.PORT || 3021);
 
-function value_parameters(date){
-	console.log('Request Date : ' + new Date() + ' url: '+ url + date);
-	var date = (date + '').split('&');
-	if(date.length!==3){
+function value_parameters(date) {
+	console.log('Request Date : ' + new Date() + ' url: ' + url + date);
+	date = (date + '').split('&');
+	if (date.length !== 3) {
 		console.log('error');
 		res.statusCode = 404;
 		return res.send('Error 404: No quote found');
 	}
-	if(Number(date[1]) === NaN || Number(date[2]) === NaN || type[date[0]] === undefined){
+	if (Number(date[1]) === NaN || Number(date[2]) === NaN || type[date[0]] === undefined) {
 		console.log('error');
-		res.statusCode = 404;		
+		res.statusCode = 404;
 		return res.send('Error 404: No quote found');
 	}
-	if(parseInt(date[2]) - parseInt(date[1]) < 0){
+	if (parseInt(date[2]) - parseInt(date[1]) < 0) {
 		console.log('error');
 		res.statusCode = 404;
 		return res.send('Error 404: No quote found');
 	}
 	//we can do a consult per hour less two months
-	if(parseInt(date[2]) - parseInt(date[1]) > 60*24*3600 && date[0]==='h'){
+	if (parseInt(date[2]) - parseInt(date[1]) > 60 * 24 * 3600 && date[0] === 'h') {
 		console.log('High petición of data per hour ');
 		res.statusCode = 404;
 		return res.send('Error 404: No quote found');
