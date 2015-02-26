@@ -1,8 +1,8 @@
 (function(settings) {
 var start_str = '';
 var end_str = '';
-var start_times = 0
-var end_times = 0
+var start_times = 0;
+var end_times = 0;
 var months = [31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31];
 var date_xaxis = [];
 var json_obj = null;

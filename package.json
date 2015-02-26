@@ -1,7 +1,7 @@
 {
   "name": "osm-edit-report",
   "version": "0.0.1",
-  "description": "",
+  "description": "Reports editing activity for a number of users on OpenStreetMap.",
   "author": "Mapbox",
   "license": "ISC",
   "engines": {
@@ -18,6 +18,21 @@
     "zlib": "^1.0.5"
   },
   "scripts": {
-    "run": "./server.js"
-  }
+    "run": "./server.js",
+    "start": "node server.js"
+  },
+  "main": "server.js",
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/mapbox/osm-edit-report.git"
+  },
+  "keywords": [
+    "openstreetmap",
+    "report",
+    "edit"
+  ],
+  "bugs": {
+    "url": "https://github.com/mapbox/osm-edit-report/issues"
+  },
+  "homepage": "https://github.com/mapbox/osm-edit-report"
 }

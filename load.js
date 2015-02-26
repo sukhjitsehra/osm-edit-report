@@ -55,7 +55,7 @@ function download_file(url, localFile, callback) {
 			callback(false, null);
 		}
 	});
-};
+}
 
 function proces_file_save(value) {
 	if (!value) {
@@ -116,10 +116,10 @@ function proces_file_save(value) {
 							var num_obj = (val.osm_node + val.osm_way + val.osm_relation);
 							var query_insert = {text:"", values:[]};
 							if (flag) {
-								query_insert.text= "UPDATE osm_obj SET u_" + key + " = $1 WHERE osmdate = $2",
+								query_insert.text= "UPDATE osm_obj SET u_" + key + " = $1 WHERE osmdate = $2";
 								query_insert.values.push(num_obj,osmdate);
 							} else {
-								query_insert.text= "INSERT INTO osm_obj(osmdate, u_" + key + ") VALUES ($1,$2)",
+								query_insert.text= "INSERT INTO osm_obj(osmdate, u_" + key + ") VALUES ($1,$2)";
 								query_insert.values.push(osmdate,num_obj);
 								flag = true;
 							}
