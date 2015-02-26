@@ -25,7 +25,6 @@ System requirements:
     npm install
 
     # Set up database
-
     postgres createdb dbstatistic
     psql dbstatistic -f query/tables.sql
 
@@ -54,7 +53,6 @@ You can start loading data starting with any replication file found in http://pl
 
 For instance, to start loading with [2012-10-23 23:02](http://planet.openstreetmap.org/replication/hour/000/001/) run:
 
-    cd get_data/
     node load.js --num_file=1 --num_directory=0 --user=<dbuser> --password=<dbpassword> --database=dbstatistic
 
 Or to start loading with [2015-01-01 00:02](http://planet.openstreetmap.org/replication/hour/000/020/) run:
@@ -63,7 +61,7 @@ Or to start loading with [2015-01-01 00:02](http://planet.openstreetmap.org/repl
 
 ### 4. Run data server
 
-    node index.js --user=<dbuser> --password=<dbpassword> --database=dbstatistic
+    node server.js --user=<dbuser> --password=<dbpassword> --database=dbstatistic
 
 This will run the server at port 3021. Use [forever](http://labs.telasocial.com/nodejs-forever-daemon/) to run as a daemon.
 
