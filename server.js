@@ -20,6 +20,7 @@ var client = new pg.Client(
 	"@" + (argv.pghost || 'localhost') +
 	"/" + (argv.pgdatabase || 'dbstatistic')
 );
+console.log("http://" + (argv.dbhost || 'localhost') + ":3021/");
 var type = {
 	'h': 14,
 	'd': 11,
