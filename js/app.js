@@ -337,7 +337,7 @@ function draw() {
                             var d = val.values[k].x.split('-');
                             var date_timestamp = Date.UTC(d[0],
                                 parseInt(d[1]) - 1,
-                                parseInt(d[2]), parseInt(d[3]), 300);
+                                parseInt(d[2]), parseInt(d[3]), 0);
                             var utc = new Date(date_timestamp);
                             val.values[k].x = utc;
                             date_xaxis.push(date_timestamp);
