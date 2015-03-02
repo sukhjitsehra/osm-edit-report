@@ -275,9 +275,14 @@ function draw() {
     } else {
         switch (type) {
             case 'h':
-                // if ((end_times - start_times) > 24 * 60 * 60 * 5) {
-                //     return null;
-                // }
+                 if ((end_times - start_times) > 60 * 24 * 3600) {                    
+                       $("#span-warning").text(' You selected request per hour, this is not possible if there is more than two months on range, please select other range');
+                       $('#error-warning').show();
+                        setTimeout(function() { 
+                          $('#error-warning').hide();
+                        }, 8000);
+                    return null;
+                 }
                 break;
             case 'd':
                 // if ((end_times - start_times) > 24 * 60 * 60 * 30 * 3) {
