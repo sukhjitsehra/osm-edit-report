@@ -112,7 +112,7 @@ function date_format() {
                     return d3.time.format.utc('%a %d %H%p')(date);
                 } else {
                     var date = new Date(d);
-                    return d3.time.format.utc('%a-%d %H%p')(date);
+                    return d3.time.format.utc('%H%p')(date);
                 }
             }
             break;
