@@ -13,4 +13,5 @@ select add_user(2115749,'srividya_c','7B68EE',true);
 select add_user(1306,'PlaneMad','B22222',true);
 select add_user(2748195,'karitotp','00BFFF',true);
 select add_user(2644101,'Chetan_Gowda','5E2D79',true);
+select add_user(2823295,'Ramya Ragupathy','e6e600',true);
 
