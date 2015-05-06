@@ -122,7 +122,6 @@ function proces_file_save(value) {
 						flag = result.rows[0].exists;
 						_.each(count, function(val, key) {
 							var num_obj = (val.osm_node + val.osm_way + val.osm_relation);
-							console.log(_.size(_.uniq(val.changeset)));
 							var query_insert = {
 								text: "",
 								values: []
