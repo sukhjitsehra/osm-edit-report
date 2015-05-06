@@ -1,4 +1,5 @@
 #!/usr/bin/env node
+
 var osmium = require('osmium');
 var request = require('request');
 var fs = require('fs');
@@ -16,9 +17,11 @@ var obj = function() {
 		osm_date: 0,
 		osm_node: 0,
 		osm_way: 0,
-		osm_relation: 0
+		osm_relation: 0,
+		changeset: []
 	};
 };
+
 var client = new pg.Client(
 	"postgres://" + (argv.pguser || 'postgres') +
 	":" + (argv.pgpassword || '1234') +
@@ -66,9 +69,9 @@ function proces_file_save(value) {
 		var osmfile = osm_file;
 		var count = {};
 		var query_user = {
-      		text: 'SELECT iduser, osmuser, color, estado FROM osm_user WHERE estado = $1;',
-      		values: [true]
-    	};
+			text: 'SELECT iduser, osmuser, color, estado FROM osm_user WHERE estado = $1;',
+			values: [true]
+		};
 		var main_query = client.query(query_user, function(error, result) {
 			if (error) {
 				console.log(error);
@@ -86,41 +89,50 @@ function proces_file_save(value) {
 					var handler = new osmium.Handler();
 					//WAY
 					handler.on('way', function(way) {
+						//console.log(way);
 						osmdate = way.timestamp;
 						osmdate = osmdate - osmdate % 1000;
-						if (count.hasOwnProperty(way.uid) && _.size(way.tags()) > 0) {
+						if (count.hasOwnProperty(way.uid)) { //&& _.size(way.tags()) > 0
 							++count[way.uid].osm_way;
+							count[way.uid].changeset.push(way.changeset);
 						}
 					});
 					//NODE
 					handler.on('node', function(node) {
-						if (count.hasOwnProperty(node.uid) && _.size(node.tags()) > 0) {
+						if (count.hasOwnProperty(node.uid)) { //&& _.size(node.tags()) > 0
 							++count[node.uid].osm_node;
+							count[node.uid].changeset.push(node.changeset);
 						}
 					});
 					//RELATION
 					handler.on('relation', function(relation) {
-						if (count.hasOwnProperty(relation.uid) && _.size(relation.tags()) > 0) {
+						if (count.hasOwnProperty(relation.uid)) { //&& _.size(relation.tags()) > 0
 							++count[relation.uid].osm_relation;
+							count[relation.uid].changeset.push(relation.changeset);
 						}
 					});
+
 					reader.apply(handler);
 					var flag = true;
 					var query_exists = {
-      					text: 'SELECT EXISTS(SELECT osmdate FROM osm_obj where osmdate = $1);',
-      					values: [osmdate]
-    				};
+						text: 'SELECT EXISTS(SELECT osmdate FROM osm_obj where osmdate = $1);',
+						values: [osmdate]
+					};
 					client.query(query_exists, function(err, result) {
 						flag = result.rows[0].exists;
 						_.each(count, function(val, key) {
 							var num_obj = (val.osm_node + val.osm_way + val.osm_relation);
-							var query_insert = {text:"", values:[]};
+							console.log(_.size(_.uniq(val.changeset)));
+							var query_insert = {
+								text: "",
+								values: []
+							};
 							if (flag) {
-								query_insert.text= "UPDATE osm_obj SET u_" + key + " = $1 WHERE osmdate = $2";
-								query_insert.values.push(num_obj,osmdate);
+								query_insert.text = "UPDATE osm_obj SET uo_" + key + " = $1 , uc_" + key + " = $2 WHERE osmdate = $3";
+								query_insert.values.push(num_obj, _.size(_.uniq(val.changeset)), osmdate);
 							} else {
-								query_insert.text= "INSERT INTO osm_obj(osmdate, u_" + key + ") VALUES ($1,$2)";
-								query_insert.values.push(osmdate,num_obj);
+								query_insert.text = "INSERT INTO osm_obj(osmdate, uo_" + key + ", uc_" + key + ") VALUES ($1,$2,$3)";
+								query_insert.values.push(osmdate, num_obj, _.size(_.uniq(val.changeset)));
 								flag = true;
 							}
 							client.query(query_insert, function(err, result) {
@@ -190,7 +202,7 @@ function init() {
 				if (!err && resp.statusCode == 200) {
 					download_file(url_file, osm_file, proces_file_save);
 				} else {
-					console.log('URL is not available yet: '+ url_file);					
+					console.log('URL is not available yet: ' + url_file);
 					if (num_file === 1) {
 						num_file = 999;
 						name_directory = name_directory - 1;

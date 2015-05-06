@@ -16,11 +16,15 @@ RETURNS VOID
 AS $$
 declare 
     _flag varchar ;
+    _uo varchar;
+    _uc varchar;
 begin 
-	_columname = 'u_'||_columname;	
-	_flag = (SELECT attname FROM pg_attribute WHERE attrelid = (SELECT oid FROM pg_class WHERE relname = 'osm_obj') AND attname = _columname);
+	_uo = 'uo_'||_columname;
+	_uc = 'uc_'||_columname;
+	_flag = (SELECT attname FROM pg_attribute WHERE attrelid = (SELECT oid FROM pg_class WHERE relname = 'osm_obj') AND attname = _uo);
 	if(_flag is null ) then 
-		EXECUTE 'ALTER TABLE osm_obj ADD COLUMN ' || _columname || ' SMALLINT;';
+		EXECUTE 'ALTER TABLE osm_obj ADD COLUMN ' || _uo || ' SMALLINT;';
+		EXECUTE 'ALTER TABLE osm_obj ADD COLUMN ' || _uc || ' SMALLINT;';
 		_flag = _columname ||' Was created';
 	else
 		_flag = _columname ||' Already exist';

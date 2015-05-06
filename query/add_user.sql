@@ -15,5 +15,6 @@ select add_user(2748195,'karitotp','00BFFF',true);
 select add_user(2644101,'Chetan_Gowda','336699',true);
 select add_user(2823295,'Ramya Ragupathy','996633',true);
 select add_user(29936237,'ksharma198','00CC99 ',true);
+SELECT add_user(2306749,'shvrm','FF00FF',true);
 
 

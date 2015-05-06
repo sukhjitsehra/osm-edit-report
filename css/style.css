@@ -16,6 +16,9 @@ svg {
 #chart_line {
 	height: 400px;
 }
+#chart_line_changeset {
+	height: 400px;
+}
 .date-form {
 	margin: 10px;
 }
