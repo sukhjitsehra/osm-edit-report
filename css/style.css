@@ -10,14 +10,12 @@ svg {
 .container_way, .container_line {
 	margin-top: 30px;
 }
-#chart_bar {
-	height: 400px;
-}
+
 #chart_line {
-	height: 400px;
+	height: 300px;
 }
 #chart_line_changeset {
-	height: 400px;
+	height: 300px;
 }
 .date-form {
 	margin: 10px;
