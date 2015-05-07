@@ -54,8 +54,6 @@ app.get('/:date', function(req, res) {
 				text: 'SELECT substring(to_timestamp(osmdate)::text,0,$1) as osm_date',
 				values: [type[date[0]]]
 			};
-
-			console.log(query_obj);
 			var query_user = {
 				text: 'SELECT iduser, osmuser, color, estado FROM osm_user WHERE estado = $1',
 				values: [true]
@@ -79,7 +77,6 @@ app.get('/:date', function(req, res) {
 				}
 			});
 
-			console.log(main_query);
 			main_query.on('end', function(result) {
 				query_obj.text += " FROM osm_obj WHERE osmdate >= $2 AND osmdate < $3 GROUP BY osm_date ORDER BY osm_date";
 				query_obj.values.push(parseInt(date[1]), parseInt(date[2]));

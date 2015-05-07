@@ -17,3 +17,8 @@ select add_user(2823295,'ramyaragupathy','996633',true);
 select add_user(2782847,'ksharma198','00CC99 ',true);
 SELECT add_user(589596,'lxbarth','333366',true);
 SELECT add_user(2306749,'shvrm','FF00FF',true);
+SELECT add_user(53073,'Aaron Lidman','330066',true);
+SELECT add_user(146675,'geohacker','666600',true);
+--UPDATE osm_user
+--   SET color= '666600'
+-- WHERE iduser=0000;
