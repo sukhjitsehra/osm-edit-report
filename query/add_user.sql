@@ -1,5 +1,4 @@
-﻿select add_user(510836,'Rub21','0171C5',true);
-select add_user(1240849,'ediyes','FFFF00',true);
+﻿select add_user(1240849,'ediyes','FFFF00',true);
 select add_user(1829683,'Luis36995','00FF00',true);
 select add_user(2219338,'RichRico','EE3344',true);
 select add_user(2226712,'dannykath','662289',true);
@@ -18,6 +17,7 @@ SELECT add_user(589596,'lxbarth','333366',true);
 SELECT add_user(2306749,'shvrm','FF00FF',true);
 SELECT add_user(53073,'Aaron Lidman','330066',true);
 SELECT add_user(146675,'geohacker','666600',true);
+select add_user(510836,'Rub21','0171C5',true);
 --UPDATE osm_user
 --   SET color= '666600'
 -- WHERE iduser=0000;
