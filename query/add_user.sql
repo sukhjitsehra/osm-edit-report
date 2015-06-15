@@ -19,7 +19,7 @@ SELECT add_user(2306749,'shvrm','FF00FF',true);
 SELECT add_user(53073,'Aaron Lidman','330066',true);
 SELECT add_user(146675,'geohacker','666600',true);
 SELECT add_user(2905914,'pratikyadav','00f2ff',true);
-SELECT add_user(2847988' jinalfoflia','ff6a6a',true);
+SELECT add_user(2847988,'jinalfoflia','ff6a6a',true);
 
 
 --UPDATE osm_user
