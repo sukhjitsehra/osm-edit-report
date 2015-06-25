@@ -10,14 +10,19 @@ var download = require('./src/download');
 var database = require('./src/database');
 var count = require('./src/count');
 var removefiles = require('./src/removefiles');
-var delayed = require('delayed');
+//var delayed = require('delayed');
+var crontab = require('node-crontab');
 // Initialize parameters
+var flag = true;
+
+
 var db_conf = {
 	pguser: argv.pguser,
 	pgpassword: argv.pgpassword,
 	pghost: argv.pghost,
 	pgdatabase: argv.pgdatabase
 };
+
 
 var client = new pg.Client(
 	"postgres://" + (db_conf.pguser || 'postgres') +
@@ -50,7 +55,14 @@ function select_users(b) {
 	if (b) {
 		database.select_users(client, process_files);
 	} else {
-		delayed(init, runSpeed);
+		if (flag) {
+			flag = false;
+			crontab.scheduleJob("*/5 * * * *", function() { //This will call this function every 2 minutes 
+				init();
+			});
+		}
+		//delayed(init, runSpeed);
+
 	}
 }
 
