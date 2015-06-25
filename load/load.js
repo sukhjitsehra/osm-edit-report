@@ -19,13 +19,26 @@ var db_conf = {
 	pgdatabase: argv.pgdatabase
 };
 
+var client = new pg.Client(
+	"postgres://" + (db_conf.pguser || 'postgres') +
+	":" + (db_conf.pgpassword || '1234') +
+	"@" + (db_conf.pghost || 'localhost') +
+	"/" + (db_conf.pgdatabase || 'dbstatistic')
+);
+client.connect(function(err) {
+	if (err) {
+		return console.error('could not connect to postgres', err);
+	}
+});
+
+
 var number_obj = {
 	prev: [],
 	current: [parseInt(argv.num_directory), parseInt(argv.num_file)],
 	next: []
 };
 
-var runSpeed = 10*1000;
+var runSpeed = 10 * 1000;
 
 //inicio
 function init() {
@@ -35,7 +48,7 @@ function init() {
 //fecth users
 function select_users(b) {
 	if (b) {
-		database.select_users(db_conf, process_files);
+		database.select_users(client, process_files);
 	} else {
 		delayed(init, runSpeed);
 	}
@@ -48,7 +61,7 @@ function process_files(users) {
 
 //save on db
 function save(obj) {
-	database.insert(db_conf, obj);
+	database.insert(client, obj);
 	//filter(number_obj.current, obj, finish)
 	//remove files 
 	removefiles(number_obj.current);

@@ -5,20 +5,8 @@ var _ = require('underscore');
 var obj_user = require('./user');
 var database = {}
 
-database.select_users = function(options, done) {
-	var client = new pg.Client(
-		"postgres://" + (options.pguser || 'postgres') +
-		":" + (options.pgpassword || '1234') +
-		"@" + (options.pghost || 'localhost') +
-		"/" + (options.pgdatabase || 'dbstatistic')
-	);
-	client.connect(function(err) {
-		if (err) {
-			return console.error('could not connect to postgres', err);
-		}
-	});
+database.select_users = function(client, done) {
 	var users = {};
-
 	var query_user = {
 		text: 'SELECT iduser,osmuser FROM osm_user WHERE estado = $1;',
 		values: [true]
@@ -33,23 +21,11 @@ database.select_users = function(options, done) {
 
 	select_users.on('end', function(result) {
 		done(users);
-		client.end();
+		//client.end();
 	});
 }
 
-database.insert = function(options, obj) {
-	var client = new pg.Client(
-		"postgres://" + (options.pguser || 'postgres') +
-		":" + (options.pgpassword || '1234') +
-		"@" + (options.pghost || 'localhost') +
-		"/" + (options.pgdatabase || 'dbstatistic')
-	);
-	client.connect(function(err) {
-		if (err) {
-			return console.error('could not connect to postgres', err);
-		}
-	});
-
+database.insert = function(client, obj) {
 	var flag = true;
 	var query_exists = {
 		text: 'SELECT EXISTS(SELECT osmdate FROM osm_obj where osmdate = $1);',
