@@ -25,7 +25,7 @@ var number_obj = {
 	next: []
 };
 
-var runSpeed = 1000;
+var runSpeed = 10*1000;
 
 //inicio
 function init() {
