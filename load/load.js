@@ -10,7 +10,6 @@ var download = require('./src/download');
 var database = require('./src/database');
 var count = require('./src/count');
 var removefiles = require('./src/removefiles');
-//var delayed = require('delayed');
 var crontab = require('node-crontab');
 // Initialize parameters
 var flag = true;
@@ -61,8 +60,6 @@ function select_users(b) {
 				init();
 			});
 		}
-		//delayed(init, runSpeed);
-
 	}
 }
 
