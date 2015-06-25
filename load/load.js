@@ -9,7 +9,8 @@ var pg = require('pg');
 var download = require('./src/download');
 var database = require('./src/database');
 var count = require('./src/count');
-var filter = require('./src/filter');
+var removefiles = require('./src/removefiles');
+var delayed = require('delayed');
 // Initialize parameters
 var db_conf = {
 	pguser: argv.pguser,
@@ -36,7 +37,7 @@ function select_users(b) {
 	if (b) {
 		database.select_users(db_conf, process_files);
 	} else {
-		setTimeout(init, runSpeed);
+		delayed(init, runSpeed);
 	}
 }
 
@@ -48,14 +49,13 @@ function process_files(users) {
 //save on db
 function save(obj) {
 	database.insert(db_conf, obj);
-	filter(number_obj.current, obj, finish)
+	//filter(number_obj.current, obj, finish)
+	//remove files 
+	removefiles(number_obj.current);
+	console.log("fin");
 	get_num(number_obj.next);
 	init();
-}
 
-
-function finish() {
-	console.log("fin")
 }
 
 function get_num(arr) {
