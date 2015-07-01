@@ -15,12 +15,12 @@ select add_user(2748195,'karitotp','00BFFF',true);
 select add_user(2644101,'Chetan_Gowda','336699',true);
 select add_user(2823295,'ramyaragupathy','996633',true);
 SELECT add_user(589596,'lxbarth','333366',true);
-SELECT add_user(2306749,'shvrm','FF00FF',true);
+SELECT add_user(2306749,'shvrm','000000',true);
 SELECT add_user(53073,'Aaron Lidman','330066',true);
 SELECT add_user(146675,'geohacker','666600',true);
 SELECT add_user(2905914,'pratikyadav','00f2ff',true);
 SELECT add_user(2847988,'jinalfoflia','ff6a6a',true);
-
+SELECT add_user(2835928,'Nikhil Prabhakar U','FF8A00',true);
 
 --UPDATE osm_user
 --   SET color= '666600'
