@@ -16,10 +16,10 @@ var flag = true;
 
 
 var db_conf = {
-	pguser: argv.pguser,
-	pgpassword: argv.pgpassword,
-	pghost: argv.pghost,
-	pgdatabase: argv.pgdatabase
+	pguser: argv.user,
+	pgpassword: argv.password,
+	pghost: argv.host,
+	pgdatabase: argv.database
 };
 
 
