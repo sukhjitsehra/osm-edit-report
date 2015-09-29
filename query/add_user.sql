@@ -22,6 +22,7 @@ SELECT add_user(2847988,'jinalfoflia','ff6a6a',true);
 SELECT add_user(2835928,'Nikhil Prabhakar U','FF8A00',true);
 SELECT add_user(2985232,'aarthy','666699',true);
 SELECT add_user(3057995,'oini','FFCC99',true);
+SELECT add_user(3057995,'Jothirnadh','2015224',true);
 
 --UPDATE osm_user
 --   SET color= '666600'
