@@ -330,16 +330,19 @@
 //         }
 //     }
 
-    // $('.from').change(draw);
+    $('.from').blur(function(event){
+        draw($('.from').val(), $('.to').val());
+    });
+    $('.to').blur(function(event){
+        draw($('.from').val(), $('.to').val());
+    });
     // $('.to').change(draw);
 
     draw();
 
-    function draw() {
-        var startDateString = $('.from').value || new Date();
-        var startTime = "2015-11-23";
-        var endDateString = $('.to').value || new Date();
-        var endTime = "2015-11-23";
+    function draw(startDateString, endDateString) {
+        var startTime = Date.UTC(parseInt(startDateString.getFullYear()), parseInt(startDateString.getMonth()) + 1, parseInt(startDateString.getDate())) / 1000;
+        var endTime = Date.UTC(parseInt(endDateString.getFullYear()), parseInt(endDateString.getMonth()) + 1, parseInt(endDateString.getDate())) / 1000;
 
         if (startTime === endTime) {
             console.log("Per hour!");
@@ -358,7 +361,6 @@
             dataType: 'json',
             url: settings.host + 'd' + '&' + startTime + '&' + endTime,
             success: function (json) {
-                alert("success!");
                 //json - set of JSON values for each user whose name and details({'x':'date','y':'no-of-objects-modified'(for 'OBJECTS MODIFIED' graph - the first graph) ,'change':'no-of-changesets'(for 'CHANGESETS' graph - the second graph)}) are represented in the graph.
                 dateXAxis = [];
                 jsonObject = [];
