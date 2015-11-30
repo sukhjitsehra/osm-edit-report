@@ -8,22 +8,38 @@
   <script src="public/lib/jquery-2.1.1.min.js"></script>
   <script src="public/settings.js"></script>
   <script src="public/js/app.js"></script>
-  
+  <style type="text/css">
+    input {
+      border-radius: 15px;
+    }
+  </style>
 </head>
 <body>
-    <header class="col12 pad2y fill-blue hey-header clearfix"><div class="heading fl dark">OSM Edit Report</div></header>
-    <div class="row1">
-        <input name="from" class ="from" placeholder="yyyy-mm-dd" required="yes" type="date">
-        <input name="to" class ="to" placeholder="yyyy-mm-dd" required="yes" type="date">
-        <div class='rounded-toggle inline'>
-            <input id='edits' type='radio' name='rtoggle' value='edits' checked='checked'>
-            <label for='edits'>Edits per User</label>
-            <input id='changesets' type='radio' name='rtoggle' value='changesets'>
-            <label for='changesets'>Changesets per User</label>
+    <div class="grid">
+      <div class="col12 pad2 fill-denim dark clearfix center">
+        <div class="col6 pad1">
+          OpenStreetMap Edit Report
         </div>
-    </div>
-    <div class="chart">
-        <svg></svg>
+        <div class="col3">
+          <input name="from" class ="from" placeholder="yyyy-mm-dd" required="yes" type="date">
+        </div>
+        <div class="col3">
+          <input name="to" class ="to" placeholder="yyyy-mm-dd" required="yes" type="date">
+        </div>
+        <div class="col3">
+          <div class='rounded-toggle inline'>
+              <input id='edits' type='radio' name='rtoggle' value='edits' checked='checked'>
+              <label for='edits'>Edits per User</label>
+              <input id='changesets' type='radio' name='rtoggle' value='changesets'>
+              <label for='changesets'>Changesets per User</label>
+          </div>
+        </div>
+      </div>
+
+      <div class="col12 clearfix chart">
+        chart goes here!
+      </div>
+
     </div>
 </body>
 </html>
