@@ -16,7 +16,7 @@ var obj = function() {
 	};
 };
 var client = new pg.Client(
-	"postgres://" + (argv.pguser || 'postgres') +
+	"postgres://" + (argv.pguser || 'aruna') +
 	":" + (argv.pgpassword || '1234') +
 	"@" + (argv.pghost || 'localhost') +
 	"/" + (argv.pgdatabase || 'dbstatistic')
