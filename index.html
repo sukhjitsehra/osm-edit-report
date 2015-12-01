@@ -12,21 +12,27 @@
   <script src="public/settings.js"></script>
   <script src="public/js/app.js"></script>
   <style type="text/css">
+    
     input {
-      border-radius: 15px;
+        border-radius: 15px;
+    }
+
+    body{
+        
     }
 
     .axis text {
-      font: 10px sans-serif;
+        font: 10px sans-serif;
     }
 
     .axis path,
     .axis line {
-      fill: none;
-      stroke: #000;
-      shape-rendering: crispEdges;
+        fill: none;
+        stroke: #000;
+        shape-rendering: crispEdges;
     }
   </style>
+
 </head>
 <body>
     <div class="grid">
@@ -41,11 +47,11 @@
           <input name="to" class ="to" placeholder="yyyy-mm-dd" required="yes" type="date">
         </div>
         <div class="col3">
-          <div class='rounded-toggle inline'>
-              <input id='edits' type='radio' name='rtoggle' value='edits' checked='checked'>
-              <label for='edits'>Edits per User</label>
-              <input id='changesets' type='radio' name='rtoggle' value='changesets'>
-              <label for='changesets'>Changesets per User</label>
+          <div class='rounded-toggle inline' id="toggleButtons">
+              <input id='objectsButton' type='radio' name='rtoggle' value='objects' checked='checked'>
+              <label for='objectsButton'>Objects modified</label>
+              <input id='changesetsButton' type='radio' name='rtoggle' value='changesets'>
+              <label for='changesetsButton'>Changesets created</label>
           </div>
         </div>
       </div>
@@ -53,6 +59,7 @@
       <div class="col12 clearfix chart" id="chart">
         <svg></svg>
       </div>
+      
 
     </div>
 </body>
