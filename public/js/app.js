@@ -52,6 +52,7 @@ function init() {
 }
 
 function draw(startDateString, endDateString) {
+
     $('#chart svg').empty();
 
     var startTime = moment.utc(startDateString) / 1000;
@@ -144,12 +145,11 @@ function drawGraph(data, startDateString, endDateString) {
         top: 50,
         right: 200,
         bottom: 0,
-        left: 20
+        left: 70
         },
-        width = noOfTicks * 70;
-        height = data.length * 30;
-
-    // console.log('chart height ' + $('#chart').height());
+        // width = ((noOfTicks * 80) > $(window).width()) ? noOfTicks * 80 : $(window).width(),
+        width = $('body').innerWidth();
+        height = data.length * 62;
 
     var x = d3.scale.linear()
     .domain([0, noOfTicks])
