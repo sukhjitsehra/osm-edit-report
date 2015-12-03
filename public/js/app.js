@@ -91,7 +91,34 @@ function truncate(str, maxLength, suffix) {
     return str;
 }
 
+function returnMax(data) {
+    var i, j;
+    switch (CURRENT_SELECTION) {
+    case 'CHANGESETS':
+        var changesets = [];
+        for (i = 0; i < data.length; i++) {
+            for (j = 0; j < data[i].values.length; j++) {
+                changesets.push(data[i].values[j].change);
+            }
+        }
+        return _.max(changesets);
+        break;
+    case 'OBJECTS':
+        var objectsModified = [];
+        for (i = 0; i < data.length; i++) {
+            for (j = 0; j < data[i].values.length; j++) {
+                objectsModified.push(data[i].values[j].y);
+            }
+        }
+        return _.max(objectsModified);
+        break;
+    }
+}
+
+
 function drawGraph(data, startDateString, endDateString) {
+
+    var domainMax = returnMax(data);
     //Map startDate and endDate to the two date strings.
     var startDate = new Date(startDateString),
         endDate = new Date(endDateString);
@@ -181,6 +208,10 @@ function drawGraph(data, startDateString, endDateString) {
     svg.append('g')
     .attr('class', 'x axis')
     .call(xAxis);
+
+    var rScale = d3.scale.linear()
+                   .domain([1, domainMax])
+                   .range([10, 40]);
 
 
     for (var j = 0; j < data.length; j++) {
