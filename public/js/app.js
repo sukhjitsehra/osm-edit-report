@@ -30,14 +30,15 @@ $(document).ready(function () {
 });
 
 function init() {
-    var fromDate = (document.location.href.split('#')[1] != undefined) ? document.location.href.split('#')[1].split('&')[1] : moment().subtract(8, 'days'),
-        toDate = (document.location.href.split('#')[1] != undefined) ? document.location.href.split('#')[1].split('&')[2] : moment().subtract(1, 'days');
 
-    CURRENT_SELECTION = (document.location.href.split('#')[1] != undefined) ? (document.location.href.split('#')[1].split('&')[3]).toUpperCase() : 'OBJECTS';
+    var fromDate = (document.location.href.split('#')[1] !== undefined) ? document.location.href.split('#')[1].split('&')[1] : moment().subtract(8, 'days'),
+        toDate = (document.location.href.split('#')[1] !== undefined) ? document.location.href.split('#')[1].split('&')[2] : moment().subtract(1, 'days');
 
-    console.log('fromDate ' + fromDate + ' toDate ' + toDate + ' selection ' + CURRENT_SELECTION);
+    CURRENT_SELECTION = (document.location.href.split('#')[1] !== undefined) ? (document.location.href.split('#')[1].split('&')[3]).toUpperCase() : 'OBJECTS';
 
-
+    if (!Date.parse(fromDate) && !(Date.parse(toDate))) {
+        alert('Please enter valid dates.');
+    }
     if (CURRENT_SELECTION === 'CHANGESETS') {
         $('#changesetsButton').prop('checked', true);
     }
