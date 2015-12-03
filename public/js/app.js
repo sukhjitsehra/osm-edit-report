@@ -2,12 +2,11 @@ var CURRENT_SELECTION = 'OBJECTS';
 var TYPE = 'D';
 
 
-$(document).ready(function(){
-
+$(document).ready(function () {
     init();
 
     //Call draw() when from and to change.
-    $('.from').on('change', function (e) {
+    $('.from').on('change', function () {
         draw($('.from').val(), $('.to').val());
     });
 
