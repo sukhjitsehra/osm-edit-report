@@ -74,8 +74,7 @@ function queryAPI(startDateString, endDateString) {
         TYPE = 'm';
     }
 
-
-    document.location.href = document.location.href.split('#')[0] + '#' + type + '&' + startDateString + '&' + endDateString + '&' + CURRENT_SELECTION;
+    document.location.href = document.location.href.split('#')[0] + '#' + TYPE + '&' + startDateString + '&' + endDateString + '&' + CURRENT_SELECTION;
 
     if (startTime > endTime) {
         alert('Select a range of correct dates');
@@ -83,7 +82,7 @@ function queryAPI(startDateString, endDateString) {
     } else {
         $.ajax({
             dataType: 'json',
-            url: settings.host + TYPE + '&' + startTime + '&' + endTime,
+            url: settings.host + type + '&' + startTime + '&' + endTime,
             success: function (json) {
                 draw(json, startDateString, endDateString);
             }
