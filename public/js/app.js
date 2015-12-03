@@ -1,7 +1,6 @@
 var CURRENT_SELECTION = 'OBJECTS';
 var TYPE = 'D';
 
-
 $(document).ready(function () {
     init();
 
@@ -75,7 +74,6 @@ function draw(startDateString, endDateString) {
             dataType: 'json',
             url: settings.host + TYPE + '&' + startTime + '&' + endTime,
             success: function (json) {
-                // jsonResponse = JSON.parse(json);
                 drawGraph(json, startDateString, endDateString);
             }
         });
@@ -226,14 +224,6 @@ function drawGraph(data, startDateString, endDateString) {
                     .data(data[j].values)
                     .enter()
                     .append('text');
-
-        // var xScale = d3.time.scale()
-        //                .domain([startDate, endDate])
-        //                .range([0, width/2]);
-
-        var rScale = d3.scale.log()
-                       .domain([1, 10])
-                       .range([0, 8]);
 
         circles
         .attr('cx', function (d, i) {
