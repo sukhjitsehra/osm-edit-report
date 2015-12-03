@@ -53,18 +53,30 @@ function init() {
 function queryAPI(startDateString, endDateString) {
 
     $('#chart svg').empty();
-
+    //this superfluous variable can be removed once we can
+    //query the backend for weekly stats
+    var type;
     var startTime = moment.utc(startDateString) / 1000;
     var endTime = (moment.utc(endDateString) / 1000) + (24 * 60 * 60);
+    var diff = moment(endDateString).diff(moment(startDateString), 'days');
+    console.log("difference " + diff);
 
-    if (startDateString === endDateString) {
+    if (diff === 0) {
+        type = 'h';
         TYPE = 'h';
-
-    } else {
+    } else if (diff >= 1 && diff <= 15) {
+        type = 'd';
         TYPE = 'd';
+    } else if (diff >= 16 && diff <= 30) {
+        type = 'd';
+        TYPE = 'w';
+    } else {
+        type = 'm';
+        TYPE = 'm';
     }
 
-    document.location.href = document.location.href.split('#')[0] + '#' + TYPE + '&' + startDateString + '&' + endDateString + '&' + CURRENT_SELECTION;
+
+    document.location.href = document.location.href.split('#')[0] + '#' + type + '&' + startDateString + '&' + endDateString + '&' + CURRENT_SELECTION;
 
     if (startTime > endTime) {
         alert('Select a range of correct dates');
