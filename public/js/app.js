@@ -155,7 +155,6 @@ function draw(data, startDateString, endDateString) {
             startDate.setHours(startDate.getHours() + 1);
         }
         break;
-
     case 'd':
         limit = 0;
         for (index = startDate.getTime(); index <= endDate.getTime(); ) {
@@ -267,6 +266,7 @@ function draw(data, startDateString, endDateString) {
                 } else {
                     return rScale(d.y);
                 }
+                break;
             case 'CHANGESETS':
                 if (d.change === 0 || d.change === null){
                     return 1;
