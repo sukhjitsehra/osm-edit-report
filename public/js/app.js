@@ -30,8 +30,8 @@ $(document).ready(function () {
 
 function init() {
 
-    var fromDate = (document.location.href.split('#')[1] !== undefined) ? document.location.href.split('#')[1].split('&')[1] : moment().subtract(8, 'days'),
-        toDate = (document.location.href.split('#')[1] !== undefined) ? document.location.href.split('#')[1].split('&')[2] : moment().subtract(1, 'days');
+    var fromDate = (document.location.href.split('#')[1] !== undefined) ? document.location.href.split('#')[1].split('&')[1] : moment.utc().subtract(8, 'days'),
+        toDate = (document.location.href.split('#')[1] !== undefined) ? document.location.href.split('#')[1].split('&')[2] : moment.utc().subtract(1, 'days');
 
     CURRENT_SELECTION = (document.location.href.split('#')[1] !== undefined) ? (document.location.href.split('#')[1].split('&')[3]).toUpperCase() : 'OBJECTS';
 
@@ -45,8 +45,8 @@ function init() {
         $('#objectsButton').prop('checked', true);
     }
     //Call queryAPI with default dates.
-    $('.from').val(moment(fromDate).format('YYYY-MM-DD'));
-    $('.to').val(moment(toDate).format('YYYY-MM-DD'));
+    $('.from').val(moment.utc(fromDate).format('YYYY-MM-DD'));
+    $('.to').val(moment.utc(toDate).format('YYYY-MM-DD'));
     queryAPI($('.from').val(), $('.to').val());
 }
 
@@ -58,8 +58,7 @@ function queryAPI(startDateString, endDateString) {
     var type;
     var startTime = moment.utc(startDateString) / 1000;
     var endTime = (moment.utc(endDateString) / 1000) + (24 * 60 * 60);
-    var diff = moment(endDateString).diff(moment(startDateString), 'days');
-    console.log("difference " + diff);
+    var diff = moment.utc(endDateString).diff(moment.utc(startDateString), 'days');
 
     if (diff === 0) {
         type = 'h';
