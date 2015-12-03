@@ -163,18 +163,21 @@ function drawGraph(data, startDateString, endDateString) {
     //startDate = endDate), then there is only one tick label which means that
     //the right end of the graph has no tick label. To solve this, have two
     //tick labels, and push the same value twice into dateTickValues
-    dateTickValues[1] = (dateTickValues.length == 1) ? dateTickValues[0] : dateTickValues [1];
+    dateTickValues[1] = (dateTickValues.length === 1) ? dateTickValues[0] : dateTickValues [1];
 
     //SVG margins
     var margin = {
-        top: 50,
-        right: 200,
-        bottom: 0,
-        left: 70
+            top: 50,
+            right: 200,
+            bottom: 0,
+            left: 40
         },
-        // width = ((noOfTicks * 80) > $(window).width()) ? noOfTicks * 80 : $(window).width(),
-        width = $('body').innerWidth();
-        height = data.length * 62;
+        width = ((noOfTicks * 100) < $('body').innerWidth()) ? noOfTicks * 100 : $('body').innerWidth(),
+        height = data.length * 72;
+
+    if ((noOfTicks * 100) < $('body').innerWidth()) {
+        $('#chart').css({'text-align': 'center'});
+    }
 
     var x = d3.scale.linear()
     .domain([0, noOfTicks])
@@ -232,7 +235,7 @@ function drawGraph(data, startDateString, endDateString) {
         .attr('class', function (d, i) {
             return 'circleColumn' + i;
         })
-        .attr('cy', j * 60 + 60)
+        .attr('cy', j * 70 + 60)
         .attr('r', function (d) {
             switch (CURRENT_SELECTION) {
             case 'OBJECTS':
@@ -255,7 +258,7 @@ function drawGraph(data, startDateString, endDateString) {
         });
 
         text
-        .attr('y', j * 60 + 65)
+        .attr('y', j * 70 + 65)
         .attr('x', function (d, i) {
             return (width / noOfTicks) * i - 5;
         })
@@ -277,7 +280,7 @@ function drawGraph(data, startDateString, endDateString) {
 
         //Append osm objectors names to the right of the SVG=============================
         g.append('text')
-         .attr('y', j * 60 + 65)
+         .attr('y', j * 70 + 65)
          .attr('x', width + 60)
          .attr('class', 'label')
          .text(truncate(data[j].key, 30, '...'))
