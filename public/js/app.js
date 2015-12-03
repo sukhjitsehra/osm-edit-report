@@ -63,10 +63,10 @@ function queryAPI(startDateString, endDateString) {
     if (diff === 0) {
         type = 'h';
         TYPE = 'h';
-    } else if (diff >= 1 && diff <= 15) {
+    } else if (diff >= 1 && diff <= 14) {
         type = 'd';
         TYPE = 'd';
-    } else if (diff >= 16 && diff <= 30) {
+    } else if (diff >= 15 && diff <= 30) {
         type = 'd';
         TYPE = 'w';
     } else {
