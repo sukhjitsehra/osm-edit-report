@@ -29,15 +29,6 @@ $(document).ready(function () {
     });
 });
 
-function truncate(str, maxLength, suffix) {
-    if (str.length > maxLength) {
-        str = str.substring(0, maxLength + 1);
-        str = str.substring(0, Math.min(str.length, str.lastIndexOf(' ')));
-        str = str + suffix;
-    }
-    return str;
-}
-
 function init() {
     var fromDate = (document.location.href.split('#')[1] != undefined) ? document.location.href.split('#')[1].split('&')[1] : moment().subtract(8, 'days'),
         toDate = (document.location.href.split('#')[1] != undefined) ? document.location.href.split('#')[1].split('&')[2] : moment().subtract(1, 'days');
@@ -77,15 +68,25 @@ function draw(startDateString, endDateString) {
     if (startTime > endTime) {
         alert('Select a range of correct dates');
         return null;
-    } else{
+    } else {
         $.ajax({
             dataType: 'json',
             url: settings.host + TYPE + '&' + startTime + '&' + endTime,
             success: function (json) {
+                // jsonResponse = JSON.parse(json);
                 drawGraph(json, startDateString, endDateString);
             }
         });
     }
+}
+
+function truncate(str, maxLength, suffix) {
+    if (str.length > maxLength) {
+        str = str.substring(0, maxLength + 1);
+        str = str.substring(0, Math.min(str.length, str.lastIndexOf(' ')));
+        str = str + suffix;
+    }
+    return str;
 }
 
 function drawGraph(data, startDateString, endDateString) {
