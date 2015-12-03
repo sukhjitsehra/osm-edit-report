@@ -14,13 +14,17 @@ $(document).ready(function () {
         draw($('.from').val(), $('.to').val());
     });
 
-    $('#toggleButtons').click(function () {
-        if ($('#objectsButton').is(':checked')){
-            CURRENT_SELECTION = 'OBJECTS';
-        }
-        else {
-            CURRENT_SELECTION = 'CHANGESETS';
-        }
+
+    $('#objectsButton').click(function () {
+        $('#objectsButton').prop('checked', true);
+        $('#changesetsButton').prop('checked', false);
+        CURRENT_SELECTION = 'OBJECTS';
+        draw($('.from').val(), $('.to').val());
+    });
+    $('#changesetsButton').click(function () {
+        $('#changesetsButton').prop('checked', true);
+        $('#objectsButton').prop('checked', false);
+        CURRENT_SELECTION = 'CHANGESETS';
         draw($('.from').val(), $('.to').val());
     });
 });
