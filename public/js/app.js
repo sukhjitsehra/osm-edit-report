@@ -100,7 +100,7 @@ function returnMax(data) {
             }
         }
         return _.max(changesets);
-        break;
+    break;
     case 'OBJECTS':
         var objectsModified = [];
         for (i = 0; i < data.length; i++) {
@@ -109,7 +109,7 @@ function returnMax(data) {
             }
         }
         return _.max(objectsModified);
-        break;
+    break;
     }
 }
 
