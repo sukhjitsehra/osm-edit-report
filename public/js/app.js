@@ -202,7 +202,7 @@ function drawGraph(data, startDateString, endDateString) {
 
         var rScale = d3.scale.log()
                        .domain([1, 10])
-                       .range([0, 2]);
+                       .range([0, 8]);
 
         circles
         .attr('cx', function (d, i) {
@@ -211,7 +211,7 @@ function drawGraph(data, startDateString, endDateString) {
         .attr('class', function (d, i) {
             return 'circleColumn' + i;
         })
-        .attr('cy', j * 20 + 20)
+        .attr('cy', j * 60 + 60)
         .attr('r', function (d) {
             switch (CURRENT_SELECTION) {
             case 'OBJECTS':
@@ -234,7 +234,7 @@ function drawGraph(data, startDateString, endDateString) {
         });
 
         text
-        .attr('y', j * 20 + 25)
+        .attr('y', j * 60 + 65)
         .attr('x', function (d, i) {
             return (width / noOfTicks) * i - 5;
         })
@@ -256,7 +256,7 @@ function drawGraph(data, startDateString, endDateString) {
 
         //Append osm objectors names to the right of the SVG=============================
         g.append('text')
-         .attr('y', j * 20 + 25)
+         .attr('y', j * 60 + 65)
          .attr('x', width + 60)
          .attr('class', 'label')
          .text(truncate(data[j].key, 30, '...'))
