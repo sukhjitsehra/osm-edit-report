@@ -123,10 +123,48 @@ function returnMax(data) {
     }
 }
 
+function generateWeeklyStats(data, startDateString, endDateString) {
+    var weeklyData = [],
+        i,j
+        weekBeginnings = [];
+
+    var noOfWeeks = Math.floor((moment.utc(endDateString).diff(moment.utc(startDateString), 'days')) / 7);
+
+
+    for (i = 0; i <= noOfWeeks; i++) {
+        weekBeginnings[i] = [moment.utc(startDateString).add(i * 7, 'days'), moment.utc(startDateString).add((i + 1) * 7, 'days')];
+    }
+
+    // console.log("weekBeginnings " + JSON.stringify(weekBeginnings));
+
+    data.forEach(function (dataRow, index) {
+        weeklyData[index] = {};
+        weeklyData[index].values = [];
+        weeklyData[index].key = dataRow.key;
+        weeklyData[index].color = dataRow.color;
+        weeklyData[index].iduser = dataRow.iduser;
+        for (i = 0; i < noOfWeeks; i++) {
+            weeklyData[index].values[i] = {};
+            weeklyData[index].values[i].x = d3.time.format.utc('%d/%m')(new Date(weekBeginnings[i][0])) +
+                                            '-' + d3.time.format.utc('%d/%m')(new Date(weekBeginnings[i][1]));
+            weeklyData[index].values[i].y = 0;
+            weeklyData[index].values[i].change = 0;
+
+           for (j = 0; j < data[index].values.length; j++) {
+                if (moment.utc(weekBeginnings[i][1]).diff(moment.utc(data[index].values[j].x), 'days') <= 7) {
+                    weeklyData[index].values[i].y += data[index].values[j].y;
+                    weeklyData[index].values[i].change += data[index].values[j].change;
+                }
+           }
+            // console.log('i ', i, ' weekBeginnings[i] ', weekBeginnings[i][1], ' data[index].values[i].x ', data[index].values[i].x, ' difference ', moment.utc(weekBeginnings[i][1]).diff(moment.utc(data[index].values[i].x), 'days'))
+        }
+    });
+
+    return weeklyData;
+}
+
 
 function draw(data, startDateString, endDateString) {
-
-    var domainMax = returnMax(data);
     //Map startDate and endDate to the two date strings.
     var startDate = new Date(startDateString),
         endDate = new Date(endDateString);
@@ -138,6 +176,12 @@ function draw(data, startDateString, endDateString) {
     var noOfTicks = 0;
     var dateTickValues = [];
     var limit;
+
+    if (TYPE === 'w') {
+        data = generateWeeklyStats(data, startDateString, endDateString);
+    }
+
+    var domainMax = returnMax(data);
 
     switch (TYPE) {
     case 'h':
@@ -171,6 +215,15 @@ function draw(data, startDateString, endDateString) {
             startDate.setMonth(startDate.getMonth() + 1);
         }
         break;
+    case 'w':
+        console.log('w', 'startDateString ', moment.utc(startDateString).add(0, 'days'), 'endDateString ', endDateString);
+        limit = (moment.utc(endDateString).diff(moment.utc(startDateString), 'days'));
+        noOfTicks = Math.floor(limit / 7);
+        noOfTicks = (limit % 7 === 0) ? (noOfTicks - 1) : noOfTicks;
+        console.log(noOfTicks);
+        for (index = 0; index <= noOfTicks; index++) {
+            dateTickValues[index] = [moment.utc(startDateString).add(index * 7, 'days'), moment.utc(startDateString).add((index + 1) * 7, 'days')];
+        }
     }
 
     //If the noOfTicks = 0 for example when startDate = endDate, ensure that
@@ -212,6 +265,8 @@ function draw(data, startDateString, endDateString) {
             return d3.time.format.utc('%d %b')(new Date(dateTickValues[i]));
         case 'm':
             return d3.time.format.utc('%b %Y')(new Date(dateTickValues[i]));
+        case 'w':
+            return d3.time.format.utc('%d/%m')(new Date(dateTickValues[i][0])) + "-" + d3.time.format.utc('%d/%m')(new Date(dateTickValues[i][1]));
         }
     })
     .orient('top');
