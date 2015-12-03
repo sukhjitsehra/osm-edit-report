@@ -166,6 +166,14 @@ function draw(data, startDateString, endDateString) {
         }
         noOfTicks = limit - 1;
         break;
+    case 'm':
+        noOfTicks = endDate.getMonth() - startDate.getMonth();
+        limit = endDate.getMonth() - startDate.getMonth();
+        for (index = 0; index <= limit; index++) {
+            dateTickValues[index] = new Date(JSON.parse(JSON.stringify(startDate)));
+            startDate.setMonth(startDate.getMonth() + 1);
+        }
+        break;
     }
 
     //If the noOfTicks = 0 for example when startDate = endDate, ensure that
@@ -205,6 +213,8 @@ function draw(data, startDateString, endDateString) {
             return d3.time.format.utc('%I%p')(new Date(dateTickValues[i]));
         case 'd':
             return d3.time.format.utc('%d %b')(new Date(dateTickValues[i]));
+        case 'm':
+            return d3.time.format.utc('%b %Y')(new Date(dateTickValues[i]));
         }
     })
     .orient('top');
