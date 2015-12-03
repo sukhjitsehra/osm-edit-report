@@ -209,7 +209,7 @@ function draw(data, startDateString, endDateString) {
         break;
     case 'm':
         noOfTicks = endDate.getMonth() - startDate.getMonth();
-        limit = endDate.getMonth() - startDate.getMonth();
+        limit = noOfTicks;
         for (index = 0; index <= limit; index++) {
             dateTickValues[index] = new Date(JSON.parse(JSON.stringify(startDate)));
             startDate.setMonth(startDate.getMonth() + 1);
