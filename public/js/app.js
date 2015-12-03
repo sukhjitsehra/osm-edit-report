@@ -192,7 +192,7 @@ function drawGraph(data, startDateString, endDateString) {
         case 'h':
             return d3.time.format.utc('%I%p')(new Date(dateTickValues[i]));
         case 'd':
-            return d3.time.format.utc('%a:%d %b')(new Date(dateTickValues[i]));
+            return d3.time.format.utc('%d %b')(new Date(dateTickValues[i]));
         }
     })
     .orient('top');
