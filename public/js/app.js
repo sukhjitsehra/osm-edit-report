@@ -4,13 +4,13 @@ var TYPE = 'D';
 $(document).ready(function () {
     init();
 
-    //Call draw() when from and to change.
+    //Call queryAPI() when from and to change.
     $('.from').on('change', function () {
-        draw($('.from').val(), $('.to').val());
+        queryAPI($('.from').val(), $('.to').val());
     });
 
     $('.to').change(function () {
-        draw($('.from').val(), $('.to').val());
+        queryAPI($('.from').val(), $('.to').val());
     });
 
 
@@ -18,13 +18,13 @@ $(document).ready(function () {
         $('#objectsButton').prop('checked', true);
         $('#changesetsButton').prop('checked', false);
         CURRENT_SELECTION = 'OBJECTS';
-        draw($('.from').val(), $('.to').val());
+        queryAPI($('.from').val(), $('.to').val());
     });
     $('#changesetsButton').click(function () {
         $('#changesetsButton').prop('checked', true);
         $('#objectsButton').prop('checked', false);
         CURRENT_SELECTION = 'CHANGESETS';
-        draw($('.from').val(), $('.to').val());
+        queryAPI($('.from').val(), $('.to').val());
     });
 });
 
@@ -44,13 +44,13 @@ function init() {
     else {
         $('#objectsButton').prop('checked', true);
     }
-    //Call draw with default dates.
+    //Call queryAPI with default dates.
     $('.from').val(moment(fromDate).format('YYYY-MM-DD'));
     $('.to').val(moment(toDate).format('YYYY-MM-DD'));
-    draw($('.from').val(), $('.to').val());
+    queryAPI($('.from').val(), $('.to').val());
 }
 
-function draw(startDateString, endDateString) {
+function queryAPI(startDateString, endDateString) {
 
     $('#chart svg').empty();
 
@@ -74,7 +74,7 @@ function draw(startDateString, endDateString) {
             dataType: 'json',
             url: settings.host + TYPE + '&' + startTime + '&' + endTime,
             success: function (json) {
-                drawGraph(json, startDateString, endDateString);
+                draw(json, startDateString, endDateString);
             }
         });
     }
@@ -114,7 +114,7 @@ function returnMax(data) {
 }
 
 
-function drawGraph(data, startDateString, endDateString) {
+function draw(data, startDateString, endDateString) {
 
     var domainMax = returnMax(data);
     //Map startDate and endDate to the two date strings.
