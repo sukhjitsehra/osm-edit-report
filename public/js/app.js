@@ -228,10 +228,18 @@ function draw(data, startDateString, endDateString) {
             top: 50,
             right: 200,
             bottom: 0,
-            left: 40
-        },
-        width = ((noOfTicks * 100) < $('body').innerWidth()) ? noOfTicks * 100 : $('body').innerWidth(),
+            left: 45
+        }, width, rangeMax, height;
+
+    if (noOfTicks > 11) {
+        width = (noOfTicks * 60);
+        rangeMax = 30;
+        height = data.length * 62;
+    } else {
+        width = noOfTicks * 100;
+        rangeMax = 40;
         height = data.length * 82;
+    }
 
     if ((noOfTicks * 100) < $('body').innerWidth()) {
         $('#chart').css({'text-align': 'center'});
@@ -276,7 +284,7 @@ function draw(data, startDateString, endDateString) {
 
     var rScale = d3.scale.linear()
                    .domain([0, domainMax])
-                   .range([2, 40]);
+                   .range([2, rangeMax]);
 
 
     for (var j = 0; j < data.length; j++) {
@@ -287,14 +295,14 @@ function draw(data, startDateString, endDateString) {
             var nodeData = getStats(j, i);
             gChild.append('circle')
                   .attr('cx', i * (width / noOfTicks))
-                  .attr('cy', j * 80 + 55)
+                  .attr('cy', j * rangeMax * 2 + 55)
                   .attr('class', 'circle')
                   .attr('r', rScale(nodeData))
                   .style('fill', c(j))
                   .style('opacity', 0.5);
 
             gChild.append('text')
-                  .attr('y', j * 80 + 60)
+                  .attr('y', j * rangeMax * 2 + 60)
                   .attr('x', i * (width / noOfTicks))
                   .attr('text-anchor', 'middle')
                   .attr('class', 'circleText')
@@ -305,8 +313,8 @@ function draw(data, startDateString, endDateString) {
 
         //Append osm objectors names to the right of the SVG=============================
             g.append('text')
-             .attr('y', j * 80 + 65)
-             .attr('x', width + 60)
+             .attr('y', j * rangeMax * 2 + 60)
+             .attr('x', width + rangeMax + 1)
              .attr('class', 'label')
              .text(data[j].key)
              .style('fill', c(j));
