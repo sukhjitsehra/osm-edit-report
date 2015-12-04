@@ -101,7 +101,6 @@ function returnMax(data) {
             }
         }
         return _.max(changesets);
-    break;
     case 'OBJECTS':
         var objectsModified = [];
         for (i = 0; i < data.length; i++) {
@@ -110,7 +109,6 @@ function returnMax(data) {
             }
         }
         return _.max(objectsModified);
-    break;
     }
 }
 
@@ -120,7 +118,6 @@ function generateWeeklyStats(data, startDateString, endDateString) {
         weekBeginnings = [];
 
     var noOfWeeks = Math.floor((moment.utc(endDateString).diff(moment.utc(startDateString), 'days')) / 7);
-
 
     for (i = 0; i <= noOfWeeks; i++) {
         weekBeginnings[i] = [moment.utc(startDateString).add(i * 7, 'days'), moment.utc(startDateString).add((i + 1) * 7, 'days')];
@@ -319,10 +316,8 @@ function draw(data, startDateString, endDateString) {
         switch (CURRENT_SELECTION) {
         case 'OBJECTS':
             return (data[j].values[i].y > 0) ? data[j].values[i].y : '';
-        break;
         case 'CHANGESETS':
             return (data[j].values[i].change > 0) ? data[j].values[i].change : '';
-        break;
         }
     }
 
