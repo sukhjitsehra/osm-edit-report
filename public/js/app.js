@@ -276,118 +276,54 @@ function draw(data, startDateString, endDateString) {
     .call(xAxis);
 
     var rScale = d3.scale.linear()
-                   .domain([1, domainMax])
-                   .range([10, 40]);
+                   .domain([0, domainMax])
+                   .range([5, 40]);
 
 
     for (var j = 0; j < data.length; j++) {
         var g = svg.append('g');
 
-        var circles = g.selectAll('circle')
-                       .data(data[j].values)
-                       .enter()
-                       .append('circle');
+        for (var i = 0; i < data[j].values.length; i++) {
+            var gChild = g.append('g');
+            var nodeData = getStats(j, i);
+            gChild.append('circle')
+                  .attr('cx', i * (width / noOfTicks))
+                  .attr('cy', j * 70 + 55)
+                  .attr('class', 'circle')
+                  .attr('r', rScale(nodeData))
+                  .style('fill', c(j))
+                  .style('opacity', 0.5);
 
-        var text = g.selectAll('text')
-                    .data(data[j].values)
-                    .enter()
-                    .append('text');
-
-        circles
-        .attr('cx', function (d, i) {
-            return (width / noOfTicks) * i;
-        })
-        .attr('class', function (d, i) {
-            return 'circleColumn' + i;
-        })
-        .attr('cy', j * 70 + 60)
-        .attr('r', function (d) {
-            switch (CURRENT_SELECTION) {
-            case 'OBJECTS':
-                    //This is to avoid the -infinity error.
-                if (d.y === 0 || d.y === null){
-                    return 1;
-                } else {
-                    return rScale(d.y);
-                }
-                break;
-            case 'CHANGESETS':
-                if (d.change === 0 || d.change === null){
-                    return 1;
-                } else {
-                    return rScale(d.change);
-                }
+            if (nodeData > 0) {
+                gChild.append('text')
+                      .attr('y', j * 70 + 60)
+                      .attr('x', i * (width / noOfTicks))
+                      .attr('text-anchor', 'middle')
+                      .attr('class', 'circleText')
+                      .text(nodeData)
+                      .style('fill', '#25383C');
             }
-        })
-        .style('fill', function () {
-            return c(j);
-        });
-
-        text
-        .attr('y', j * 70 + 65)
-        .attr('x', function (d, i) {
-            return (width / noOfTicks) * i - 5;
-        })
-        .attr('class', function (d, i) {
-            return 'circleTextColumn' + i + ' value';
-        })
-        .text(function (d) {
-            switch (CURRENT_SELECTION) {
-            case 'OBJECTS':
-                return d.y;
-            case 'CHANGESETS':
-                return d.change;
-            }
-        })
-        .style('fill', function (d) {
-            return c(j);
-        })
-        .style('display', 'none');
+        }
 
         //Append osm objectors names to the right of the SVG=============================
-        g.append('text')
-         .attr('y', j * 70 + 65)
-         .attr('x', width + 60)
-         .attr('class', 'label')
-         .text(truncate(data[j].key, 30, '...'))
-         .style('fill', function (d) {
-             return c(j);
-         })
-         .on('mouseover', usernameMouseover)
-         .on('mouseout', usernameMouseout);
-
-        //Mouseover and Mouseout over ticks============================================
-        d3.selectAll('.x')
-          .selectAll('.tick.major')
-          .on('mouseover', tickMouseover);
-
-        d3.selectAll('.x')
-          .selectAll('.tick.major')
-          .on('mouseout', tickMouseout);
-        //=============================================================================
+            g.append('text')
+             .attr('y', j * 70 + 65)
+             .attr('x', width + 60)
+             .attr('class', 'label')
+             .text(data[j].key)
+             .style('fill', c(j));
     }
 
-
-    function tickMouseover(p, i) {
-        d3.selectAll('.circleColumn' + i).style('display', 'none');
-        d3.selectAll('.circleTextColumn' + i).style('display', 'block');
+    function getStats(j, i) {
+        switch (CURRENT_SELECTION) {
+        case 'OBJECTS':
+            return data[j].values[i].y;
+        break;
+        case 'CHANGESETS':
+            return data[j].values[i].change;
+        break;
+        }
     }
 
-    function tickMouseout(p, i) {
-        d3.selectAll('.circleColumn' + i).style('display', 'block');
-        d3.selectAll('.circleTextColumn' + i).style('display', 'none');
-    }
-
-    function usernameMouseover() {
-        var g = d3.select(this).node().parentNode;
-        d3.select(g).selectAll('circle').style('display', 'none');
-        d3.select(g).selectAll('.value').style('display', 'block');
-    }
-
-    function usernameMouseout() {
-        var g = d3.select(this).node().parentNode;
-        d3.select(g).selectAll('circle').style('display', 'block');
-        d3.select(g).selectAll('text.value').style('display', 'none');
-    }
 }
 
