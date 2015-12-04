@@ -240,6 +240,8 @@ function draw(data, startDateString, endDateString) {
         $('#chart').css({'text-align': 'center'});
     }
 
+    $('#chart svg').each(function () { $(this)[0].setAttribute('viewBox', '0 0 ' + (width) + ' ' + height); });
+
     var x = d3.scale.linear()
     .domain([0, noOfTicks])
     .range([0, width]);

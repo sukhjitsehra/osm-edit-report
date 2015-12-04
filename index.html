@@ -21,6 +21,11 @@
         font: 15px sans-serif;
     }
 
+    #chart svg{
+        max-width:100%;
+        height:auto;
+    }
+
     .axis path,
     .axis line {
         fill: none;
@@ -53,7 +58,7 @@
       </div>
 
       <div class="col12 clearfix chart" id="chart">
-        <svg></svg>
+        <svg preserveAspectRatio='xMinYMin'></svg>
       </div>
       
 
