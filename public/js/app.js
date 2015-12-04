@@ -277,7 +277,7 @@ function draw(data, startDateString, endDateString) {
 
     var rScale = d3.scale.linear()
                    .domain([0, domainMax])
-                   .range([5, 40]);
+                   .range([2, 40]);
 
 
     for (var j = 0; j < data.length; j++) {
