@@ -294,15 +294,14 @@ function draw(data, startDateString, endDateString) {
                   .style('fill', c(j))
                   .style('opacity', 0.5);
 
-            if (nodeData > 0) {
-                gChild.append('text')
-                      .attr('y', j * 70 + 60)
-                      .attr('x', i * (width / noOfTicks))
-                      .attr('text-anchor', 'middle')
-                      .attr('class', 'circleText')
-                      .text(nodeData)
-                      .style('fill', '#25383C');
-            }
+            gChild.append('text')
+                  .attr('y', j * 80 + 60)
+                  .attr('x', i * (width / noOfTicks))
+                  .attr('text-anchor', 'middle')
+                  .attr('class', 'circleText')
+                  .text(nodeData)
+                  .style('fill', '#25383C');
+                  // .style('font-weight', 'bold');
         }
 
         //Append osm objectors names to the right of the SVG=============================
@@ -317,10 +316,10 @@ function draw(data, startDateString, endDateString) {
     function getStats(j, i) {
         switch (CURRENT_SELECTION) {
         case 'OBJECTS':
-            return data[j].values[i].y;
+            return (data[j].values[i].y > 0) ? data[j].values[i].y : '';
         break;
         case 'CHANGESETS':
-            return data[j].values[i].change;
+            return (data[j].values[i].change > 0) ? data[j].values[i].change : '';
         break;
         }
     }
