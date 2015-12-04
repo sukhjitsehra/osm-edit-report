@@ -234,7 +234,7 @@ function draw(data, startDateString, endDateString) {
             left: 40
         },
         width = ((noOfTicks * 100) < $('body').innerWidth()) ? noOfTicks * 100 : $('body').innerWidth(),
-        height = data.length * 72;
+        height = data.length * 82;
 
     if ((noOfTicks * 100) < $('body').innerWidth()) {
         $('#chart').css({'text-align': 'center'});
@@ -288,7 +288,7 @@ function draw(data, startDateString, endDateString) {
             var nodeData = getStats(j, i);
             gChild.append('circle')
                   .attr('cx', i * (width / noOfTicks))
-                  .attr('cy', j * 70 + 55)
+                  .attr('cy', j * 80 + 55)
                   .attr('class', 'circle')
                   .attr('r', rScale(nodeData))
                   .style('fill', c(j))
@@ -307,7 +307,7 @@ function draw(data, startDateString, endDateString) {
 
         //Append osm objectors names to the right of the SVG=============================
             g.append('text')
-             .attr('y', j * 70 + 65)
+             .attr('y', j * 80 + 65)
              .attr('x', width + 60)
              .attr('class', 'label')
              .text(data[j].key)
