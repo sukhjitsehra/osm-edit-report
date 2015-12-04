@@ -134,7 +134,7 @@ function generateWeeklyStats(data, startDateString, endDateString) {
         weeklyData[index].key = dataRow.key;
         weeklyData[index].color = dataRow.color;
         weeklyData[index].iduser = dataRow.iduser;
-        for (i = 0; i < noOfWeeks; i++) {
+        for (i = 0; i <= noOfWeeks; i++) {
             weeklyData[index].values[i] = {};
             weeklyData[index].values[i].x = d3.time.format.utc('%d/%m')(new Date(weekBeginnings[i][0])) +
                                             '-' + d3.time.format.utc('%d/%m')(new Date(weekBeginnings[i][1]));
