@@ -116,7 +116,7 @@ function returnMax(data) {
 
 function generateWeeklyStats(data, startDateString, endDateString) {
     var weeklyData = [],
-        i,j
+        i, j,
         weekBeginnings = [];
 
     var noOfWeeks = Math.floor((moment.utc(endDateString).diff(moment.utc(startDateString), 'days')) / 7);
