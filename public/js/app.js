@@ -161,7 +161,7 @@ function draw(data, startDateString, endDateString) {
         endDate = new Date(endDateString);
 
     //decides colours of the circles
-    var c = d3.scale.category20c();
+    var c = d3.scale.category10();
 
     //define a time scale with the range 0 - width and map the domain startDate,endDate on it
     var noOfTicks = 0;
