@@ -269,12 +269,7 @@ function draw(data, from, to) {
     dateTickValues[1] = (dateTickValues.length === 1) ? dateTickValues[0] : dateTickValues [1];
 
     //SVG margins
-    var margin = {
-            top: 50,
-            right: 200,
-            bottom: 0,
-            left: 45
-        }, width, rangeMax, height;
+    var margin = {top: 50, right: 200, bottom: 0, left: 45}, width, rangeMax, height;
 
     if (noOfTicks > 11) {
         width = (noOfTicks * 60);
@@ -356,7 +351,7 @@ function draw(data, from, to) {
                   // .style('font-weight', 'bold');
         }
 
-        //Append osm objectors names to the right of the SVG=============================
+        //Append osm editors names to the right of the SVG=============================
             g.append('text')
              .attr('y', j * rangeMax * 2 + 60)
              .attr('x', width + rangeMax + 1)
