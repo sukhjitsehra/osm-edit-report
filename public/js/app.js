@@ -71,6 +71,7 @@ function parseURL() {
 }
 
 function init() {
+
     var urlObjects = parseURL();
 
     var fromDate = urlObjects.from;
@@ -79,15 +80,17 @@ function init() {
     CURRENT_SELECTION = urlObjects.stats;
     var type = TYPE = urlObjects.type;
 
-    if ((!moment.utc(fromDate) && ! moment.utc(toDate)) || moment.utc(fromDate).diff(moment.utc(toDate)) > 0) {
+    //invalid date/range selection error handling.
+    //Should this be moved?
+    if ((!moment.utc(fromDate) && !moment.utc(toDate)) || moment.utc(fromDate).diff(moment.utc(toDate)) > 0) {
         alert('Please enter a valid date range');
     }
     if (CURRENT_SELECTION === 'changesets') {
         $('#changesetsButton').prop('checked', true);
-    }
-    else {
+    } else {
         $('#objectsButton').prop('checked', true);
     }
+
     //Call queryAPI with default dates.
     $('.from').val(moment.utc(fromDate).format('YYYY-MM-DD'));
     $('.to').val(moment.utc(toDate).format('YYYY-MM-DD'));
