@@ -268,13 +268,12 @@ function draw(data, from, to) {
     $('#chart svg').each(function () { $(this)[0].setAttribute('viewBox', '0 0 ' + (svgWidth) + ' ' + svgHeight); });
     //=================================
 
-    var x = d3.scale.linear()
+    var xScale = d3.scale.linear()
     .domain([0, totalTicks])
     .range([0, svgWidth]);
 
-    //create axis with the above defined time scale and orient it on top(x axis on top).
     var xAxis = d3.svg.axis()
-    .scale(x)
+    .scale(xScale)
     .ticks(totalTicks)
     .tickFormat(function (d, i) {
         switch (TYPE) {
