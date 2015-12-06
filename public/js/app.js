@@ -11,6 +11,8 @@ $(document).ready(function () {
 
     $('.to').change(function () {
         queryAPI($('.from').val(), $('.to').val());
+        var type = calculateDuration(fromDate, toDate);
+        queryAPI(fromDate, toDate, type);
     });
 
 
@@ -18,13 +20,13 @@ $(document).ready(function () {
         $('#objectsButton').prop('checked', true);
         $('#changesetsButton').prop('checked', false);
         CURRENT_SELECTION = 'objects';
-        queryAPI($('.from').val(), $('.to').val());
+        queryAPI($('.from').val(), $('.to').val(), TYPE);
     });
     $('#changesetsButton').click(function () {
         $('#changesetsButton').prop('checked', true);
         $('#objectsButton').prop('checked', false);
         CURRENT_SELECTION = 'changesets';
-        queryAPI($('.from').val(), $('.to').val());
+        queryAPI($('.from').val(), $('.to').val(), TYPE);
     });
 
 });
@@ -91,10 +93,10 @@ function init() {
     //Call queryAPI with default dates.
     $('.from').val(moment.utc(fromDate).format('YYYY-MM-DD'));
     $('.to').val(moment.utc(toDate).format('YYYY-MM-DD'));
-    queryAPI($('.from').val(), $('.to').val());
+    queryAPI($('.from').val(), $('.to').val(), type);
 }
 
-function queryAPI(startDateString, endDateString) {
+function queryAPI(startDateString, endDateString, type) {
 
     $('#chart svg').empty();
     //this superfluous variable can be removed once we can
