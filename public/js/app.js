@@ -169,8 +169,6 @@ function generateWeeklyStats(data, startDateString, endDateString) {
         weekBeginnings[i] = [moment.utc(startDateString).add(i * 7, 'days'), moment.utc(startDateString).add((i + 1) * 7, 'days')];
     }
 
-    // console.log("weekBeginnings " + JSON.stringify(weekBeginnings));
-
     data.forEach(function (dataRow, index) {
         weeklyData[index] = {};
         weeklyData[index].values = [];
@@ -184,13 +182,12 @@ function generateWeeklyStats(data, startDateString, endDateString) {
             weeklyData[index].values[i].y = 0;
             weeklyData[index].values[i].change = 0;
 
-           for (j = 0; j < data[index].values.length; j++) {
+            for (j = 0; j < data[index].values.length; j++) {
                 if ((moment.utc(data[index].values[j].x).diff(moment.utc(weekBeginnings[i][0]), 'days') >= 0) && (moment.utc(data[index].values[j].x).diff(moment.utc(weekBeginnings[i][1]), 'days') <= 0)) {
                     weeklyData[index].values[i].y += data[index].values[j].y;
                     weeklyData[index].values[i].change += data[index].values[j].change;
                 }
-           }
-            // console.log('i ', i, ' weekBeginnings[i] ', weekBeginnings[i][1], ' data[index].values[i].x ', data[index].values[i].x, ' difference ', moment.utc(weekBeginnings[i][1]).diff(moment.utc(data[index].values[i].x), 'days'))
+            }
         }
     });
 
