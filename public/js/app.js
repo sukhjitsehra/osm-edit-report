@@ -28,12 +28,34 @@ $(document).ready(function () {
     });
 });
 
+function parseURL() {
+    var result = {
+    };
+
+    switch (document.location.href.split('#')[1]) {
+    case undefined:
+        result.from = moment.utc().subtract(8, 'days');
+        result.to = moment.utc().subtract(1, 'days');
+        result.stats = 'objects';
+        result.type = 'd';
+        break;
+    default :
+        result.from = document.location.href.split('&from=')[1].split('&to=')[0];
+        result.to = document.location.href.split('&to=')[1].split('&stats=')[0];
+        result.stats = document.location.href.split('&stats=')[1];
+        result.type = document.location.href.split('#')[1].split('&from=')[0];
+    }
+    return result;
+}
+
 function init() {
+    var urlObjects = parseURL();
 
-    var fromDate = (document.location.href.split('#')[1] !== undefined) ? document.location.href.split('#')[1].split('&')[1] : moment.utc().subtract(8, 'days'),
-        toDate = (document.location.href.split('#')[1] !== undefined) ? document.location.href.split('#')[1].split('&')[2] : moment.utc().subtract(1, 'days');
+    var fromDate = urlObjects.from;
+        toDate = urlObjects.to;
 
-    CURRENT_SELECTION = (document.location.href.split('#')[1] !== undefined) ? (document.location.href.split('#')[1].split('&')[3]).toUpperCase() : 'OBJECTS';
+    CURRENT_SELECTION = urlObjects.stats;
+    var type = TYPE = urlObjects.type;
 
     if (!Date.parse(fromDate) && !(Date.parse(toDate))) {
         alert('Please enter valid dates.');
@@ -74,7 +96,7 @@ function queryAPI(startDateString, endDateString) {
         TYPE = 'm';
     }
 
-    document.location.href = document.location.href.split('#')[0] + '#' + TYPE + '&' + startDateString + '&' + endDateString + '&' + CURRENT_SELECTION;
+    document.location.href = document.location.href.split('#')[0] + '#' + TYPE + '&from=' + startDateString + '&to=' + endDateString + '&stats=' + CURRENT_SELECTION;
 
     if (startTime > endTime) {
         alert('Select a range of correct dates');
