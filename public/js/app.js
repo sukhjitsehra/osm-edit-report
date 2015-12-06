@@ -198,26 +198,6 @@ function generateWeeklyStats(data, from, to) {
 function getTicks(from, to) {
     var ticks = [], index, length;
 
-function draw(data, from, to) {
-    $('#chart svg').empty();
-    //Map from and to to the two date strings.
-    var from = new Date(from),
-        to = new Date(to);
-
-    //decides colours of the circles
-    var c = d3.scale.category10();
-
-    //define a time scale with the range 0 - width and map the domain from,to on it
-    var noOfTicks = 0;
-    var dateTickValues = [];
-    var limit;
-
-    if (TYPE === 'w') {
-        data = generateWeeklyStats(data, from, to);
-    }
-
-    var domainMax = returnMax(data);
-
     switch (TYPE) {
     case 'h':
         length = 24;
@@ -248,14 +228,23 @@ function draw(data, from, to) {
     console.log('TYPE', TYPE, 'length', length, 'ticks', JSON.stringify(ticks));
     return ticks;
 }
-    //If the noOfTicks = 0 for example when from = to, ensure that
-    //at least one tick is present for values to appear under.
-    noOfTicks = (noOfTicks < 1) ? 1 : noOfTicks;
-    //If the graph has only one tick(when looking at data for just 2015, or when
-    //from = to), then there is only one tick label which means that
-    //the right end of the graph has no tick label. To solve this, have two
-    //tick labels, and push the same value twice into dateTickValues
-    dateTickValues[1] = (dateTickValues.length === 1) ? dateTickValues[0] : dateTickValues [1];
+
+
+function draw(data, from, to) {
+    $('#chart svg').empty();
+
+    //generate weekly stats on client side. Remove once backend returns weekly data.
+    if (TYPE === 'w') {
+        data = generateWeeklyStats(data, from, to);
+    }
+
+    //decides colours of the circles
+    var c = d3.scale.category10();
+
+    //For scaling circle radii,
+    //take max of all data being shown and scale accordingly.
+    var domainMax = returnMax(data);
+
     var axisTicks = getTicks(from, to);
     var totalTicks = axisTicks.length - 1;
 
