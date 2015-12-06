@@ -139,7 +139,7 @@ function generateWeeklyStats(data, startDateString, endDateString) {
             weeklyData[index].values[i].change = 0;
 
            for (j = 0; j < data[index].values.length; j++) {
-                if (moment.utc(weekBeginnings[i][1]).diff(moment.utc(data[index].values[j].x), 'days') <= 7) {
+                if ((moment.utc(data[index].values[j].x).diff(moment.utc(weekBeginnings[i][0]), 'days') >= 0) && (moment.utc(data[index].values[j].x).diff(moment.utc(weekBeginnings[i][1]), 'days') <= 0)) {
                     weeklyData[index].values[i].y += data[index].values[j].y;
                     weeklyData[index].values[i].change += data[index].values[j].change;
                 }
