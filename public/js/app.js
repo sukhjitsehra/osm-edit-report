@@ -256,44 +256,47 @@ function draw(data, from, to) {
     //the right end of the graph has no tick label. To solve this, have two
     //tick labels, and push the same value twice into dateTickValues
     dateTickValues[1] = (dateTickValues.length === 1) ? dateTickValues[0] : dateTickValues [1];
+    var axisTicks = getTicks(from, to);
+    var totalTicks = axisTicks.length - 1;
 
     //SVG margins
     var margin = {top: 50, right: 200, bottom: 0, left: 45}, width, rangeMax, height;
 
-    if (noOfTicks > 11) {
-        width = (noOfTicks * 60);
+    if (totalTicks > 11) {
+        width = (totalTicks * 60);
         rangeMax = 30;
         height = data.length * 62;
     } else {
-        width = noOfTicks * 100;
+        width = totalTicks * 100;
         rangeMax = 40;
         height = data.length * 82;
     }
 
-    if ((noOfTicks * 100) < $('body').innerWidth()) {
+    if ((totalTicks * 100) < $('body').innerWidth()) {
         $('#chart').css({'text-align': 'center'});
     }
 
     $('#chart svg').each(function () { $(this)[0].setAttribute('viewBox', '0 0 ' + (width) + ' ' + height); });
 
     var x = d3.scale.linear()
-    .domain([0, noOfTicks])
+    .domain([0, totalTicks])
     .range([0, width]);
 
     //create axis with the above defined time scale and orient it on top(x axis on top).
     var xAxis = d3.svg.axis()
     .scale(x)
-    .ticks(noOfTicks)
+    .ticks(totalTicks)
     .tickFormat(function (d, i) {
         switch (TYPE) {
         case 'h':
-            return d3.time.format.utc('%I%p')(new Date(dateTickValues[i]));
+            return d3.time.format.utc('%I%p')(new Date(axisTicks[i]));
         case 'd':
-            return d3.time.format.utc('%d %b')(new Date(dateTickValues[i]));
+            return d3.time.format.utc('%d %b')(new Date(axisTicks[i]));
         case 'm':
-            return d3.time.format.utc('%b %Y')(new Date(dateTickValues[i]));
+            return d3.time.format.utc('%b %Y')(new Date(axisTicks[i]));
         case 'w':
-            return d3.time.format.utc('%d/%m')(new Date(dateTickValues[i][0])) + "-" + d3.time.format.utc('%d/%m')(new Date(dateTickValues[i][1]));
+            return d3.time.format.utc('%d/%m')(new Date(axisTicks[i][0])) + "-" +
+                   d3.time.format.utc('%d/%m')(new Date(axisTicks[i][1]));
         }
     })
     .orient('top');
@@ -323,7 +326,7 @@ function draw(data, from, to) {
             var gChild = g.append('g');
             var nodeData = getStats(j, i);
             gChild.append('circle')
-                  .attr('cx', i * (width / noOfTicks))
+                  .attr('cx', i * (width / totalTicks))
                   .attr('cy', j * rangeMax * 2 + 55)
                   .attr('class', 'circle')
                   .attr('r', rScale(nodeData))
@@ -332,7 +335,7 @@ function draw(data, from, to) {
 
             gChild.append('text')
                   .attr('y', j * rangeMax * 2 + 60)
-                  .attr('x', i * (width / noOfTicks))
+                  .attr('x', i * (width / totalTicks))
                   .attr('text-anchor', 'middle')
                   .attr('class', 'circleText')
                   .text(nodeData)
