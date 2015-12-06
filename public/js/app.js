@@ -57,8 +57,8 @@ function init() {
     CURRENT_SELECTION = urlObjects.stats;
     var type = TYPE = urlObjects.type;
 
-    if (!Date.parse(fromDate) && !(Date.parse(toDate))) {
-        alert('Please enter valid dates.');
+    if ((!moment.utc(fromDate) && ! moment.utc(toDate)) || moment.utc(fromDate).diff(moment.utc(toDate)) > 0) {
+        alert('Please enter a valid date range');
     }
     if (CURRENT_SELECTION === 'changesets') {
         $('#changesetsButton').prop('checked', true);
@@ -98,10 +98,6 @@ function queryAPI(startDateString, endDateString) {
 
     document.location.href = document.location.href.split('#')[0] + '#' + TYPE + '&from=' + startDateString + '&to=' + endDateString + '&stats=' + CURRENT_SELECTION;
 
-    if (startTime > endTime) {
-        alert('Select a range of correct dates');
-        return null;
-    } else {
         $.ajax({
             dataType: 'json',
             url: settings.host + type + '&' + startTime + '&' + endTime,
