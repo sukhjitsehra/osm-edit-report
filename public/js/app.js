@@ -116,7 +116,6 @@ function init() {
 
 function queryAPI(startDateString, endDateString, type) {
 
-    $('#chart svg').empty();
     //this superfluous variable can be removed once we can
     //query the backend for weekly stats
     var startTime = moment.utc(startDateString) / 1000;
@@ -198,6 +197,7 @@ function generateWeeklyStats(data, startDateString, endDateString) {
 
 
 function draw(data, startDateString, endDateString) {
+    $('#chart svg').empty();
     //Map startDate and endDate to the two date strings.
     var startDate = new Date(startDateString),
         endDate = new Date(endDateString);
