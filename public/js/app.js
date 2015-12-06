@@ -5,16 +5,16 @@ $(document).ready(function () {
 
     init();
 
-    var type, fromDate, toDate;
+    var type, from, to;
 
     //Call queryAPI() when from and to change.
     $('.from, .to').on('change', function () {
 
-        fromDate = $('.from').val();
-        toDate = $('.to').val();
-        type = calculateDuration(fromDate, toDate);
+        from = $('.from').val();
+        to = $('.to').val();
+        type = calculateDuration(from, to);
 
-        queryAPI(fromDate, toDate, type);
+        queryAPI(from, to, type);
     });
 
 
@@ -25,11 +25,11 @@ $(document).ready(function () {
 
         CURRENT_SELECTION = 'objects';
 
-        fromDate = $('.from').val();
-        toDate = $('.to').val();
-        type = calculateDuration(fromDate, toDate);
+        from = $('.from').val();
+        to = $('.to').val();
+        type = calculateDuration(from, to);
 
-        queryAPI(fromDate, toDate, type);
+        queryAPI(from, to, type);
     });
 
     $('#changesetsButton').click(function () {
@@ -37,17 +37,17 @@ $(document).ready(function () {
         $('#objectsButton').prop('checked', false);
         CURRENT_SELECTION = 'changesets';
 
-        fromDate = $('.from').val();
-        toDate = $('.to').val();
-        type = calculateDuration(fromDate, toDate);
+        from = $('.from').val();
+        to = $('.to').val();
+        type = calculateDuration(from, to);
 
-        queryAPI(fromDate, toDate, type);
+        queryAPI(from, to, type);
     });
 
 });
 
-function calculateDuration(fromDate, toDate) {
-    var timeDifference = moment.utc(toDate).diff(moment.utc(fromDate), 'days');
+function calculateDuration(from, to) {
+    var timeDifference = moment.utc(to).diff(moment.utc(from), 'days');
     var type;
 
     if (timeDifference === 0) {
@@ -89,15 +89,15 @@ function init() {
 
     var urlObjects = parseURL();
 
-    var fromDate = urlObjects.from,
-        toDate = urlObjects.to;
+    var from = urlObjects.from,
+        to = urlObjects.to;
 
     CURRENT_SELECTION = urlObjects.stats;
-    var type  = calculateDuration(fromDate, toDate);
+    var type  = calculateDuration(from, to);
 
     //invalid date/range selection error handling.
     //Should this be moved?
-    if ((!moment.utc(fromDate) && !moment.utc(toDate)) || moment.utc(fromDate).diff(moment.utc(toDate)) > 0) {
+    if ((!moment.utc(from) && !moment.utc(to)) || moment.utc(from).diff(moment.utc(to)) > 0) {
         alert('Please enter a valid date range');
     }
 
@@ -109,29 +109,29 @@ function init() {
     }
 
     //Add the dates in the from/to boxes.
-    $('.from').val(moment.utc(fromDate).format('YYYY-MM-DD'));
-    $('.to').val(moment.utc(toDate).format('YYYY-MM-DD'));
+    $('.from').val(moment.utc(from).format('YYYY-MM-DD'));
+    $('.to').val(moment.utc(to).format('YYYY-MM-DD'));
 
     //Call queryAPI with default dates.
     queryAPI($('.from').val(), $('.to').val(), type);
 }
 
-function queryAPI(startDateString, endDateString, type) {
+function queryAPI(from, to, type) {
 
     //this superfluous variable can be removed once we can
     //query the backend for weekly stats
-    var startTime = moment.utc(startDateString) / 1000;
-    var endTime = (moment.utc(endDateString) / 1000) + (24 * 60 * 60);
+    var startTime = moment.utc(from) / 1000;
+    var endTime = moment.utc(to).add(1, 'days') / 1000;
 
 
-    document.location.href = document.location.href.split('#')[0] + '#' + TYPE + '&from=' + startDateString + '&to=' + endDateString + '&stats=' + CURRENT_SELECTION;
+    document.location.href = document.location.href.split('#')[0] + '#' + TYPE + '&from=' + from + '&to=' + to + '&stats=' + CURRENT_SELECTION;
 
 
     $.ajax({
         dataType: 'json',
         url: settings.host + type + '&' + startTime + '&' + endTime,
         success: function (json) {
-            draw(json, startDateString, endDateString);
+            draw(json, from, to);
         }
     });
 }
@@ -158,15 +158,15 @@ function returnMax(data) {
     }
 }
 
-function generateWeeklyStats(data, startDateString, endDateString) {
+function generateWeeklyStats(data, from, to) {
     var weeklyData = [],
         i, j,
         weekBeginnings = [];
 
-    var noOfWeeks = Math.floor((moment.utc(endDateString).diff(moment.utc(startDateString), 'days')) / 7);
+    var noOfWeeks = Math.floor((moment.utc(to).diff(moment.utc(from), 'days')) / 7);
 
     for (i = 0; i <= noOfWeeks; i++) {
-        weekBeginnings[i] = [moment.utc(startDateString).add(i * 7, 'days'), moment.utc(startDateString).add((i + 1) * 7, 'days')];
+        weekBeginnings[i] = [moment.utc(from).add(i * 7, 'days'), moment.utc(from).add((i + 1) * 7, 'days')];
     }
 
     data.forEach(function (dataRow, index) {
@@ -195,22 +195,22 @@ function generateWeeklyStats(data, startDateString, endDateString) {
 }
 
 
-function draw(data, startDateString, endDateString) {
+function draw(data, from, to) {
     $('#chart svg').empty();
-    //Map startDate and endDate to the two date strings.
-    var startDate = new Date(startDateString),
-        endDate = new Date(endDateString);
+    //Map from and to to the two date strings.
+    var from = new Date(from),
+        to = new Date(to);
 
     //decides colours of the circles
     var c = d3.scale.category10();
 
-    //define a time scale with the range 0 - width and map the domain startDate,endDate on it
+    //define a time scale with the range 0 - width and map the domain from,to on it
     var noOfTicks = 0;
     var dateTickValues = [];
     var limit;
 
     if (TYPE === 'w') {
-        data = generateWeeklyStats(data, startDateString, endDateString);
+        data = generateWeeklyStats(data, from, to);
     }
 
     var domainMax = returnMax(data);
@@ -220,49 +220,49 @@ function draw(data, startDateString, endDateString) {
         noOfTicks = 23;
         limit = 23;
         for (var index = 0; index <= limit; index++) {
-            //new Date(JSON.parse(JSON.stringify(startDate))) done to shallow copy
-            //the startDate value into dateTickValues. If
-            //dateTickValues[index] = startDate; is done
+            //new Date(JSON.parse(JSON.stringify(from))) done to shallow copy
+            //the from value into dateTickValues. If
+            //dateTickValues[index] = from; is done
             //It amounts to a deep copy. Array elements get overwritten with the
-            //latest value of startDate which is pointless.
-            dateTickValues[index] = new Date(JSON.parse(JSON.stringify(startDate)));
-            startDate.setHours(startDate.getHours() + 1);
+            //latest value of from which is pointless.
+            dateTickValues[index] = new Date(JSON.parse(JSON.stringify(from)));
+            from.setHours(from.getHours() + 1);
         }
         break;
     case 'd':
         limit = 0;
-        for (index = startDate.getTime(); index <= endDate.getTime(); ) {
-            dateTickValues[limit] = new Date(JSON.parse(JSON.stringify(startDate)));
-            startDate.setDate(startDate.getDate() + 1);
-            index = startDate.getTime();
+        for (index = from.getTime(); index <= to.getTime(); ) {
+            dateTickValues[limit] = new Date(JSON.parse(JSON.stringify(from)));
+            from.setDate(from.getDate() + 1);
+            index = from.getTime();
             limit += 1;
         }
         noOfTicks = limit - 1;
         break;
     case 'm':
-        noOfTicks = endDate.getMonth() - startDate.getMonth();
+        noOfTicks = to.getMonth() - from.getMonth();
         limit = noOfTicks;
         for (index = 0; index <= limit; index++) {
-            dateTickValues[index] = new Date(JSON.parse(JSON.stringify(startDate)));
-            startDate.setMonth(startDate.getMonth() + 1);
+            dateTickValues[index] = new Date(JSON.parse(JSON.stringify(from)));
+            from.setMonth(from.getMonth() + 1);
         }
         break;
     case 'w':
-        console.log('w', 'startDateString ', moment.utc(startDateString).add(0, 'days'), 'endDateString ', endDateString);
-        limit = (moment.utc(endDateString).diff(moment.utc(startDateString), 'days'));
+        console.log('w', 'from ', moment.utc(from).add(0, 'days'), 'to ', to);
+        limit = (moment.utc(to).diff(moment.utc(from), 'days'));
         noOfTicks = Math.floor(limit / 7);
         noOfTicks = (limit % 7 === 0) ? (noOfTicks - 1) : noOfTicks;
         console.log(noOfTicks);
         for (index = 0; index <= noOfTicks; index++) {
-            dateTickValues[index] = [moment.utc(startDateString).add(index * 7, 'days'), moment.utc(startDateString).add((index + 1) * 7, 'days')];
+            dateTickValues[index] = [moment.utc(from).add(index * 7, 'days'), moment.utc(from).add((index + 1) * 7, 'days')];
         }
     }
 
-    //If the noOfTicks = 0 for example when startDate = endDate, ensure that
+    //If the noOfTicks = 0 for example when from = to, ensure that
     //at least one tick is present for values to appear under.
     noOfTicks = (noOfTicks < 1) ? 1 : noOfTicks;
     //If the graph has only one tick(when looking at data for just 2015, or when
-    //startDate = endDate), then there is only one tick label which means that
+    //from = to), then there is only one tick label which means that
     //the right end of the graph has no tick label. To solve this, have two
     //tick labels, and push the same value twice into dateTickValues
     dateTickValues[1] = (dateTickValues.length === 1) ? dateTickValues[0] : dateTickValues [1];
