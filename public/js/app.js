@@ -124,8 +124,9 @@ function queryAPI(from, to, type) {
     var endTime = moment.utc(to).add(1, 'days') / 1000;
 
 
-    document.location.href = document.location.href.split('#')[0] + '#' + TYPE + '&from=' + from + '&to=' + to + '&stats=' + CURRENT_SELECTION;
-
+    document.location.href = document.location.href.split('#')[0] +
+                            '#' + TYPE + '&from=' + from + '&to=' +
+                            to + '&stats=' + CURRENT_SELECTION;
 
     $.ajax({
         dataType: 'json',
