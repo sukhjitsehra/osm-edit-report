@@ -329,7 +329,6 @@ function draw(data, from, to) {
                   .attr('class', 'circleText')
                   .text(nodeData)
                   .style('fill', '#25383C');
-                  // .style('font-weight', 'bold');
         }
 
         //Append osm editors names to the right of the SVG=============================
