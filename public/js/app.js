@@ -5,11 +5,13 @@ $(document).ready(function () {
 
     init();
 
+    var type;
+
     //Call queryAPI() when from and to change.
     $('.from, .to').on('change', function () {
         var fromDate = $('.from').val();
         var toDate = $('.to').val();
-        var type = calculateDuration(fromDate, toDate);
+        type = calculateDuration(fromDate, toDate);
         queryAPI(fromDate, toDate, type);
     });
 
@@ -18,13 +20,15 @@ $(document).ready(function () {
         $('#objectsButton').prop('checked', true);
         $('#changesetsButton').prop('checked', false);
         CURRENT_SELECTION = 'objects';
-        queryAPI($('.from').val(), $('.to').val(), TYPE);
+        type = calculateDuration(fromDate, toDate);
+        queryAPI($('.from').val(), $('.to').val(), type);
     });
     $('#changesetsButton').click(function () {
         $('#changesetsButton').prop('checked', true);
         $('#objectsButton').prop('checked', false);
         CURRENT_SELECTION = 'changesets';
-        queryAPI($('.from').val(), $('.to').val(), TYPE);
+        type = calculateDuration(fromDate, toDate);
+        queryAPI($('.from').val(), $('.to').val(), type);
     });
 
 });
@@ -59,13 +63,11 @@ function parseURL() {
         result.from = moment.utc().subtract(8, 'days');
         result.to = moment.utc().subtract(1, 'days');
         result.stats = 'objects';
-        result.type = 'd';
         break;
     default :
         result.from = document.location.href.split('&from=')[1].split('&to=')[0];
         result.to = document.location.href.split('&to=')[1].split('&stats=')[0];
         result.stats = document.location.href.split('&stats=')[1];
-        result.type = document.location.href.split('#')[1].split('&from=')[0];
     }
     return result;
 }
@@ -75,11 +77,10 @@ function init() {
     var urlObjects = parseURL();
 
     var fromDate = urlObjects.from,
-        toDate = urlObjects.to,
-        type = urlObjects.type;
+        toDate = urlObjects.to;
 
     CURRENT_SELECTION = urlObjects.stats;
-    TYPE = type;
+    var type  = calculateDuration(fromDate, toDate);
 
     //invalid date/range selection error handling.
     //Should this be moved?
