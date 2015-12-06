@@ -1,4 +1,4 @@
-var CURRENT_SELECTION = 'OBJECTS';
+var CURRENT_SELECTION = 'objects';
 var TYPE = 'D';
 
 $(document).ready(function () {
@@ -17,13 +17,13 @@ $(document).ready(function () {
     $('#objectsButton').click(function () {
         $('#objectsButton').prop('checked', true);
         $('#changesetsButton').prop('checked', false);
-        CURRENT_SELECTION = 'OBJECTS';
+        CURRENT_SELECTION = 'objects';
         queryAPI($('.from').val(), $('.to').val());
     });
     $('#changesetsButton').click(function () {
         $('#changesetsButton').prop('checked', true);
         $('#objectsButton').prop('checked', false);
-        CURRENT_SELECTION = 'CHANGESETS';
+        CURRENT_SELECTION = 'changesets';
         queryAPI($('.from').val(), $('.to').val());
     });
 });
@@ -38,7 +38,7 @@ function init() {
     if (!Date.parse(fromDate) && !(Date.parse(toDate))) {
         alert('Please enter valid dates.');
     }
-    if (CURRENT_SELECTION === 'CHANGESETS') {
+    if (CURRENT_SELECTION === 'changesets') {
         $('#changesetsButton').prop('checked', true);
     }
     else {
@@ -93,7 +93,7 @@ function queryAPI(startDateString, endDateString) {
 function returnMax(data) {
     var i, j;
     switch (CURRENT_SELECTION) {
-    case 'CHANGESETS':
+    case 'changesets':
         var changesets = [];
         for (i = 0; i < data.length; i++) {
             for (j = 0; j < data[i].values.length; j++) {
@@ -101,7 +101,7 @@ function returnMax(data) {
             }
         }
         return _.max(changesets);
-    case 'OBJECTS':
+    case 'objects':
         var objectsModified = [];
         for (i = 0; i < data.length; i++) {
             for (j = 0; j < data[i].values.length; j++) {
@@ -322,9 +322,9 @@ function draw(data, startDateString, endDateString) {
 
     function getStats(j, i) {
         switch (CURRENT_SELECTION) {
-        case 'OBJECTS':
+        case 'objects':
             return (data[j].values[i].y > 0) ? data[j].values[i].y : '';
-        case 'CHANGESETS':
+        case 'changesets':
             return (data[j].values[i].change > 0) ? data[j].values[i].change : '';
         }
     }
