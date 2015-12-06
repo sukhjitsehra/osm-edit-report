@@ -300,7 +300,7 @@ function draw(data, from, to) {
 
     //Append the svg axis
     svg.append('g')
-    .attr('class', 'x axis')
+    .attr('class', 'axis')
     .call(xAxis);
 
     var rScale = d3.scale.linear()
@@ -317,7 +317,6 @@ function draw(data, from, to) {
             gChild.append('circle')
                   .attr('cx', i * (svgWidth / totalTicks))
                   .attr('cy', j * rangeMax * 2 + 55)
-                  .attr('class', 'circle')
                   .attr('r', rScale(nodeData))
                   .style('fill', c(j))
                   .style('opacity', 0.5);
@@ -326,7 +325,6 @@ function draw(data, from, to) {
                   .attr('y', j * rangeMax * 2 + 60)
                   .attr('x', i * (svgWidth / totalTicks))
                   .attr('text-anchor', 'middle')
-                  .attr('class', 'circleText')
                   .text(nodeData)
                   .style('fill', '#25383C');
         }
@@ -335,7 +333,6 @@ function draw(data, from, to) {
             g.append('text')
              .attr('y', j * rangeMax * 2 + 60)
              .attr('x', svgWidth + rangeMax + 1)
-             .attr('class', 'label')
              .text(data[j].key)
              .style('fill', c(j));
     }
