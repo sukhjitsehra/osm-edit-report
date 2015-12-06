@@ -248,28 +248,29 @@ function draw(data, from, to) {
     var axisTicks = getTicks(from, to);
     var totalTicks = axisTicks.length - 1;
 
-    //SVG margins
-    var margin = {top: 50, right: 200, bottom: 0, left: 45}, width, rangeMax, height;
+    //SVG styling=====================
+    var svgMargin = {top: 50, right: 200, bottom: 0, left: 45}, svgWidth, rangeMax, svgHeight;
 
     if (totalTicks > 11) {
-        width = (totalTicks * 60);
+        svgWidth = (totalTicks * 60);
         rangeMax = 30;
-        height = data.length * 62;
+        svgHeight = data.length * 62;
     } else {
-        width = totalTicks * 100;
+        svgWidth = totalTicks * 100;
         rangeMax = 40;
-        height = data.length * 82;
+        svgHeight = data.length * 82;
     }
 
     if ((totalTicks * 100) < $('body').innerWidth()) {
         $('#chart').css({'text-align': 'center'});
     }
 
-    $('#chart svg').each(function () { $(this)[0].setAttribute('viewBox', '0 0 ' + (width) + ' ' + height); });
+    $('#chart svg').each(function () { $(this)[0].setAttribute('viewBox', '0 0 ' + (svgWidth) + ' ' + svgHeight); });
+    //=================================
 
     var x = d3.scale.linear()
     .domain([0, totalTicks])
-    .range([0, width]);
+    .range([0, svgWidth]);
 
     //create axis with the above defined time scale and orient it on top(x axis on top).
     var xAxis = d3.svg.axis()
@@ -292,11 +293,11 @@ function draw(data, from, to) {
 
     //Append the svg to the body
     var svg = d3.select('#chart svg')
-    .attr('width', width + margin.left + margin.right)
-    .attr('height', height + margin.top + margin.bottom)
-    .style('margin-left', margin.left + 'px')
+    .attr('width', svgWidth + svgMargin.left + svgMargin.right)
+    .attr('height', svgHeight + svgMargin.top + svgMargin.bottom)
+    .style('margin-left', svgMargin.left + 'px')
     .append('g')
-    .attr('transform', 'translate(' + margin.left + ',' + margin.top + ')');
+    .attr('transform', 'translate(' + svgMargin.left + ',' + svgMargin.top + ')');
 
     //Append the svg axis
     svg.append('g')
@@ -315,7 +316,7 @@ function draw(data, from, to) {
             var gChild = g.append('g');
             var nodeData = getStats(j, i);
             gChild.append('circle')
-                  .attr('cx', i * (width / totalTicks))
+                  .attr('cx', i * (svgWidth / totalTicks))
                   .attr('cy', j * rangeMax * 2 + 55)
                   .attr('class', 'circle')
                   .attr('r', rScale(nodeData))
@@ -324,7 +325,7 @@ function draw(data, from, to) {
 
             gChild.append('text')
                   .attr('y', j * rangeMax * 2 + 60)
-                  .attr('x', i * (width / totalTicks))
+                  .attr('x', i * (svgWidth / totalTicks))
                   .attr('text-anchor', 'middle')
                   .attr('class', 'circleText')
                   .text(nodeData)
@@ -335,7 +336,7 @@ function draw(data, from, to) {
         //Append osm editors names to the right of the SVG=============================
             g.append('text')
              .attr('y', j * rangeMax * 2 + 60)
-             .attr('x', width + rangeMax + 1)
+             .attr('x', svgWidth + rangeMax + 1)
              .attr('class', 'label')
              .text(data[j].key)
              .style('fill', c(j));
