@@ -108,9 +108,11 @@ function init() {
         $('#objectsButton').prop('checked', true);
     }
 
-    //Call queryAPI with default dates.
+    //Add the dates in the from/to boxes.
     $('.from').val(moment.utc(fromDate).format('YYYY-MM-DD'));
     $('.to').val(moment.utc(toDate).format('YYYY-MM-DD'));
+
+    //Call queryAPI with default dates.
     queryAPI($('.from').val(), $('.to').val(), type);
 }
 
