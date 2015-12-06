@@ -195,6 +195,8 @@ function generateWeeklyStats(data, from, to) {
     return weeklyData;
 }
 
+function getTicks(from, to) {
+    var ticks = [], index, length;
 
 function draw(data, from, to) {
     $('#chart svg').empty();
@@ -218,47 +220,34 @@ function draw(data, from, to) {
 
     switch (TYPE) {
     case 'h':
-        noOfTicks = 23;
-        limit = 23;
-        for (var index = 0; index <= limit; index++) {
-            //new Date(JSON.parse(JSON.stringify(from))) done to shallow copy
-            //the from value into dateTickValues. If
-            //dateTickValues[index] = from; is done
-            //It amounts to a deep copy. Array elements get overwritten with the
-            //latest value of from which is pointless.
-            dateTickValues[index] = new Date(JSON.parse(JSON.stringify(from)));
-            from.setHours(from.getHours() + 1);
+        length = 24;
+        for (index = 0; index <= length; index++) {
+            ticks[index] = moment.utc(from).add(index, 'hours');
         }
         break;
     case 'd':
-        limit = 0;
-        for (index = from.getTime(); index <= to.getTime(); ) {
-            dateTickValues[limit] = new Date(JSON.parse(JSON.stringify(from)));
-            from.setDate(from.getDate() + 1);
-            index = from.getTime();
-            limit += 1;
+        length = moment.utc(to).diff(moment.utc(from), 'days');
+        for (index = 0; index <= length; index++) {
+            ticks[index] = moment.utc(from).add(index, 'days');
         }
-        noOfTicks = limit - 1;
         break;
     case 'm':
-        noOfTicks = to.getMonth() - from.getMonth();
-        limit = noOfTicks;
-        for (index = 0; index <= limit; index++) {
-            dateTickValues[index] = new Date(JSON.parse(JSON.stringify(from)));
-            from.setMonth(from.getMonth() + 1);
+        length = moment.utc(to).diff(moment.utc(from), 'months');
+        for (index = 0; index <= length; index++) {
+            ticks[index] = moment.utc(from).add(index, 'months');
         }
         break;
     case 'w':
-        console.log('w', 'from ', moment.utc(from).add(0, 'days'), 'to ', to);
-        limit = (moment.utc(to).diff(moment.utc(from), 'days'));
-        noOfTicks = Math.floor(limit / 7);
-        noOfTicks = (limit % 7 === 0) ? (noOfTicks - 1) : noOfTicks;
-        console.log(noOfTicks);
-        for (index = 0; index <= noOfTicks; index++) {
-            dateTickValues[index] = [moment.utc(from).add(index * 7, 'days'), moment.utc(from).add((index + 1) * 7, 'days')];
+        length = moment.utc(to).diff(moment.utc(from), 'weeks');
+        for (index = 0; index <= length; index++) {
+            ticks[index] = [moment.utc(from).add(index, 'weeks'),
+                            moment.utc(from).add((index + 1), 'weeks')];
         }
     }
 
+    console.log('TYPE', TYPE, 'length', length, 'ticks', JSON.stringify(ticks));
+    return ticks;
+}
     //If the noOfTicks = 0 for example when from = to, ensure that
     //at least one tick is present for values to appear under.
     noOfTicks = (noOfTicks < 1) ? 1 : noOfTicks;
