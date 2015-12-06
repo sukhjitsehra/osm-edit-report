@@ -5,30 +5,43 @@ $(document).ready(function () {
 
     init();
 
-    var type;
+    var type, fromDate, toDate;
 
     //Call queryAPI() when from and to change.
     $('.from, .to').on('change', function () {
-        var fromDate = $('.from').val();
-        var toDate = $('.to').val();
+
+        fromDate = $('.from').val();
+        toDate = $('.to').val();
         type = calculateDuration(fromDate, toDate);
+
         queryAPI(fromDate, toDate, type);
     });
 
 
     $('#objectsButton').click(function () {
+
         $('#objectsButton').prop('checked', true);
         $('#changesetsButton').prop('checked', false);
+
         CURRENT_SELECTION = 'objects';
+
+        fromDate = $('.from').val();
+        toDate = $('.to').val();
         type = calculateDuration(fromDate, toDate);
-        queryAPI($('.from').val(), $('.to').val(), type);
+
+        queryAPI(fromDate, toDate, type);
     });
+
     $('#changesetsButton').click(function () {
         $('#changesetsButton').prop('checked', true);
         $('#objectsButton').prop('checked', false);
         CURRENT_SELECTION = 'changesets';
+
+        fromDate = $('.from').val();
+        toDate = $('.to').val();
         type = calculateDuration(fromDate, toDate);
-        queryAPI($('.from').val(), $('.to').val(), type);
+
+        queryAPI(fromDate, toDate, type);
     });
 
 });
