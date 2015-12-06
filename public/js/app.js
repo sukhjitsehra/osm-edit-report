@@ -2,15 +2,13 @@ var CURRENT_SELECTION = 'objects';
 var TYPE = 'D';
 
 $(document).ready(function () {
+
     init();
 
     //Call queryAPI() when from and to change.
-    $('.from').on('change', function () {
-        queryAPI($('.from').val(), $('.to').val());
-    });
-
-    $('.to').change(function () {
-        queryAPI($('.from').val(), $('.to').val());
+    $('.from, .to').on('change', function () {
+        var fromDate = $('.from').val();
+        var toDate = $('.to').val();
         var type = calculateDuration(fromDate, toDate);
         queryAPI(fromDate, toDate, type);
     });
