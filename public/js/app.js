@@ -105,14 +105,14 @@ function queryAPI(startDateString, endDateString, type) {
 
     document.location.href = document.location.href.split('#')[0] + '#' + TYPE + '&from=' + startDateString + '&to=' + endDateString + '&stats=' + CURRENT_SELECTION;
 
-        $.ajax({
-            dataType: 'json',
-            url: settings.host + type + '&' + startTime + '&' + endTime,
-            success: function (json) {
-                draw(json, startDateString, endDateString);
-            }
-        });
-    }
+
+    $.ajax({
+        dataType: 'json',
+        url: settings.host + type + '&' + startTime + '&' + endTime,
+        success: function (json) {
+            draw(json, startDateString, endDateString);
+        }
+    });
 }
 
 function returnMax(data) {
