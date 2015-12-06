@@ -26,7 +26,29 @@ $(document).ready(function () {
         CURRENT_SELECTION = 'changesets';
         queryAPI($('.from').val(), $('.to').val());
     });
+
 });
+
+function calculateDuration(fromDate, toDate) {
+    var timeDifference = moment.utc(toDate).diff(moment.utc(fromDate), 'days');
+    var type;
+
+    if (timeDifference === 0) {
+        type = 'h';
+        TYPE = 'h';
+    } else if (timeDifference >= 1 && timeDifference <= 14) {
+        type = 'd';
+        TYPE = 'd';
+    } else if (timeDifference >= 15 && timeDifference <= 30) {
+        type = 'd';
+        TYPE = 'w';
+    } else {
+        type = 'm';
+        TYPE = 'm';
+    }
+
+    return type;
+}
 
 function parseURL() {
     var result = {
@@ -77,24 +99,9 @@ function queryAPI(startDateString, endDateString) {
     $('#chart svg').empty();
     //this superfluous variable can be removed once we can
     //query the backend for weekly stats
-    var type;
     var startTime = moment.utc(startDateString) / 1000;
     var endTime = (moment.utc(endDateString) / 1000) + (24 * 60 * 60);
-    var diff = moment.utc(endDateString).diff(moment.utc(startDateString), 'days');
 
-    if (diff === 0) {
-        type = 'h';
-        TYPE = 'h';
-    } else if (diff >= 1 && diff <= 14) {
-        type = 'd';
-        TYPE = 'd';
-    } else if (diff >= 15 && diff <= 30) {
-        type = 'd';
-        TYPE = 'w';
-    } else {
-        type = 'm';
-        TYPE = 'm';
-    }
 
     document.location.href = document.location.href.split('#')[0] + '#' + TYPE + '&from=' + startDateString + '&to=' + endDateString + '&stats=' + CURRENT_SELECTION;
 
