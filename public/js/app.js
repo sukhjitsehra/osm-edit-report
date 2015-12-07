@@ -68,8 +68,7 @@ function calculateDuration(from, to) {
 }
 
 function parseURL() {
-    var result = {
-    };
+    var result = {};
 
     switch (document.location.href.split('#')[1]) {
     case undefined:
@@ -225,7 +224,6 @@ function getTicks(from, to) {
         }
     }
 
-    console.log('TYPE', TYPE, 'length', length, 'ticks', JSON.stringify(ticks));
     return ticks;
 }
 
