@@ -1,0 +1,79 @@
+body {
+	overflow-y: scroll;
+}
+text {
+	font: 12px sans-serif;
+}
+svg {
+	display: block;
+}
+.container_way, .container_line {
+	margin-top: 30px;
+}
+
+#chart_line {
+	height: 300px;
+}
+#chart_line_changeset {
+	height: 300px;
+}
+.date-form {
+	margin: 10px;
+}
+label.control-label span {
+	cursor: pointer;
+}
+#date-picker-2 {
+	z-index: 9999;
+}
+#date-picker-3 {
+	z-index: 9999;
+}
+.date_form {
+	margin-left: 0px;
+	margin-right: 0px;
+	padding-left: 0px;
+	padding-right: 0px;
+}
+.title_date {
+	margin-top: -7px;
+	margin-left: 0px;
+	margin-right: 5px;
+	padding-left: -10px;
+	text-align: right;
+}
+.loading:after {
+	background: url(../img/ajax-loader.gif) no-repeat;
+	content: "Loading...";
+	color: #666;
+	left: 50%;
+	height: 16px;
+	line-height: 16px;
+	margin-top: -8px;
+	margin-left: -40px;
+	position: relative;
+	font-size: 12px;
+	text-indent: 26px;
+	top: -80%;
+	width: 80px;
+	z-index: 2;
+	display: block;
+}
+.calendar-off table.ui-datepicker-calendar {
+	display: none !important;
+}
+.MonthDatePicker .ui-datepicker-year {
+	display: none;
+}
+.YearDatePicker .ui-datepicker-month {
+	display: none;
+}
+.container_line small, .container_bar small {
+	font-size: 12px;
+	color: #9b9b9b;
+}
+
+/*hide x scale*/
+.nv-x .tick line {
+	display: none;
+}
