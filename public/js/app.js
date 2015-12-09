@@ -131,11 +131,49 @@ function queryAPI(from, to, type) {
         dataType: 'json',
         url: settings.host + type + '&' + startTime + '&' + endTime,
         success: function (json) {
+            json = preprocess(json);
             draw(json, from, to);
         }
     });
 }
 
+function preprocess(data){
+    var i,j;
+    var totalObject = {'key': 'TOTAL',
+    'color': '#FFFF00',
+    'iduser': 'NaN',
+    'total_changesets': 0,
+    'total_objects': 0,
+    'values':[]}
+
+    var timeLength = data[0].values.length;
+
+    //calculate total changesets and objects per time duration
+    for (i = 0; i < timeLength; i++) {
+        totalObject.values[i] = {};
+        totalObject.values[i].change = 0;
+        totalObject.values[i].y = 0;
+        for (j = 0; j < data.length; j++) {
+            totalObject.values[i].x = data[j].values[i].x;
+            totalObject.values[i].change += data[j].values[i].change;
+            totalObject.values[i].y += data[j].values[i].y;
+        }
+    }
+
+    data.push(totalObject);
+
+    //Calculate total changesets and objects per user
+    for (i = 0; i < data.length; i++) {
+        data[i].total_changesets = 0;
+        data[i].total_objects = 0;
+        for (j = 0; j < data[i].values.length; j++) {
+            data[i].total_changesets += data[i].values[j].change;
+            data[i].total_objects += data[i].values[j].y;
+        }
+    }
+
+    return data;
+}
 function returnMax(data) {
     var i, j;
     switch (CURRENT_SELECTION) {
