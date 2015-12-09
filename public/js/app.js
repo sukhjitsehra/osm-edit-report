@@ -140,24 +140,25 @@ function queryAPI(from, to, type) {
         dataType: 'json',
         url: settings.host + type + '&' + startTime + '&' + endTime,
         success: function (json) {
-            json = preprocess(json);
             draw(json, from, to);
         }
     });
 }
 
-function preprocess(data){
-    var i,j;
-    var totalObject = {'key': 'TOTAL',
-    'color': '#FFFF00',
-    'iduser': 'NaN',
-    'total_changesets': 0,
-    'total_objects': 0,
-    'values':[]}
+function preProcess(data) {
+    var i, j;
+
+    var totalObject = {
+        'key': 'TOTAL',
+        'color': '#FFFF00',
+        'iduser': 'NaN',
+        'total_changesets': 0,
+        'total_objects': 0,
+        'values': []
+    };
 
     var timeLength = data[0].values.length;
 
-    //calculate total changesets and objects per time duration
     for (i = 0; i < timeLength; i++) {
         totalObject.values[i] = {};
         totalObject.values[i].change = 0;
@@ -307,13 +308,15 @@ function getTicks(from, to) {
 
 
 function draw(data, from, to) {
-    data = sortData(data);
+
     $('#chart svg').empty();
 
     //generate weekly stats on client side. Remove once backend returns weekly data.
     if (TYPE === 'w') {
         data = generateWeeklyStats(data, from, to);
     }
+
+    data = sortData(preProcess(data));
 
     //decides colours of the circles
     var c = d3.scale.category10();
