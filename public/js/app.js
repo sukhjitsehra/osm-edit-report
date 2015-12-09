@@ -380,8 +380,10 @@ function draw(data, from, to) {
         var g = svg.append('g');
 
         for (var i = 0; i < data[j].values.length; i++) {
+
             var gChild = g.append('g');
             var nodeData = getStats(j, i);
+
             gChild.append('circle')
                   .attr('cx', i * (svgWidth / totalTicks))
                   .attr('cy', j * rangeMax * 2 + 55)
