@@ -115,6 +115,15 @@ function init() {
     queryAPI($('.from').val(), $('.to').val(), type);
 }
 
+function truncate(str, maxLength, suffix) {
+    if (str.length > maxLength) {
+        str = str.slice(0, maxLength + 1);
+        str = str.slice(0, Math.min(str.length, str.lastIndexOf(' ')));
+        str = str + suffix;
+    }
+    return str;
+}
+
 function queryAPI(from, to, type) {
 
     //this superfluous variable can be removed once we can
@@ -403,8 +412,18 @@ function draw(data, from, to) {
             g.append('text')
              .attr('y', j * rangeMax * 2 + 60)
              .attr('x', svgWidth + rangeMax + 1)
-             .text(data[j].key + ' (' + getTotalStats(j) + ')')
-             .style('fill', c(j));
+             .text(truncate(data[i].key, 5, '..') + ' (' + getTotalStats(i) + ')')
+             .style('fill', c(i));
+        } else {
+            g.append('a')
+             .attr('xlink:href', osmUserURL + data[i].key)
+             .append('text')
+             .attr('y', i * rangeMax * 2 + 60)
+             .attr('x', svgWidth + rangeMax + 1)
+             .attr('text-decoration', 'underline')
+             .text(truncate(data[i].key, 5, '..') + ' (' + getTotalStats(i) + ')')
+             .style('fill', c(i));
+        }
     }
 
     function getStats(j, i) {
