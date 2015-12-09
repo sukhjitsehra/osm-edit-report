@@ -317,17 +317,17 @@ function draw(data, from, to) {
 
     data = sortData(preProcess(data));
 
-    //decides colours of the circles
+    // Decides colours of the circles
     var c = d3.scale.category10();
 
-    //For scaling circle radii,
-    //take max of all data being shown and scale accordingly.
+    // For scaling circle radii,
+    // take max of all data being shown and scale accordingly.
     var domainMax = returnMax(data);
 
     var axisTicks = getTicks(from, to);
     var totalTicks = axisTicks.length - 1;
 
-    //SVG styling=====================
+    // SVG styling
     var svgMargin = {top: 50, right: 200, bottom: 0, left: 45}, svgWidth, rangeMax, svgHeight;
 
     if (totalTicks > 11) {
@@ -345,7 +345,6 @@ function draw(data, from, to) {
     }
 
     $('#chart svg').each(function () { $(this)[0].setAttribute('viewBox', '0 0 ' + (svgWidth) + ' ' + svgHeight); });
-    //=================================
 
     var xScale = d3.scale.linear()
     .domain([0, totalTicks])
@@ -369,7 +368,7 @@ function draw(data, from, to) {
     })
     .orient('top');
 
-    //Append the svg to the body
+    // Append the svg to the body
     var svg = d3.select('#chart svg')
     .attr('width', svgWidth + svgMargin.left + svgMargin.right)
     .attr('height', svgHeight + svgMargin.top + svgMargin.bottom)
@@ -377,7 +376,7 @@ function draw(data, from, to) {
     .append('g')
     .attr('transform', 'translate(' + svgMargin.left + ',' + svgMargin.top + ')');
 
-    //Append the svg axis
+    // Append the svg axis
     svg.append('g')
     .attr('class', 'axis')
     .call(xAxis);
@@ -410,7 +409,7 @@ function draw(data, from, to) {
                   .style('fill', '#25383C');
         }
 
-        //Append osm editors names to the right of the SVG=============================
+        // Append osm editors names to the right of the SVG
             g.append('text')
              .attr('y', j * rangeMax * 2 + 60)
              .attr('x', svgWidth + rangeMax + 1)
