@@ -23,7 +23,7 @@ database.select_users = function(client, done) {
 		done(users);
 		//client.end();
 	});
-};
+}
 
 database.insert = function(client, obj) {
 	var flag = true;

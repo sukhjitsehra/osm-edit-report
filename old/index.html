@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<meta charset="utf-8">
+<head>
+    <title>OSM-edit-report</title>
+</head>
+<body>
+    <link rel="stylesheet" type="text/css" href="public/lib/nv.d3.css">
+    <link type="text/css" rel="stylesheet" href="public/lib/bootstrap.css">
+    <link type="text/css" rel="stylesheet" href="public/lib/bootstrap-theme.css">
+    <link rel="stylesheet" type="text/css" href="public/lib/jquery-ui.css">
+    <link type="text/css" rel="stylesheet" href="public/css/style.css">
+    <div class="navbar navbar-default navbar-fixed-top" role="navigation">
+        <div class="container">
+            <div class="navbar-header">
+                <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+                <!--      <span class="sr-only">Toggle navigation</span> -->
+                <span class="icon-bar"></span>
+                </button>
+                <a class="navbar-brand" href="#">Data team edits</a>
+            </div>
+            <div class="navbar-collapse collapse">
+                <div class="btn-group nav navbar-nav btn-input clearfix col-md-2" style="margin-top: 10px">
+                    <button type="button" class="btn btn-default dropdown-toggle form-control" data-toggle="dropdown">
+                    <span class="type_label" data-bind="label">Per Day</span> <span class="caret"></span>
+                    </button>
+                    <ul class="dropdown-menu" role="menu">
+                        <li><a href="#" id="h">Per Hour</a></li>
+                        <li><a href="#" id="d">Per Day</a></li>
+                        <li><a href="#" id="m">Per Month</a></li>
+                        <li><a href="#" id="y">Per Year</a></li>
+                    </ul>
+                </div>
+                <div class="col-sm-1 title_date" ><h3><small>From </small></h3></div>
+                <div class="date-form  col-md-2 date_form">
+                    <div class="form-horizontal">
+                        <div class="control-group">
+                            <div class="controls">
+                                <div class="input-group">
+                                    <input id="date-picker-2" type="text" class="from form-control" />
+                                    <label for="date-picker-2" class="input-group-addon btn"><span class="glyphicon glyphicon-calendar"></span>
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-sm-1 title_date" ><h3><small>To </small></h3></div>
+            <div class="date-form  col-md-2 date_form" >
+                <div class="form-horizontal">
+                    <div class="control-group">
+                        <div class="controls">
+                            <div class="input-group">
+                                <input id="date-picker-3" type="text" class="to form-control" />
+                                <label for="date-picker-3" class="input-group-addon btn"><span class="glyphicon glyphicon-calendar"></span>
+                            </label>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+</div>
+<div class="container container_line" >
+<div class="page-header">
+    <h2>OpenStreetMap objects modified</h2><small class="label_line"></small>
+    <div class="alert alert-warning" id="error-warning" style="display: none;">
+        <a href="#" class="close" data-dismiss="alert">&times;</a>
+        <strong>Warning!</strong><span id="span-warning"></span>
+    </div>
+</div>
+<div id="chart_line" class='chart full with-3d-shadow with-transitions loading'>
+<svg></svg>
+</div>
+</div>
+<div class="container" >
+<div class="page-header">
+<h2>OpenStreetMap changeset</h2><small class="label_line"></small>
+<div class="alert alert-warning" id="error-warning" style="display: none;">
+    <a href="#" class="close" data-dismiss="alert">&times;</a>
+    <strong>Warning!</strong><span id="span-warning"></span>
+</div>
+</div>
+<div id="chart_line_changeset" class='chart full with-3d-shadow with-transitions loading'>
+<svg></svg>
+</div>
+</div>
+<script src="public/lib/jquery-2.1.1.min.js"></script>
+<script src="public/lib/jquery-ui-1.9.2.min.js"></script>
+<script src="public/lib/underscore-min.js"></script>
+<script src="public/lib/bootstrap.js"></script>
+<script src="public/lib/d3.v3.js"></script>
+<script src="public/lib/nv.d3.js"></script>
+<script src="public/lib/tooltip.js"></script>
+<script src="public/lib/utils.js"></script>
+<script src="public/lib/interactiveLayer.js"></script>
+<script src="public/lib/models/legend.js"></script>
+<script src="public/lib/models/axis.js"></script>
+<script src="public/lib/models/scatter.js"></script>
+<script src="public/lib/models/line.js"></script>
+<script src="public/lib/models/lineChart.js"></script>
+<script src="public/settings.js"></script>
+<script src="public/js/app.js"></script>
+</body>
