@@ -331,8 +331,8 @@ function draw(data, from, to) {
     var svgMargin = {top: 50, right: 200, bottom: 0, left: 45}, svgWidth, rangeMax, svgHeight;
 
     if (totalTicks > 11) {
-        svgWidth = (totalTicks * 60);
-        rangeMax = 30;
+        svgWidth = (totalTicks * 50);
+        rangeMax = 25;
         svgHeight = data.length * 62;
     } else {
         svgWidth = totalTicks * 100;
