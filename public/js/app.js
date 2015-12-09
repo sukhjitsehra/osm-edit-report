@@ -447,6 +447,7 @@ function draw(data, from, to) {
         } else {
             g.append('a')
              .attr('xlink:href', osmUserURL + data[i].key)
+             .attr('target', '_blank')
              .append('text')
              .attr('y', i * rangeMax * 2 + 60)
              .attr('x', svgWidth + rangeMax + 1)
