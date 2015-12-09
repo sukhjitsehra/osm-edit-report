@@ -169,7 +169,6 @@ function preProcess(data) {
             totalObject.values[i].y += data[j].values[i].y;
         }
     }
-
     data.push(totalObject);
 
     //Calculate total changesets and objects per user
@@ -362,7 +361,7 @@ function draw(data, from, to) {
         case 'm':
             return d3.time.format.utc('%b %Y')(new Date(axisTicks[i]));
         case 'w':
-            return d3.time.format.utc('%d/%m')(new Date(axisTicks[i][0])) + "-" +
+            return d3.time.format.utc('%d/%m')(new Date(axisTicks[i][0])) + '-' +
                    d3.time.format.utc('%d/%m')(new Date(axisTicks[i][1]));
         }
     })
@@ -385,33 +384,63 @@ function draw(data, from, to) {
                    .domain([0, domainMax])
                    .range([2, rangeMax]);
 
+    var osmUserURL = 'http://www.openstreetmap.org/user/';
 
-    for (var j = 0; j < data.length; j++) {
+
+    for (var i = 0; i < data.length; i++) {
         var g = svg.append('g');
+        var commaFormat = d3.format(',');
 
-        for (var i = 0; i < data[j].values.length; i++) {
+        for (var j = 0; j < data[j].values.length; j++) {
 
             var gChild = g.append('g');
-            var nodeData = getStats(j, i);
+            var nodeData = getStats(i, j);
 
-            gChild.append('circle')
-                  .attr('cx', i * (svgWidth / totalTicks))
-                  .attr('cy', j * rangeMax * 2 + 55)
-                  .attr('r', rScale(nodeData))
-                  .style('fill', c(j))
-                  .style('opacity', 0.5);
+            if (i === 0) {
+                gChild.append('circle')
+                      .attr('cy', i * rangeMax * 2 + 55)
+                      .attr('cx', j * (svgWidth / totalTicks))
+                      .attr('r', 1)
+                      .transition().duration(1000)
+                      .attr('r', 0)
+                      .style('fill', c(i))
+                      .style('opacity', 0.5);
 
-            gChild.append('text')
-                  .attr('y', j * rangeMax * 2 + 60)
-                  .attr('x', i * (svgWidth / totalTicks))
-                  .attr('text-anchor', 'middle')
-                  .text(nodeData)
-                  .style('fill', '#25383C');
+                nodeData = (nodeData === '') ? '' : commaFormat(nodeData);
+
+                gChild.append('text')
+                      .attr('y', i * rangeMax * 2 + 60)
+                      .attr('x', j * (svgWidth / totalTicks))
+                      .attr('text-anchor', 'middle')
+                      .attr('font-weight', 'bold')
+                      .text(nodeData)
+                      .style('fill', '#25383C');
+            } else {
+                gChild.append('circle')
+                      .attr('cy', i * rangeMax * 2 + 55)
+                      .attr('cx', j * (svgWidth / totalTicks))
+                      .attr('r', 0)
+                      .transition().duration(1000)
+                      .attr('r', rScale(nodeData))
+                      .style('fill', c(i))
+                      .style('opacity', 0.5);
+
+                nodeData = (nodeData === '') ? '' : commaFormat(nodeData);
+
+                gChild.append('text')
+                      .attr('y', i * rangeMax * 2 + 60)
+                      .attr('x', j * (svgWidth / totalTicks))
+                      .attr('text-anchor', 'middle')
+                      .text(nodeData)
+                      .style('fill', '#25383C');
+            }
+
         }
 
         // Append osm editors names to the right of the SVG
+        if (i === 0) {
             g.append('text')
-             .attr('y', j * rangeMax * 2 + 60)
+             .attr('y', i * rangeMax * 2 + 60)
              .attr('x', svgWidth + rangeMax + 1)
              .text(truncate(data[i].key, 5, '..') + ' (' + getTotalStats(i) + ')')
              .style('fill', c(i));
@@ -427,21 +456,23 @@ function draw(data, from, to) {
         }
     }
 
-    function getStats(j, i) {
-        switch (CURRENT_SELECTION) {
+    function getStats(i, j) {
+        switch (currentSelection) {
         case 'objects':
-            return (data[j].values[i].y > 0) ? data[j].values[i].y : '';
+            return (data[i].values[j].y > 0) ? data[i].values[j].y : '';
         case 'changesets':
-            return (data[j].values[i].change > 0) ? data[j].values[i].change : '';
+            return (data[i].values[j].change > 0) ? data[i].values[j].change : '';
         }
     }
 
-    function getTotalStats(j) {
-        switch (CURRENT_SELECTION) {
+    function getTotalStats(i) {
+        var commaFormat = d3.format(',');
+
+        switch (currentSelection) {
         case 'objects':
-            return (data[j].total_objects);
+            return commaFormat(data[i].total_objects);
         case 'changesets':
-            return (data[j].total_changesets);
+            return commaFormat(data[i].total_changesets);
         }
     }
 
