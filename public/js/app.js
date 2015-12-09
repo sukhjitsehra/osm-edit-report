@@ -401,7 +401,7 @@ function draw(data, from, to) {
             g.append('text')
              .attr('y', j * rangeMax * 2 + 60)
              .attr('x', svgWidth + rangeMax + 1)
-             .text(data[j].key)
+             .text(data[j].key + ' (' + getTotalStats(j) + ')')
              .style('fill', c(j));
     }
 
@@ -414,5 +414,13 @@ function draw(data, from, to) {
         }
     }
 
-}
+    function getTotalStats(j) {
+        switch (CURRENT_SELECTION) {
+        case 'objects':
+            return (data[j].total_objects);
+        case 'changesets':
+            return (data[j].total_changesets);
+        }
+    }
 
+}
