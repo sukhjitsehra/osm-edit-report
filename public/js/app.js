@@ -185,12 +185,10 @@ function preProcess(data) {
     return data;
 }
 
-function sortData(data){
-    var i,j;
-    var newData = [];
+function sortData(data) {
+    var i, j;
     switch (currentSelection) {
         case 'changesets':
-            var changesets = [];
             for (i = 0; i < (data.length - 1); i++) {
                 for (j = 0; j < (data.length - i - 1); j++) {
                     if (data[j].total_changesets < data[j+1].total_changesets) {
@@ -200,7 +198,8 @@ function sortData(data){
                     }
                 }
             }
-            return data;
+        return data;
+
         case 'objects':
             for (i = 0; i < (data.length - 1); i++) {
                 for (j = 0; j < (data.length - i - 1); j++) {
