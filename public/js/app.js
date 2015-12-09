@@ -12,7 +12,7 @@ $(document).ready(function () {
 
         from = $('.from').val();
         to = $('.to').val();
-        type = calculateDuration(from, to);
+        type = getDuration(from, to);
 
         queryAPI(from, to, type);
     });
@@ -27,7 +27,7 @@ $(document).ready(function () {
 
         from = $('.from').val();
         to = $('.to').val();
-        type = calculateDuration(from, to);
+        type = getDuration(from, to);
 
         queryAPI(from, to, type);
     });
@@ -39,14 +39,14 @@ $(document).ready(function () {
 
         from = $('.from').val();
         to = $('.to').val();
-        type = calculateDuration(from, to);
+        type = getDuration(from, to);
 
         queryAPI(from, to, type);
     });
 
 });
 
-function calculateDuration(from, to) {
+function getDuration(from, to) {
     var timeDifference = moment.utc(to).diff(moment.utc(from), 'days');
     var type;
 
@@ -92,7 +92,7 @@ function init() {
         to = urlObjects.to;
 
     CURRENT_SELECTION = urlObjects.stats;
-    var type  = calculateDuration(from, to);
+    var type  = getDuration(from, to);
 
     //invalid date/range selection error handling.
     //Should this be moved?
