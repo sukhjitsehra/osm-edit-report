@@ -1,5 +1,5 @@
-var CURRENT_SELECTION = 'objects';
-var TYPE = 'D';
+var currentSelection = 'objects';
+var durationType = 'D';
 
 $(document).ready(function () {
 
@@ -23,7 +23,7 @@ $(document).ready(function () {
         $('#objectsButton').prop('checked', true);
         $('#changesetsButton').prop('checked', false);
 
-        CURRENT_SELECTION = 'objects';
+        currentSelection = 'objects';
 
         from = $('.from').val();
         to = $('.to').val();
@@ -35,7 +35,7 @@ $(document).ready(function () {
     $('#changesetsButton').click(function () {
         $('#changesetsButton').prop('checked', true);
         $('#objectsButton').prop('checked', false);
-        CURRENT_SELECTION = 'changesets';
+        currentSelection = 'changesets';
 
         from = $('.from').val();
         to = $('.to').val();
@@ -52,16 +52,16 @@ function getDuration(from, to) {
 
     if (timeDifference === 0) {
         type = 'h';
-        TYPE = 'h';
+        durationType = 'h';
     } else if (timeDifference >= 1 && timeDifference <= 14) {
         type = 'd';
-        TYPE = 'd';
+        durationType = 'd';
     } else if (timeDifference >= 15 && timeDifference <= 30) {
         type = 'd';
-        TYPE = 'w';
+        durationType = 'w';
     } else {
         type = 'm';
-        TYPE = 'm';
+        durationType = 'm';
     }
 
     return type;
@@ -91,7 +91,7 @@ function init() {
     var from = urlObjects.from,
         to = urlObjects.to;
 
-    CURRENT_SELECTION = urlObjects.stats;
+    currentSelection = urlObjects.stats;
     var type  = getDuration(from, to);
 
     //invalid date/range selection error handling.
@@ -101,7 +101,7 @@ function init() {
     }
 
     //Fix which button appears clicked.
-    if (CURRENT_SELECTION === 'changesets') {
+    if (currentSelection === 'changesets') {
         $('#changesetsButton').prop('checked', true);
     } else {
         $('#objectsButton').prop('checked', true);
@@ -133,8 +133,8 @@ function queryAPI(from, to, type) {
 
 
     document.location.href = document.location.href.split('#')[0] +
-                            '#' + TYPE + '&from=' + from + '&to=' +
-                            to + '&stats=' + CURRENT_SELECTION;
+                            '#' + durationType + '&from=' + from + '&to=' +
+                            to + '&stats=' + currentSelection;
 
     $.ajax({
         dataType: 'json',
@@ -188,7 +188,7 @@ function preProcess(data) {
 function sortData(data){
     var i,j;
     var newData = [];
-    switch(CURRENT_SELECTION){
+    switch (currentSelection) {
         case 'changesets':
             var changesets = [];
             for (i = 0; i < (data.length - 1); i++) {
@@ -211,16 +211,16 @@ function sortData(data){
                     }
                 }
             }
-            return data;
+        return data;
     }
 }
 
 function returnMax(data) {
     var i, j;
-    switch (CURRENT_SELECTION) {
+    switch (currentSelection) {
     case 'changesets':
         var changesets = [];
-        for (i = 0; i < data.length; i++) {
+        for (i = 1; i < data.length; i++) {
             for (j = 0; j < data[i].values.length; j++) {
                 changesets.push(data[i].values[j].change);
             }
@@ -228,7 +228,7 @@ function returnMax(data) {
         return _.max(changesets);
     case 'objects':
         var objectsModified = [];
-        for (i = 0; i < data.length; i++) {
+        for (i = 1; i < data.length; i++) {
             for (j = 0; j < data[i].values.length; j++) {
                 objectsModified.push(data[i].values[j].y);
             }
@@ -276,7 +276,7 @@ function generateWeeklyStats(data, from, to) {
 function getTicks(from, to) {
     var ticks = [], index, length;
 
-    switch (TYPE) {
+    switch (durationType) {
     case 'h':
         length = 24;
         for (index = 0; index <= length; index++) {
@@ -311,8 +311,8 @@ function draw(data, from, to) {
 
     $('#chart svg').empty();
 
-    //generate weekly stats on client side. Remove once backend returns weekly data.
-    if (TYPE === 'w') {
+    // Generate weekly stats on client side. Remove once backend returns weekly data.
+    if (durationType === 'w') {
         data = generateWeeklyStats(data, from, to);
     }
 
@@ -356,7 +356,7 @@ function draw(data, from, to) {
     .scale(xScale)
     .ticks(totalTicks)
     .tickFormat(function (d, i) {
-        switch (TYPE) {
+        switch (durationType) {
         case 'h':
             return d3.time.format.utc('%I%p')(new Date(axisTicks[i]));
         case 'd':
