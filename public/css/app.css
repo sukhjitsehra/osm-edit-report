@@ -1,19 +1,26 @@
 input {
-        border-radius: 15px;
-    }
+    border-radius: 15px;
+}
 
-    .axis text {
-        font: 15px sans-serif;
-    }
+.axis text {
+    font: 11px sans-serif;
+}
 
-    #chart svg{
-        max-width:100%;
-        height:auto;
-    }
+#chart svg{
+    max-width:100%;
+    height:auto;
+}
 
-    .axis path,
-    .axis line {
-        fill: none;
-        stroke: #000;
-        shape-rendering: crispEdges;
-    }
+.axis path,
+.axis line {
+    fill: none;
+    stroke: #000;
+    shape-rendering: crispEdges;
+}
+
+#totalStats{
+    font-weight:bold;
+    text-align: center;
+    font-size: 20px;
+    margin-top:1%;
+}
