@@ -174,6 +174,37 @@ function preprocess(data){
 
     return data;
 }
+
+function sortData(data){
+    var i,j;
+    var newData = [];
+    switch(CURRENT_SELECTION){
+        case 'changesets':
+            var changesets = [];
+            for (i = 0; i < (data.length - 1); i++) {
+                for (j = 0; j < (data.length - i - 1); j++) {
+                    if (data[j].total_changesets < data[j+1].total_changesets) {
+                        var swap  = data[j];
+                        data[j]   = data[j+1];
+                        data[j+1] = swap;
+                    }
+                }
+            }
+            return data;
+        case 'objects':
+            for (i = 0; i < (data.length - 1); i++) {
+                for (j = 0; j < (data.length - i - 1); j++) {
+                    if (data[j].total_objects < data[j+1].total_objects) {
+                        var swap = data[j];
+                        data[j]   = data[j+1];
+                        data[j+1] = swap;
+                    }
+                }
+            }
+            return data;
+    }
+}
+
 function returnMax(data) {
     var i, j;
     switch (CURRENT_SELECTION) {
@@ -267,6 +298,7 @@ function getTicks(from, to) {
 
 
 function draw(data, from, to) {
+    data = sortData(data);
     $('#chart svg').empty();
 
     //generate weekly stats on client side. Remove once backend returns weekly data.
