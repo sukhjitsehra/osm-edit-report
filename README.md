@@ -2,7 +2,7 @@
 
 Reports editing activity for a number of users on OpenStreetMap.
 
-![](https://s3.amazonaws.com/f.cl.ly/items/020L3h1h0s3g3a3x1T34/Screen%20Shot%202015-02-02%20at%2010.16.03%20PM.png)
+![](https://cloud.githubusercontent.com/assets/126868/11736531/80103dba-9ff5-11e5-8455-5756326d5555.png)
 
 ## Installation
 
