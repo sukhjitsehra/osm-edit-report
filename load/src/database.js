@@ -1,10 +1,8 @@
-'use strict'
-
+'use strict';
 var pg = require('pg');
 var _ = require('underscore');
 var obj_user = require('./user');
-var database = {}
-
+var database = {};
 database.select_users = function(client, done) {
 	var users = {};
 	var query_user = {
@@ -18,10 +16,8 @@ database.select_users = function(client, done) {
 			users[result.rows[i].iduser].osm_user = result.rows[i].osmuser;
 		}
 	});
-
 	select_users.on('end', function(result) {
 		done(users);
-		//client.end();
 	});
 };
 
@@ -54,7 +50,6 @@ database.insert = function(client, obj) {
 			});
 		});
 	});
-}
-
+};
 
 module.exports = database;

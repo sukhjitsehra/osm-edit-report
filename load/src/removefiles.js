@@ -1,9 +1,10 @@
+'use strict';
 var os = require('os');
 var path = require('path');
 var fs = require('fs');
 module.exports = function(arr, obj, done) {
 	var folder = os.tmpDir();
-	var osmfile = arr[1].pad(3) + ".osc"; //completa el nombre a 006
+	var osmfile = arr[1].pad(3) + ".osc";
 	var fileSrc = path.join(folder, osmfile);
 	if (!fs.exists(fileSrc)) {
 		var tempFile = fs.openSync(fileSrc, 'r');
@@ -13,7 +14,7 @@ module.exports = function(arr, obj, done) {
 	} else {
 		console.log('Error in remove file');
 	}
-}
+};
 
 Number.prototype.pad = function(size) {
 	var s = String(this);
@@ -21,4 +22,4 @@ Number.prototype.pad = function(size) {
 		s = "0" + s;
 	}
 	return s;
-}
+};

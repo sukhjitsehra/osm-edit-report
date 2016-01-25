@@ -1,3 +1,4 @@
+'use strict';
 var osmium = require('osmium');
 var os = require('os');
 var path = require('path');
@@ -8,13 +9,9 @@ module.exports = function(arr, users, done) {
 		osmdate: null
 	};
 	var folder = os.tmpDir();
-	var osmfile = arr[1].pad(3) + ".osc"; //completa el nombre a 006
+	var osmfile = arr[1].pad(3) + ".osc";
 	var fileSrc = path.join(folder, osmfile);
-
 	console.log('Process file :' + fileSrc);
-
-
-	//var file = new osmium.File(fileSrc);
 	var reader = new osmium.Reader(fileSrc);
 	var handler = new osmium.Handler();
 	//WAY
@@ -45,7 +42,7 @@ module.exports = function(arr, users, done) {
 	});
 	obj.users = users;
 	done(obj);
-}
+};
 
 Number.prototype.pad = function(size) {
 	var s = String(this);
@@ -53,4 +50,4 @@ Number.prototype.pad = function(size) {
 		s = "0" + s;
 	}
 	return s;
-}
+};

@@ -1,4 +1,4 @@
-'use strict'
+'use strict';
 var os = require('os');
 var request = require('request');
 var path = require('path');
@@ -28,7 +28,7 @@ module.exports = function(arr, done) {
 			done(false);
 		}
 	});
-}
+};
 
 Number.prototype.pad = function(size) {
 	var s = String(this);
@@ -36,4 +36,4 @@ Number.prototype.pad = function(size) {
 		s = "0" + s;
 	}
 	return s;
-}
+};

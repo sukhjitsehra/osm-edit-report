@@ -1,5 +1,4 @@
-#!/usr/bin/env node
-
+'use strict';
 var express = require('express');
 var cors = require('cors');
 var app = express();
@@ -94,8 +93,7 @@ app.get('/:date', function(req, res) {
 										y: parseInt(result.rows[i]["uo_" + v.iduser]),
 										change: parseInt(result.rows[i]["uc_" + v.iduser])
 									}
-
-								)
+								);
 							});
 						}
 						res.json(array_objs);
@@ -111,7 +109,6 @@ app.get('/:date', function(req, res) {
 		res.end();
 	}
 });
-app.listen(process.env.PORT || 3021);
 
 function value_parameters(date) {
 	console.log('Request Date : ' + new Date() + ' url: ' + url + date);
@@ -124,7 +121,6 @@ function value_parameters(date) {
 			status = 0;
 		}
 		if (Number(date[1]) === NaN || Number(date[2]) === NaN || date[1].match(/^[0-9]+$/) === null || date[2].match(/^[0-9]+$/) === null || type[date[0]] === undefined) {
-
 			status = 0;
 		}
 		if (parseInt(date[2]) - parseInt(date[1]) < 0) {
@@ -137,3 +133,5 @@ function value_parameters(date) {
 	}
 	return status;
 }
+
+app.listen(process.env.PORT || 3021);
