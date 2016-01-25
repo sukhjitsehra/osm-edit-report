@@ -1,6 +1,6 @@
 {
   "name": "osm-edit-report",
-  "version": "0.0.7",
+  "version": "0.0.8",
   "description": "Reports editing activity for a number of users on OpenStreetMap.",
   "author": "Mapbox",
   "license": "ISC",

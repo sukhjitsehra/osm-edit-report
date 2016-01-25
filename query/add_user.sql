@@ -18,8 +18,8 @@ SELECT add_user(2306749,'shvrm','000000',true);
 SELECT add_user(53073,'Aaron Lidman','330066',true);
 SELECT add_user(146675,'geohacker','666600',true);
 SELECT add_user(2905914,'pratikyadav','00f2ff',true);
-SELECT add_user(2847988,'jinalfoflia','ff6a6a',true);
-SELECT add_user(2835928,'Nikhil Prabhakar U','FF8A00',true);
+SELECT add_user(2847988,'jinalfolia','ff6a6a',true);
+SELECT add_user(2835928,'nikhilprabhakar','FF8A00',true);
 SELECT add_user(3057995,'oini','FFCC99',true);
 SELECT add_user(2015224,'Jothirnadh','CC6699',true);
 SELECT add_user(3272286,'manings','666633',true);
@@ -27,7 +27,6 @@ SELECT add_user(2477516,'Arunasank','000066',true);
 SELECT add_user(261012,'sanjayb','996600',true);
 SELECT add_user(3029661,'saikabhi','003300',true);
 SELECT add_user(2985232,'AarthyKC','666699',true);
-
 --UPDATE osm_user
 --   SET color= '666600'
 -- WHERE iduser=0000;

@@ -33,7 +33,6 @@ begin
 end;
 $$ LANGUAGE plpgsql;
 
-
 CREATE OR REPLACE FUNCTION add_user( _iduser integer, _osmuser varchar, _color varchar, _estado boolean)
 returns varchar 
 AS $$
