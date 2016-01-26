@@ -21,7 +21,7 @@
   },
   "scripts": {
     "run": "./server.js",
-    "start": "node server.js"
+    "start": "node server/server.js"
   },
   "main": "server.js",
   "repository": {
