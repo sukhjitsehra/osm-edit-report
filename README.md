@@ -51,13 +51,13 @@ Or use Mapbox data team users included in the project:
 
 You can start loading data starting with any replication file found in http://planet.openstreetmap.org/replication/hour/
 
-For instance, to start loading with [2012-10-23 23:02](http://planet.openstreetmap.org/replication/hour/000/001/) run:
+For instance, to start loading with [2015-03-22](https://s3.amazonaws.com/osm-changesets/hour/000/022/117.osc.gz) run:
 
-    node load/load.js --num_file=1 --num_directory=0 --user=<dbuser> --password=<dbpassword> --database=dbstatistic
+    node load/load.js --num_file=117 --num_directory=22 --user=<dbuser> --password=<dbpassword> --database=dbstatistic
 
-Or to start loading with [2015-01-01 00:02](http://planet.openstreetmap.org/replication/hour/000/020/) run:
+Or to start loading with [2016-01-26](https://s3.amazonaws.com/osm-changesets/hour/000/029/551.osc.gz) run:
 
-    node load/load.js --num_file=177 --num_directory=20 --user=<dbuser> --password=<dbpassword> --database=dbstatistic
+    node load/load.js --num_file=551 --num_directory=29 --user=<dbuser> --password=<dbpassword> --database=dbstatistic
 
 ### 4. Run data server
 

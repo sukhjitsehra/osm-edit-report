@@ -2,6 +2,7 @@
 var os = require('os');
 var path = require('path');
 var fs = require('fs');
+
 module.exports = function(arr, obj, done) {
 	var folder = os.tmpDir();
 	var osmfile = arr[1].pad(3) + ".osc";

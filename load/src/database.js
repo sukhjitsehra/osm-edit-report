@@ -3,6 +3,7 @@ var pg = require('pg');
 var _ = require('underscore');
 var obj_user = require('./user');
 var database = {};
+
 database.select_users = function(client, done) {
 	var users = {};
 	var query_user = {

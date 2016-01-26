@@ -1,8 +1,4 @@
 'use strict';
-var osmium = require('osmium');
-var fs = require('fs');
-var zlib = require('zlib');
-var _ = require('underscore');
 var argv = require('optimist').argv;
 var pg = require('pg');
 var download = require('./src/download');
@@ -24,16 +20,17 @@ var client = new pg.Client(
 	"@" + (db_conf.pghost || 'localhost') +
 	"/" + (db_conf.pgdatabase || 'dbstatistic')
 );
-client.connect(function(err) {
-	if (err) {
-		return console.error('could not connect to postgres', err);
-	}
-});
 var number_obj = {
 	prev: [],
 	current: [parseInt(argv.num_directory), parseInt(argv.num_file)],
 	next: []
 };
+
+client.connect(function(err) {
+	if (err) {
+		return console.error('could not connect to postgres', err);
+	}
+});
 //inicio
 function init() {
 	download(number_obj.current, select_users);

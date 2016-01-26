@@ -5,7 +5,6 @@ var app = express();
 var pg = require('pg');
 var _ = require('underscore');
 var argv = require('optimist').argv;
-app.use(cors());
 var obj = function() {
 	return {
 		values: [],
@@ -21,16 +20,16 @@ var client = new pg.Client(
 	"/" + (argv.pgdatabase || 'dbstatistic')
 );
 var url = "http://" + (argv.dbhost || 'localhost') + ":3021/";
-console.log('Running on ' + url);
 var type = {
 	'h': 14,
 	'd': 11,
 	'm': 8,
 	'y': 5
 };
+app.use(cors());
 client.connect(function(err) {
 	if (err) {
-		return console.error('could not connect to postgres', err);
+		return console.error('Could not connect to postgres', err);
 	}
 });
 app.get('/:date', function(req, res) {
@@ -38,12 +37,10 @@ app.get('/:date', function(req, res) {
 		var value = value_parameters(req.params.date);
 		if (value === 0) {
 			res.statusCode = 404;
-			console.log('Error: Bad parameteres');
 			res.send('Error 404: Bad parameteres');
 			res.end();
 		} else if (value === 1) {
 			res.statusCode = 200;
-			console.log('Test status');
 			res.send('Successful status');
 			res.end();
 		} else {
@@ -59,23 +56,21 @@ app.get('/:date', function(req, res) {
 			};
 			var main_query = client.query(query_user, function(error, result) {
 				if (error) {
-					console.log('Error on list users');
 					res.statusCode = 404;
 					res.send('Error 404: No quote found');
 					res.end();
 				} else {
 					for (var i = 0; i < result.rows.length; i++) {
-						user = new obj();
+						var user = new obj();
 						var iduser = result.rows[i].iduser;
-						query_obj.text += ", SUM(uo_" + iduser + ") as uo_" + iduser +", SUM(uc_" + iduser + ") as uc_" + iduser ;
-						user.iduser = iduser; 
+						query_obj.text += ", SUM(uo_" + iduser + ") as uo_" + iduser + ", SUM(uc_" + iduser + ") as uc_" + iduser;
+						user.iduser = iduser;
 						user.key = result.rows[i].osmuser;
 						user.color = '#' + result.rows[i].color;
 						array_objs.push(user);
 					}
 				}
 			});
-
 			main_query.on('end', function(result) {
 				query_obj.text += " FROM osm_obj WHERE osmdate >= $2 AND osmdate < $3 GROUP BY osm_date ORDER BY osm_date";
 				query_obj.values.push(parseInt(date[1]), parseInt(date[2]));
@@ -89,11 +84,10 @@ app.get('/:date', function(req, res) {
 						for (var i = 0; i < result.rows.length; i++) {
 							_.each(array_objs, function(v, k) {
 								array_objs[k].values.push({
-										x: result.rows[i].osm_date.replace(' ', '-'),
-										y: parseInt(result.rows[i]["uo_" + v.iduser]),
-										change: parseInt(result.rows[i]["uc_" + v.iduser])
-									}
-								);
+									x: result.rows[i].osm_date.replace(' ', '-'),
+									y: parseInt(result.rows[i]["uo_" + v.iduser]),
+									change: parseInt(result.rows[i]["uc_" + v.iduser])
+								});
 							});
 						}
 						res.json(array_objs);
@@ -126,12 +120,13 @@ function value_parameters(date) {
 		if (parseInt(date[2]) - parseInt(date[1]) < 0) {
 			status = 0;
 		}
-		//we can do a consult per hour less two months
+		//we can do a consult per hour when the range of date is less two months
 		if (parseInt(date[2]) - parseInt(date[1]) > 60 * 24 * 3600 && date[0] === 'h') {
 			status = 0;
 		}
 	}
 	return status;
 }
-
-app.listen(process.env.PORT || 3021);
+app.listen(process.env.PORT || 3021, function() {
+	console.log('Running on ' + url);
+});

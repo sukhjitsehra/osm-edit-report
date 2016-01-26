@@ -3,6 +3,7 @@ var osmium = require('osmium');
 var os = require('os');
 var path = require('path');
 var _ = require('underscore');
+
 module.exports = function(arr, users, done) {
 	var obj = {
 		users: null,
