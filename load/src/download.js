@@ -7,7 +7,7 @@ var zlib = require('zlib');
 
 module.exports = function(arr, done) {
 	var folder = os.tmpDir();
-	var url = "https://s3.amazonaws.com/osm-changesets/hour/000/" + arr[0].pad(3) + "/" + arr[1].pad(3) + ".osc.gz";
+	var url = "http://planet.openstreetmap.org/replication/hour/000/" + arr[0].pad(3) + "/" + arr[1].pad(3) + ".osc.gz";
 	var baseName = arr[1].pad(3) + ".osc";
 	var fileSrc = path.join(folder, baseName);
 

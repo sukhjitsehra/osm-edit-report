@@ -9,10 +9,10 @@ var crontab = require('node-crontab');
 // Initialize parameters
 var flag = true;
 var db_conf = {
-	pguser: argv.user,
-	pgpassword: argv.password,
-	pghost: argv.host,
-	pgdatabase: argv.database
+	pguser: argv.pguser,
+	pgpassword: argv.pgpassword,
+	pghost: argv.pghost,
+	pgdatabase: argv.pgdatabase
 };
 var client = new pg.Client(
 	"postgres://" + (db_conf.pguser || 'postgres') +
