@@ -5,7 +5,6 @@ select add_user(2219338,'RichRico','EE3344',true);
 select add_user(2226712,'dannykath','662289',true);
 select add_user(94578,'andygol','3E8380',true);
 select add_user(2554698,'ruthmaben','FA58F4',true);
-select add_user(2377377,'abel801','008000',true);
 select add_user(2511706,'calfarome','800000',true);
 select add_user(2512300,'samely','66CCCC',true);
 select add_user(2115749,'srividya_c','7B68EE',true);
