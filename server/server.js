@@ -19,7 +19,7 @@ var client = new pg.Client(
 	"@" + (argv.pghost || 'localhost') +
 	"/" + (argv.pgdatabase || 'dbstatistic')
 );
-var url = "http://" + (argv.dbhost || 'localhost') + ":3021/";
+var url = "http://" + (argv.dbhost || 'localhost') + ":8000/";
 var type = {
 	'h': 14,
 	'd': 11,
@@ -31,6 +31,11 @@ client.connect(function(err) {
 	if (err) {
 		return console.error('Could not connect to postgres', err);
 	}
+});
+app.get('/', function(req, res) {
+	res.json({
+		status: 'ok'
+	});
 });
 app.get('/:date', function(req, res) {
 	try {
@@ -127,6 +132,6 @@ function value_parameters(date) {
 	}
 	return status;
 }
-app.listen(process.env.PORT || 3021, function() {
+app.listen(process.env.PORT || 8000, function() {
 	console.log('Running on ' + url);
 });

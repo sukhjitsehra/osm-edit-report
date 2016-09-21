@@ -23,7 +23,7 @@
   "scripts": {
     "start": "npm run server && npm run load",
     "server": "node server/server.js --pguser=$PGUser --pgpassword=$PGPassword --pghost=$PGHost --pgdatabase=$PGDatabase",
-    "load": "node load/load.js --num_file=$NunFile --num_directory=$NumDirectory --pguser=$PGUser --pgpassword=$PGPassword --pghost=$PGHost --pgdatabase=$PGDatabase",
+    "load": "node load/load.js --num_file=$NunFile --num_directory=$NumDirectory --pguser=$PGUser --pgpassword=$PGPassword --pghost=$PGHost --pgdatabase=$PGDatabase"
   },
   "repository": {
     "type": "git",
